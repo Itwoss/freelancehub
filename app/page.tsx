@@ -113,7 +113,7 @@ export default function HomePage() {
       <Header />
 
       {/* HERO */}
-      <main className="pt-24">
+      <main className="pt-20">
         <section className="relative overflow-hidden">
           {/* background gradient + dotted pattern */}
           <div className="absolute inset-0 pointer-events-none">
@@ -143,86 +143,55 @@ export default function HomePage() {
           </div>
 
           <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-32">
-            <div className="grid lg:grid-cols-2 items-center gap-12">
-              {/* Left copy */}
-              <div className="text-center lg:text-left">
-                <div className="inline-flex items-center gap-3 mb-6">
-                  <span className="rounded-full px-3 py-1 text-sm bg-white/8 text-white/90 backdrop-blur-sm">
-                    ✨ Our AI generates support at all times
-                  </span>
-                </div>
-
-                <h1 className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight">
-                  Support AI source code
-                  <br />
-                  ability to <span className="text-pink-400">Think Fast</span>
-                </h1>
-
-                <p className="mt-6 max-w-2xl text-gray-300 text-lg">
-                  Through our advanced AI technology, we empower developers with the
-                  ability to think fast, produce more efficient code, and deliver amazing
-                  solutions in less time.
-                </p>
-
-                <div className="mt-10 flex items-center gap-6 justify-center lg:justify-start">
-                  <Link
-                    href="/auth/signup"
-                    className="inline-flex items-center rounded-full bg-black/70 border border-white/20 px-6 py-3 text-white shadow-sm hover:opacity-95"
-                  >
-                    Get Started
-                  </Link>
-
-                  <Link
-                    href="#how"
-                    className="inline-flex items-center gap-2 text-sm text-gray-300 hover:text-white"
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M5 3v18l15-9L5 3z"
-                        stroke="currentColor"
-                        strokeWidth="1"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    How it works
-                  </Link>
-                </div>
-
-                <ul className="mt-8 flex flex-wrap gap-4 text-sm text-gray-300 justify-center lg:justify-start">
-                  <li className="flex items-center gap-2">
-                    <Star className="w-4 h-4 text-yellow-400" /> Trusted payments
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-pink-400" /> 10k+ vetted freelancers
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Zap className="w-4 h-4 text-green-400" /> Fast matching
-                  </li>
-                </ul>
+            <div className="text-center max-w-4xl mx-auto">
+              <div className="inline-flex items-center gap-3 mb-6">
+                <span className="rounded-full px-4 py-2 text-sm bg-white/10 text-white/90 backdrop-blur-sm border border-white/20">
+                  🚀 Discover Amazing Projects
+                </span>
               </div>
 
-              {/* Right visual + overlay card */}
-              <div className="relative">
-                <div className="rounded-2xl overflow-hidden shadow-2xl border border-white/6 max-w-xl mx-auto lg:ml-auto">
-                  <Image
-                    src="/images/hero-illustration.jpg"
-                    alt="Hero"
-                    width={1200}
-                    height={800}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
+              <h1 className="text-5xl md:text-7xl font-extrabold leading-tight tracking-tight">
+                Find Your Next
+                <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">
+                  Project
+                </span>
+              </h1>
 
-                <div className="absolute -bottom-8 left-8 bg-gradient-to-r from-white/6 to-white/3 backdrop-blur-sm border border-white/6 rounded-xl p-4 shadow-lg min-w-[240px]">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-xs text-gray-300">Top Project</div>
-                      <div className="font-medium">Design a Landing Page</div>
-                    </div>
-                    <div className="text-sm text-pink-300 font-semibold">$450</div>
-                  </div>
-                  <div className="mt-2 text-xs text-gray-400">2 proposals • 3 days left</div>
+              <p className="mt-6 max-w-3xl mx-auto text-gray-300 text-xl">
+                Connect with talented freelancers and discover amazing projects. 
+                From web development to design, find the perfect match for your skills.
+              </p>
+
+              <div className="mt-10 flex items-center gap-6 justify-center">
+                <Link
+                  href="/projects"
+                  className="inline-flex items-center rounded-full bg-gradient-to-r from-orange-500 to-red-500 px-8 py-4 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                >
+                  Browse Projects
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Link>
+
+                <Link
+                  href="/projects/create"
+                  className="inline-flex items-center rounded-full border border-white/20 px-8 py-4 text-white hover:bg-white/10 transition-all duration-300"
+                >
+                  Post a Project
+                </Link>
+              </div>
+
+              <div className="mt-12 grid grid-cols-3 gap-8 max-w-2xl mx-auto">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-orange-400">10k+</div>
+                  <div className="text-sm text-gray-400">Active Freelancers</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-orange-400">50k+</div>
+                  <div className="text-sm text-gray-400">Projects Completed</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-orange-400">25k+</div>
+                  <div className="text-sm text-gray-400">Happy Clients</div>
                 </div>
               </div>
             </div>
@@ -287,107 +256,150 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* PROJECTS SHOWCASE */}
-        <section className="py-16 bg-transparent">
+        {/* FEATURED PROJECTS SHOWCASE */}
+        <section className="py-20 bg-transparent">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold text-white">Featured Projects</h2>
-              <p className="mt-2 text-gray-400 max-w-2xl mx-auto">
-                Discover amazing projects and talented freelancers ready to bring your ideas to life.
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 mb-4">
+                <span className="w-2 h-2 bg-orange-400 rounded-full"></span>
+                <span className="text-orange-400 font-medium text-sm uppercase tracking-wide">Featured Projects</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Discover Amazing
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500"> Projects</span>
+              </h2>
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                Handpicked projects from talented freelancers. Find your next opportunity or get inspired by amazing work.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
               {/* Project Card 1 */}
-              <div className="bg-white/6 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-                      <Briefcase className="w-5 h-5 text-white" />
+              <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                      <Briefcase className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-white">E-commerce Website</h3>
+                      <h3 className="text-lg font-bold text-white">E-commerce Platform</h3>
                       <p className="text-sm text-gray-400">Web Development</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-lg font-bold text-pink-300">$2,500</div>
+                    <div className="text-2xl font-bold text-orange-400">$2,500</div>
                     <div className="text-xs text-gray-400">Fixed Price</div>
                   </div>
                 </div>
-                <p className="text-sm text-gray-300 mb-4">
-                  Build a modern e-commerce platform with React, Node.js, and Stripe integration.
+                <p className="text-gray-300 mb-6 leading-relaxed">
+                  Build a modern e-commerce platform with React, Node.js, and Stripe integration. 
+                  Looking for a full-stack developer with e-commerce experience.
                 </p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                      <span className="text-xs text-white font-bold">A</span>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-teal-500 rounded-full flex items-center justify-center">
+                      <span className="text-sm text-white font-bold">AJ</span>
                     </div>
-                    <span className="text-sm text-gray-300">Alex Johnson</span>
+                    <div>
+                      <div className="text-sm font-medium text-white">Alex Johnson</div>
+                      <div className="text-xs text-gray-400">5 days left</div>
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-400">5 days left</div>
+                  <div className="flex items-center gap-2">
+                    <Star className="w-4 h-4 text-yellow-400" />
+                    <span className="text-sm text-gray-300">4.9</span>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-full">React</span>
+                  <span className="px-3 py-1 bg-green-500/20 text-green-300 text-xs rounded-full">Node.js</span>
+                  <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-xs rounded-full">Stripe</span>
                 </div>
               </div>
 
               {/* Project Card 2 */}
-              <div className="bg-white/6 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg flex items-center justify-center">
-                      <Briefcase className="w-5 h-5 text-white" />
+              <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
+                      <Briefcase className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-white">Mobile App Design</h3>
+                      <h3 className="text-lg font-bold text-white">Mobile App Design</h3>
                       <p className="text-sm text-gray-400">UI/UX Design</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-lg font-bold text-pink-300">$1,200</div>
+                    <div className="text-2xl font-bold text-orange-400">$1,200</div>
                     <div className="text-xs text-gray-400">Fixed Price</div>
                   </div>
                 </div>
-                <p className="text-sm text-gray-300 mb-4">
-                  Design a sleek mobile app interface for a fitness tracking application.
+                <p className="text-gray-300 mb-6 leading-relaxed">
+                  Design a sleek mobile app interface for a fitness tracking application. 
+                  Need modern, intuitive design with excellent user experience.
                 </p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                      <span className="text-xs text-white font-bold">S</span>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center">
+                      <span className="text-sm text-white font-bold">SC</span>
                     </div>
-                    <span className="text-sm text-gray-300">Sarah Chen</span>
+                    <div>
+                      <div className="text-sm font-medium text-white">Sarah Chen</div>
+                      <div className="text-xs text-gray-400">3 days left</div>
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-400">3 days left</div>
+                  <div className="flex items-center gap-2">
+                    <Star className="w-4 h-4 text-yellow-400" />
+                    <span className="text-sm text-gray-300">4.8</span>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 bg-green-500/20 text-green-300 text-xs rounded-full">Figma</span>
+                  <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-full">UI/UX</span>
+                  <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-xs rounded-full">Mobile</span>
                 </div>
               </div>
 
               {/* Project Card 3 */}
-              <div className="bg-white/6 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
-                      <Briefcase className="w-5 h-5 text-white" />
+              <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
+                      <Briefcase className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-white">Content Marketing</h3>
+                      <h3 className="text-lg font-bold text-white">Content Marketing</h3>
                       <p className="text-sm text-gray-400">Marketing</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-lg font-bold text-pink-300">$800</div>
+                    <div className="text-2xl font-bold text-orange-400">$800</div>
                     <div className="text-xs text-gray-400">Fixed Price</div>
                   </div>
                 </div>
-                <p className="text-sm text-gray-300 mb-4">
-                  Create engaging content strategy and social media campaigns for a tech startup.
+                <p className="text-gray-300 mb-6 leading-relaxed">
+                  Create engaging content strategy and social media campaigns for a tech startup. 
+                  Looking for creative marketer with startup experience.
                 </p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
-                      <span className="text-xs text-white font-bold">M</span>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                      <span className="text-sm text-white font-bold">MD</span>
                     </div>
-                    <span className="text-sm text-gray-300">Mike Davis</span>
+                    <div>
+                      <div className="text-sm font-medium text-white">Mike Davis</div>
+                      <div className="text-xs text-gray-400">7 days left</div>
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-400">7 days left</div>
+                  <div className="flex items-center gap-2">
+                    <Star className="w-4 h-4 text-yellow-400" />
+                    <span className="text-sm text-gray-300">4.7</span>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 bg-orange-500/20 text-orange-300 text-xs rounded-full">SEO</span>
+                  <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-full">Social Media</span>
+                  <span className="px-3 py-1 bg-green-500/20 text-green-300 text-xs rounded-full">Content</span>
                 </div>
               </div>
             </div>
@@ -395,11 +407,11 @@ export default function HomePage() {
             <div className="text-center">
               <Link 
                 href="/projects" 
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-600 to-red-500 text-white px-6 py-3 rounded-full font-medium hover:opacity-95 transition-opacity"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
                 <Briefcase className="w-5 h-5" />
                 View All Projects
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
           </div>

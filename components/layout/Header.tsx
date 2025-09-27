@@ -62,99 +62,62 @@ export function Header() {
   ]
 
   return (
-    <header className="bg-black/90 backdrop-blur-sm border-b border-gray-800/50 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Left: Mobile menu */}
-            <div className="flex items-center gap-2">
+    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4">
+      <header className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-full shadow-2xl shadow-black/20" >
+        <div className="flex items-center justify-between h-16 px-6">
+            {/* Left: Mobile Menu + Profile Avatar */}
+            <div className="flex items-center gap-3">
+              {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMenuOpen((v) => !v)}
                 aria-label="Toggle menu"
-                className="p-1 rounded-md hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary-300 md:hidden"
+                className="p-2 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30 md:hidden transition-all duration-300"
               >
                 {isMenuOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-white" />}
               </button>
 
-              {/* Logo */}
-              <Link href="/" className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
-                  <Briefcase className="w-4 h-4 text-white" />
-                </div>
-                <span className="sr-only">FreelanceHub</span>
-              </Link>
-            </div>
-
-            {/* Center: navigation (desktop) */}
-            <nav className="hidden md:flex gap-8 items-center">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-sm font-mono font-medium text-white hover:text-orange-400 transition-colors duration-200"
-                >
-                  {item.name}
-                </Link>
-              ))}
-              
-              {/* Office link */}
-              <Link
-                href="/mini-office"
-                className="text-sm font-mono font-medium text-white hover:text-orange-400 transition-colors duration-200 flex items-center gap-2"
-              >
-                <Building className="w-4 h-4" />
-                Office
-              </Link>
-            </nav>
-
-            {/* Right: Profile and Contact */}
-            <div className="flex items-center gap-4">
-              {/* Notifications */}
-              <NotificationBell />
-
-              {/* Profile Icon */}
+              {/* Profile Avatar */}
               {status === 'loading' ? (
-                <div className="w-10 h-10 bg-gray-200 rounded-full animate-pulse" />
+                <div className="w-10 h-10 bg-white/20 rounded-full animate-pulse" />
               ) : session ? (
                 <div ref={profileRef} className="relative">
                   <button
                     onClick={() => setIsProfileOpen((v) => !v)}
                     aria-haspopup="true"
                     aria-expanded={isProfileOpen}
-                    className="flex items-center gap-2 rounded-full p-1 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-orange-300"
+                    className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center overflow-hidden ring-2 ring-white/30 hover:ring-white/50 transition-all duration-300"
                   >
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center overflow-hidden">
-                      {session.user?.image ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={session.user.image}
-                          alt={session.user.name ?? 'Profile'}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <UserCircle className="w-6 h-6 text-white" />
-                      )}
-                    </div>
+                    {session.user?.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={session.user.image}
+                        alt={session.user.name ?? 'Profile'}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <UserCircle className="w-6 h-6 text-white" />
+                    )}
                   </button>
 
                   {isProfileOpen && (
                     <div
                       role="menu"
                       aria-label="Profile menu"
-                      className="absolute right-0 mt-2 w-48 bg-black/90 backdrop-blur-sm rounded-lg shadow-lg border border-gray-700 py-2"
+                      className="absolute left-0 mt-2 w-48 bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 py-2"
                     >
-                      <div className="px-3 py-2 text-xs text-gray-400">Signed in as</div>
+                      <div className="px-3 py-2 text-xs text-white/60">Signed in as</div>
                       <div className="px-3 pb-2">
                         <div className="text-sm font-medium text-white truncate">{session.user?.name}</div>
-                        <div className="text-xs text-gray-400 truncate">{session.user?.email}</div>
+                        <div className="text-xs text-white/60 truncate">{session.user?.email}</div>
                       </div>
 
-                      <hr className="my-2 border-gray-700" />
+                      <hr className="my-2 border-white/20" />
 
                       {userNavigation.map((item) => (
                         <Link
                           key={item.name}
                           href={item.href}
-                          className="flex items-center gap-2 px-3 py-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white"
+                          className="flex items-center gap-2 px-3 py-2 text-sm text-white/90 hover:bg-white/10 hover:text-white rounded-lg mx-2"
                           onClick={() => setIsProfileOpen(false)}
                         >
                           <item.icon className="w-4 h-4" />
@@ -164,7 +127,7 @@ export function Header() {
 
                       <button
                         onClick={handleSignOut}
-                        className="w-full text-left flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-red-500/20 hover:text-red-300"
+                        className="w-full text-left flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-red-500/20 hover:text-red-300 rounded-lg mx-2"
                       >
                         <LogOut className="w-4 h-4" />
                         <span>Sign out</span>
@@ -173,96 +136,103 @@ export function Header() {
                   )}
                 </div>
               ) : (
-                <div className="flex items-center gap-2">
-                  <Button 
-                    variant="ghost" 
-                    onClick={() => router.push('/auth/signin')}
-                    className="text-white hover:text-orange-400 hover:bg-white/10"
-                  >
-                    Sign in
-                  </Button>
-                </div>
+                <Link href="/" className="flex items-center gap-2">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center ring-2 ring-white/30 hover:ring-white/50 transition-all duration-300">
+                    <Briefcase className="w-5 h-5 text-white" />
+                  </div>
+                </Link>
               )}
+            </div>
+
+            {/* Center: Navigation Menu */}
+            <nav className="hidden md:flex gap-1 items-center">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="px-4 py-2 text-sm font-medium text-white/90 hover:text-white hover:bg-white/10 rounded-full transition-all duration-300 hover:scale-105"
+                >
+                  {item.name}
+                </Link>
+              ))}
+              
+              {/* Office link */}
+              <Link
+                href="/mini-office"
+                className="px-4 py-2 text-sm font-medium text-white/90 hover:text-white hover:bg-white/10 rounded-full transition-all duration-300 hover:scale-105 flex items-center gap-2"
+              >
+                <Building className="w-4 h-4" />
+                Office
+              </Link>
+            </nav>
+
+            {/* Right: Contact Button */}
+            <div className="flex items-center gap-3">
+              {/* Notifications */}
+              <div className="relative">
+                <NotificationBell />
+              </div>
 
               {/* Contact Button */}
               <Button 
-                variant="outline" 
                 onClick={() => router.push('/contact')}
-                className="bg-white/10 border-white/20 text-white hover:bg-white/20 hover:border-white/30 font-mono text-sm"
+                className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-medium px-6 py-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0"
               >
-                CONTACT +
+                <Plus className="w-4 h-4 mr-2" />
+                Contact +
               </Button>
             </div>
           </div>
-
-          {/* Mobile menu panel */}
-          {isMenuOpen && (
-            <div className="md:hidden mt-4 pb-4">
-              <nav className="flex flex-col gap-2">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="flex items-center gap-3 px-3 py-3 rounded-md text-sm font-mono text-white hover:bg-white/10"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <span>{item.name}</span>
-                  </Link>
-                ))}
-                
-                {/* Office link in mobile menu */}
-                <Link
-                  href="/mini-office"
-                  className="flex items-center gap-3 px-3 py-3 rounded-md text-sm font-mono text-white hover:bg-white/10"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Building className="w-4 h-4" />
-                  <span>Office</span>
-                </Link>
-
-                <div className="border-t border-gray-700 pt-4 mt-4">
-                  {status === 'loading' ? (
-                    <div className="h-8 bg-gray-200 rounded animate-pulse" />
-                  ) : session ? (
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 overflow-hidden">
-                          {session.user?.image ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img src={session.user.image} alt={session.user.name ?? 'Profile'} className="w-full h-full object-cover" />
-                          ) : (
-                            <UserCircle className="w-6 h-6 text-white m-2" />
-                          )}
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium text-white">{session.user?.name}</div>
-                          <div className="text-xs text-gray-400">{session.user?.email}</div>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex gap-2">
-                      <Button 
-                        variant="ghost" 
-                        onClick={() => { router.push('/auth/signin'); setIsMenuOpen(false) }} 
-                        className="w-full text-white hover:text-orange-400 hover:bg-white/10"
-                      >
-                        Sign in
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        onClick={() => { router.push('/auth/signup'); setIsMenuOpen(false) }} 
-                        className="w-full bg-white/10 border-white/20 text-white hover:bg-white/20"
-                      >
-                        Sign up
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </nav>
-            </div>
-          )}
-        </div>
+      
       </header>
+
+      {/* Mobile menu panel */}
+      {isMenuOpen && (
+        <div className="md:hidden mt-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-4">
+          <nav className="flex flex-col gap-2">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-white/90 hover:bg-white/10 hover:text-white transition-all duration-300"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <span>{item.name}</span>
+              </Link>
+            ))}
+            
+            {/* Office link in mobile menu */}
+            <Link
+              href="/mini-office"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-white/90 hover:bg-white/10 hover:text-white transition-all duration-300"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Building className="w-4 h-4" />
+              <span>Office</span>
+            </Link>
+
+            {!session && (
+              <div className="border-t border-white/20 pt-4 mt-4">
+                <div className="flex gap-2">
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => { router.push('/auth/signin'); setIsMenuOpen(false) }} 
+                    className="flex-1 text-white/90 hover:text-white hover:bg-white/10 rounded-xl"
+                  >
+                    Sign in
+                  </Button>
+                  <Button 
+                    onClick={() => { router.push('/contact'); setIsMenuOpen(false) }} 
+                    className="flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-xl"
+                  >
+                    Contact +
+                  </Button>
+                </div>
+              </div>
+            )}
+          </nav>
+        </div>
+      )}
+    </div>
   )
 }

@@ -55,18 +55,18 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-black text-white antialiased">
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header className="bg-black/90 backdrop-blur-sm border-b border-gray-800/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
                 <Briefcase className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-gradient">FreelanceHub</span>
+              <span className="text-xl font-bold text-white">FreelanceHub</span>
             </Link>
-            <Link href="/auth/signup" className="text-primary-600 hover:text-primary-700">
+            <Link href="/auth/signup" className="text-orange-400 hover:text-orange-300">
               Don't have an account? Sign up
             </Link>
           </div>
@@ -77,8 +77,8 @@ export default function SignInPage() {
       <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900">Welcome back</h2>
-            <p className="mt-2 text-gray-600">
+            <h2 className="text-3xl font-bold text-white">Welcome back</h2>
+            <p className="mt-2 text-gray-300">
               Sign in to your account to continue
             </p>
           </div>
@@ -86,7 +86,7 @@ export default function SignInPage() {
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
                   Email address
                 </label>
                 <input
@@ -95,7 +95,7 @@ export default function SignInPage() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="input"
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
                   placeholder="Enter your email"
                   value={formData.email}
                   onChange={handleChange}
@@ -103,7 +103,7 @@ export default function SignInPage() {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">
                   Password
                 </label>
                 <div className="relative">
@@ -113,7 +113,7 @@ export default function SignInPage() {
                     type={showPassword ? 'text' : 'password'}
                     autoComplete="current-password"
                     required
-                    className="input pr-10"
+                    className="w-full px-4 py-3 pr-10 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
                     placeholder="Enter your password"
                     value={formData.password}
                     onChange={handleChange}
@@ -139,15 +139,15 @@ export default function SignInPage() {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-orange-500 focus:ring-orange-500 border-gray-300 rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-300">
                   Remember me
                 </label>
               </div>
 
               <div className="text-sm">
-                <Link href="/auth/forgot-password" className="text-primary-600 hover:text-primary-500">
+                <Link href="/auth/forgot-password" className="text-orange-400 hover:text-orange-300">
                   Forgot your password?
                 </Link>
               </div>
@@ -155,7 +155,7 @@ export default function SignInPage() {
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
               loading={loading}
               disabled={loading}
             >
@@ -163,9 +163,9 @@ export default function SignInPage() {
             </Button>
 
             <div className="text-center">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-300">
                 Don't have an account?{' '}
-                <Link href="/auth/signup" className="text-primary-600 hover:text-primary-500 font-medium">
+                <Link href="/auth/signup" className="text-orange-400 hover:text-orange-300 font-medium">
                   Sign up
                 </Link>
               </span>
@@ -173,9 +173,9 @@ export default function SignInPage() {
           </form>
 
           {/* Demo Credentials */}
-          <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-            <h3 className="text-sm font-medium text-blue-900 mb-2">Demo Credentials</h3>
-            <div className="text-xs text-blue-700 space-y-1">
+          <div className="mt-8 p-4 bg-white/10 rounded-lg border border-white/20">
+            <h3 className="text-sm font-medium text-white mb-2">Demo Credentials</h3>
+            <div className="text-xs text-gray-300 space-y-1">
               <div><strong>Admin:</strong> admin@freelancehub.com / admin123</div>
               <div><strong>User:</strong> user@freelancehub.com / user123</div>
             </div>

@@ -58,6 +58,12 @@ model User {
   isVerified    Boolean   @default(false)
   followersCount Int      @default(0)
   followingCount Int      @default(0)
+  
+  // Payment features
+  coins         Int       @default(0)
+  dailyMessages Int      @default(5)
+  messagesUsed  Int       @default(0)
+  lastMessageReset DateTime @default(now())
 
   accounts     Account[]
   sessions     Session[]
@@ -65,6 +71,7 @@ model User {
   orders       Order[]
   reviews      Review[]
   notifications Notification[]
+  transactions Transaction[]
   
   // Social relationships
   posts        Post[]
@@ -330,4 +337,33 @@ enum ContactStatus {
   READ
   REPLIED
   CLOSED
+}
+
+// Payment Models
+model Transaction {
+  id          String            @id @default(cuid())
+  type        TransactionType
+  amount      Int               // Amount in cents
+  currency    String            @default("usd")
+  status      TransactionStatus @default(PENDING)
+  description String?
+  metadata    Json?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum TransactionType {
+  COIN_PURCHASE
+  MESSAGE_PURCHASE
+  REFUND
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
 }

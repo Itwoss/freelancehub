@@ -28,7 +28,8 @@ import {
   Share2,
   Download,
   Filter,
-  Search
+  Search,
+  ArrowRight
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -144,16 +145,15 @@ export default function UserDashboard() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
+      <div className="min-h-screen bg-black text-white">
         <div className="flex">
-          <div className="w-64 bg-white shadow-sm border-r border-gray-200 min-h-screen">
+          <div className="w-64 bg-black/90 backdrop-blur-sm border-r border-white/10 min-h-screen">
             <div className="p-6">
               <div className="animate-pulse">
-                <div className="h-6 bg-gray-200 rounded w-1/2 mb-6"></div>
+                <div className="h-6 bg-white/20 rounded w-1/2 mb-6"></div>
                 <div className="space-y-2">
                   {[...Array(6)].map((_, i) => (
-                    <div key={i} className="h-8 bg-gray-200 rounded"></div>
+                    <div key={i} className="h-8 bg-white/20 rounded"></div>
                   ))}
                 </div>
               </div>
@@ -162,18 +162,17 @@ export default function UserDashboard() {
           <div className="flex-1">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
               <div className="animate-pulse">
-                <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
+                <div className="h-8 bg-white/20 rounded w-1/4 mb-6"></div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                   {[...Array(3)].map((_, i) => (
-                    <div key={i} className="h-32 bg-gray-200 rounded-lg"></div>
+                    <div key={i} className="h-32 bg-white/20 rounded-lg"></div>
                   ))}
                 </div>
-                <div className="h-96 bg-gray-200 rounded-lg"></div>
+                <div className="h-96 bg-white/20 rounded-lg"></div>
               </div>
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     )
   }
@@ -183,29 +182,29 @@ export default function UserDashboard() {
       title: 'My Projects',
       value: projects.length,
       icon: Briefcase,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-100'
+      color: 'text-blue-400',
+      bgColor: 'bg-blue-500/20'
     },
     {
       title: 'My Posts',
       value: myPosts.length,
       icon: MessageSquare,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-100'
+      color: 'text-purple-400',
+      bgColor: 'bg-purple-500/20'
     },
     {
       title: 'My Stories',
       value: myStories.length,
       icon: Heart,
-      color: 'text-pink-600',
-      bgColor: 'bg-pink-100'
+      color: 'text-pink-400',
+      bgColor: 'bg-pink-500/20'
     },
     {
       title: 'Total Orders',
       value: orders.length,
       icon: DollarSign,
-      color: 'text-green-600',
-      bgColor: 'bg-green-100'
+      color: 'text-green-400',
+      bgColor: 'bg-green-500/20'
     }
   ]
 
@@ -214,29 +213,33 @@ export default function UserDashboard() {
     { id: 'projects', label: 'My Projects', icon: Briefcase },
     { id: 'orders', label: 'Orders', icon: DollarSign },
     { id: 'reviews', label: 'Reviews', icon: Star },
+    { id: 'chat', label: 'Chat', icon: MessageSquare },
     { id: 'content', label: 'My Content', icon: BookOpen },
     { id: 'feed', label: 'Social Feed', icon: Users },
     { id: 'settings', label: 'Settings', icon: Settings }
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      
+    <div className="min-h-screen bg-black text-white">
       <div className="flex">
         {/* Left Sidebar */}
-        <div className="w-64 bg-white shadow-sm border-r border-gray-200 min-h-screen">
+        <div className="w-64 bg-black/90 backdrop-blur-sm border-r border-white/10 min-h-screen">
           <div className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-6">Dashboard</h2>
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
+                <Briefcase className="w-5 h-5 text-white" />
+              </div>
+              <h2 className="text-lg font-semibold text-white">Dashboard</h2>
+            </div>
             <nav className="space-y-2">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                  className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300 ${
                     activeTab === tab.id
-                      ? 'bg-primary-50 text-primary-700 border-r-2 border-primary-500'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
+                      : 'text-gray-300 hover:bg-white/10 hover:text-white'
                   }`}
                 >
                   <tab.icon className="w-4 h-4 mr-3" />
@@ -252,27 +255,25 @@ export default function UserDashboard() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-white mb-2">
             Welcome back, {session?.user?.name}!
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-300">
             Manage your projects, track orders, and grow your freelance business.
           </p>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => (
-            <div key={index} className="card">
-              <div className="p-6">
-                <div className="flex items-center">
-                  <div className={`p-3 rounded-lg ${stat.bgColor}`}>
-                    <stat.icon className={`w-6 h-6 ${stat.color}`} />
-                  </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                    <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                  </div>
+            <div key={index} className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300">
+              <div className="flex items-center">
+                <div className={`p-3 rounded-lg ${stat.bgColor}`}>
+                  <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-300">{stat.title}</p>
+                  <p className="text-2xl font-bold text-white">{stat.value}</p>
                 </div>
               </div>
             </div>
@@ -286,77 +287,92 @@ export default function UserDashboard() {
           {activeTab === 'overview' && (
             <div className="space-y-8">
               {/* Quick Actions */}
-              <div className="card">
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <Link href="/projects/create">
-                      <Button className="w-full justify-start">
-                        <Plus className="w-4 h-4 mr-2" />
-                        Create New Project
-                      </Button>
-                    </Link>
-                    <Link href="/mini-office/create-post">
-                      <Button className="w-full justify-start">
-                        <MessageSquare className="w-4 h-4 mr-2" />
-                        Create Post
-                      </Button>
-                    </Link>
-                    <Link href="/mini-office/create-story">
-                      <Button variant="outline" className="w-full justify-start">
-                        <Heart className="w-4 h-4 mr-2" />
-                        Add Story
-                      </Button>
-                    </Link>
-                    <Link href="/projects">
-                      <Button variant="outline" className="w-full justify-start">
-                        <Eye className="w-4 h-4 mr-2" />
-                        Browse Projects
-                      </Button>
-                    </Link>
-                    <Link href="/mini-office/feed">
-                      <Button variant="outline" className="w-full justify-start">
-                        <Users className="w-4 h-4 mr-2" />
-                        View Feed
-                      </Button>
-                    </Link>
-                    <Link href="/dashboard?tab=settings">
-                      <Button variant="outline" className="w-full justify-start">
-                        <Settings className="w-4 h-4 mr-2" />
-                        Account Settings
-                      </Button>
-                    </Link>
-                  </div>
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                <h3 className="text-lg font-semibold text-white mb-4">Quick Actions</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <Link href="/projects/create">
+                    <Button className="w-full justify-start bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Create New Project
+                    </Button>
+                  </Link>
+                  <Link href="/mini-office/create-post">
+                    <Button className="w-full justify-start bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
+                      <MessageSquare className="w-4 h-4 mr-2" />
+                      Create Post
+                    </Button>
+                  </Link>
+                  <Link href="/mini-office/create-story">
+                    <Button variant="outline" className="w-full justify-start border-white/20 text-white hover:bg-white/10">
+                      <Heart className="w-4 h-4 mr-2" />
+                      Add Story
+                    </Button>
+                  </Link>
+                  <Link href="/projects">
+                    <Button variant="outline" className="w-full justify-start border-white/20 text-white hover:bg-white/10">
+                      <Eye className="w-4 h-4 mr-2" />
+                      Browse Projects
+                    </Button>
+                  </Link>
+                  <Link href="/mini-office/feed">
+                    <Button variant="outline" className="w-full justify-start border-white/20 text-white hover:bg-white/10">
+                      <Users className="w-4 h-4 mr-2" />
+                      View Feed
+                    </Button>
+                  </Link>
+                  <Link href="/dashboard?tab=settings">
+                    <Button variant="outline" className="w-full justify-start border-white/20 text-white hover:bg-white/10">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Account Settings
+                    </Button>
+                  </Link>
                 </div>
               </div>
 
               {/* Recent Projects */}
-              <div className="card">
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Recent Projects</h3>
-                    <Link href="/dashboard?tab=projects">
-                      <Button variant="ghost" size="sm">View All</Button>
-                    </Link>
-                  </div>
-                  <div className="space-y-4">
-                    {projects.slice(0, 3).map((project) => (
-                      <div key={project.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                        <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">{project.title}</h4>
-                          <p className="text-sm text-gray-600">{project.category}</p>
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-lg font-semibold text-white">Recent Projects</h3>
+                  <Link href="/dashboard?tab=projects">
+                    <Button variant="ghost" size="sm" className="text-white hover:bg-white/10">View All</Button>
+                  </Link>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {projects.slice(0, 3).map((project) => (
+                    <Link key={project.id} href={`/projects/${project.id}`} className="group block">
+                      <div className="bg-white/5 backdrop-blur-sm rounded-xl overflow-hidden border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105">
+                        {/* Project Image */}
+                        <div className="relative h-32 bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
+                          {project.images.length > 0 ? (
+                            <img
+                              src={project.images[0]}
+                              alt={project.title}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="text-center text-white">
+                              <Briefcase className="w-12 h-12 mx-auto mb-1 opacity-80" />
+                              <p className="text-xs opacity-80">Project</p>
+                            </div>
+                          )}
+                          
+                          {/* Hover Arrow Overlay */}
+                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <div className="bg-white/20 backdrop-blur-sm rounded-full p-3 border border-white/30">
+                              <ArrowRight className="w-6 h-6 text-white" />
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex items-center space-x-4">
-                          <span className="text-lg font-bold text-primary-600">${project.price}</span>
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            project.status === 'ACTIVE' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                          }`}>
-                            {project.status}
-                          </span>
+                        
+                        {/* Project Title */}
+                        <div className="p-4">
+                          <h4 className="text-sm font-bold text-white group-hover:text-orange-400 transition-colors duration-300 line-clamp-2">
+                            {project.title}
+                          </h4>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>
@@ -364,122 +380,245 @@ export default function UserDashboard() {
 
           {/* Projects Tab */}
           {activeTab === 'projects' && (
-            <div className="card">
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900">My Projects</h3>
-                  <Link href="/projects/create">
-                    <Button>
-                      <Plus className="w-4 h-4 mr-2" />
-                      Create Project
-                    </Button>
-                  </Link>
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+              <div className="flex items-center justify-between mb-8">
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-2">My Projects</h3>
+                  <p className="text-gray-300">Manage and showcase your freelance projects</p>
                 </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {projects.map((project) => (
-                    <div key={project.id} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                      {project.images.length > 0 && (
-                        <img
-                          src={project.images[0]}
-                          alt={project.title}
-                          className="w-full h-48 object-cover"
-                        />
-                      )}
-                      <div className="p-4">
-                        <h4 className="font-semibold text-gray-900 mb-2">{project.title}</h4>
-                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">{project.description}</p>
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-lg font-bold text-primary-600">${project.price}</span>
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            project.status === 'ACTIVE' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                          }`}>
-                            {project.status}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between text-sm text-gray-500">
-                          <span>{project._count.orders} orders</span>
-                          <span>{project._count.reviews} reviews</span>
-                        </div>
-                        <div className="flex space-x-2 mt-4">
-                          <Link href={`/projects/${project.id}`}>
-                            <Button variant="outline" size="sm" className="flex-1">
-                              <Eye className="w-4 h-4 mr-1" />
-                              View
-                            </Button>
-                          </Link>
-                          <Link href={`/projects/${project.id}/edit`}>
-                            <Button variant="outline" size="sm" className="flex-1">
-                              <Edit className="w-4 h-4 mr-1" />
-                              Edit
-                            </Button>
-                          </Link>
+                <Link href="/projects/create">
+                  <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Project
+                  </Button>
+                </Link>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {projects.map((project) => (
+                  <Link key={project.id} href={`/projects/${project.id}`} className="group block">
+                    <div className="bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105">
+                      {/* Project Image */}
+                      <div className="relative h-48 bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
+                        {project.images.length > 0 ? (
+                          <img
+                            src={project.images[0]}
+                            alt={project.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="text-center text-white">
+                            <Briefcase className="w-16 h-16 mx-auto mb-2 opacity-80" />
+                            <p className="text-sm opacity-80">Project Image</p>
+                          </div>
+                        )}
+                        
+                        {/* Hover Arrow Overlay */}
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 border border-white/30">
+                            <ArrowRight className="w-8 h-8 text-white" />
+                          </div>
                         </div>
                       </div>
+                      
+                      {/* Project Title */}
+                      <div className="p-6">
+                        <h4 className="text-lg font-bold text-white group-hover:text-orange-400 transition-colors duration-300">
+                          {project.title}
+                        </h4>
+                      </div>
                     </div>
-                  ))}
-                </div>
+                  </Link>
+                ))}
               </div>
             </div>
           )}
 
           {/* Orders Tab */}
           {activeTab === 'orders' && (
-            <div className="card">
-              <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-6">My Orders</h3>
-                <div className="space-y-4">
-                  {orders.map((order) => (
-                    <div key={order.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                      <div className="flex-1">
-                        <h4 className="font-medium text-gray-900">{order.project.title}</h4>
-                        <p className="text-sm text-gray-600">Order #{order.id.slice(-8)}</p>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <span className="text-lg font-bold text-primary-600">${order.totalAmount}</span>
-                        <span className={`px-2 py-1 rounded-full text-xs ${
-                          order.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                          order.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-gray-100 text-gray-800'
-                        }`}>
-                          {order.status}
-                        </span>
-                      </div>
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+              <h3 className="text-2xl font-bold text-white mb-6">My Orders</h3>
+              <div className="space-y-4">
+                {orders.map((order) => (
+                  <div key={order.id} className="flex items-center justify-between p-6 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all duration-300">
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-white">{order.project.title}</h4>
+                      <p className="text-sm text-gray-400">Order #{order.id.slice(-8)}</p>
                     </div>
-                  ))}
-                </div>
+                    <div className="flex items-center space-x-4">
+                      <span className="text-xl font-bold text-orange-400">${order.totalAmount}</span>
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        order.status === 'COMPLETED' ? 'bg-green-500/20 text-green-300' :
+                        order.status === 'PENDING' ? 'bg-yellow-500/20 text-yellow-300' :
+                        'bg-gray-500/20 text-gray-300'
+                      }`}>
+                        {order.status}
+                      </span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
 
           {/* Reviews Tab */}
           {activeTab === 'reviews' && (
-            <div className="card">
-              <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-6">Reviews & Ratings</h3>
-                <div className="space-y-4">
-                  {reviews.map((review) => (
-                    <div key={review.id} className="p-4 border border-gray-200 rounded-lg">
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <h4 className="font-medium text-gray-900">{review.project.title}</h4>
-                          <p className="text-sm text-gray-600">by {review.reviewer.name}</p>
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+              <h3 className="text-2xl font-bold text-white mb-6">Reviews & Ratings</h3>
+              <div className="space-y-6">
+                {reviews.map((review) => (
+                  <div key={review.id} className="p-6 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all duration-300">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h4 className="font-semibold text-white">{review.project.title}</h4>
+                        <p className="text-sm text-gray-400">by {review.reviewer.name}</p>
+                      </div>
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-5 h-5 ${
+                              i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-gray-300 mb-4">{review.comment}</p>
+                    <p className="text-xs text-gray-400">{new Date(review.createdAt).toLocaleDateString()}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Chat Tab */}
+          {activeTab === 'chat' && (
+            <div className="space-y-8">
+              {/* Chat Header with Daily Limit */}
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-2">Chat & Connect</h3>
+                    <p className="text-gray-300">Find people, make friends, and start conversations</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm text-gray-400 mb-1">Daily Messages</div>
+                    <div className="text-2xl font-bold text-orange-400">3/5</div>
+                    <div className="text-xs text-gray-400">2 remaining</div>
+                  </div>
+                </div>
+                
+                {/* Coins and Purchase */}
+                <div className="flex items-center gap-4 p-4 bg-orange-500/10 rounded-lg border border-orange-500/20">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                      <span className="text-white font-bold text-sm">💰</span>
+                    </div>
+                    <div>
+                      <div className="text-sm text-gray-300">Your Coins</div>
+                      <div className="text-lg font-bold text-orange-400">150</div>
+                    </div>
+                  </div>
+                  <div className="flex-1"></div>
+                  <Link href="/chat/purchase">
+                    <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
+                      Buy More Messages
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Find People Section */}
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                <div className="flex items-center justify-between mb-6">
+                  <h4 className="text-xl font-bold text-white">Find People</h4>
+                  <div className="flex gap-2">
+                    <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+                      <Search className="w-4 h-4 mr-2" />
+                      Search
+                    </Button>
+                    <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+                      <Filter className="w-4 h-4 mr-2" />
+                      Filter
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {/* Sample People Cards */}
+                  {[
+                    { name: 'Sarah Johnson', role: 'UI/UX Designer', avatar: 'SJ', skills: ['Figma', 'Adobe XD'], mutual: 2 },
+                    { name: 'Mike Chen', role: 'Full Stack Developer', avatar: 'MC', skills: ['React', 'Node.js'], mutual: 5 },
+                    { name: 'Emily Davis', role: 'Marketing Specialist', avatar: 'ED', skills: ['SEO', 'Content'], mutual: 1 },
+                    { name: 'Alex Wilson', role: 'Graphic Designer', avatar: 'AW', skills: ['Photoshop', 'Illustrator'], mutual: 3 },
+                    { name: 'Lisa Brown', role: 'Product Manager', avatar: 'LB', skills: ['Strategy', 'Analytics'], mutual: 4 },
+                    { name: 'David Lee', role: 'Backend Developer', avatar: 'DL', skills: ['Python', 'Django'], mutual: 2 }
+                  ].map((person, index) => (
+                    <div key={index} className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                          <span className="text-white font-bold">{person.avatar}</span>
                         </div>
-                        <div className="flex items-center">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-4 h-4 ${
-                                i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
-                              }`}
-                            />
-                          ))}
+                        <div className="flex-1">
+                          <h5 className="font-semibold text-white">{person.name}</h5>
+                          <p className="text-sm text-gray-400">{person.role}</p>
+                          <p className="text-xs text-orange-400">{person.mutual} mutual connections</p>
                         </div>
                       </div>
-                      <p className="text-gray-700">{review.comment}</p>
-                      <p className="text-sm text-gray-500 mt-2">
-                        {new Date(review.createdAt).toLocaleDateString()}
-                      </p>
+                      
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {person.skills.map((skill, skillIndex) => (
+                          <span key={skillIndex} className="px-2 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-full">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                      
+                      <div className="flex gap-2">
+                        <Link href="/chat" className="flex-1">
+                          <Button className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
+                            <MessageSquare className="w-4 h-4 mr-2" />
+                            Message
+                          </Button>
+                        </Link>
+                        <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+                          <Heart className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Recent Conversations */}
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                <h4 className="text-xl font-bold text-white mb-6">Recent Conversations</h4>
+                <div className="space-y-4">
+                  {[
+                    { name: 'Sarah Johnson', lastMessage: 'Hey! I saw your latest project, it looks amazing!', time: '2m ago', unread: 2 },
+                    { name: 'Mike Chen', lastMessage: 'Thanks for the feedback on my design', time: '1h ago', unread: 0 },
+                    { name: 'Emily Davis', lastMessage: 'Let\'s collaborate on that marketing campaign', time: '3h ago', unread: 1 },
+                    { name: 'Alex Wilson', lastMessage: 'The logo design is ready for review', time: '1d ago', unread: 0 }
+                  ].map((conversation, index) => (
+                    <div key={index} className="flex items-center gap-4 p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-all duration-300 cursor-pointer">
+                      <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-500 rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold">{conversation.name.split(' ').map(n => n[0]).join('')}</span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-1">
+                          <h5 className="font-semibold text-white">{conversation.name}</h5>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-gray-400">{conversation.time}</span>
+                            {conversation.unread > 0 && (
+                              <span className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
+                                <span className="text-white text-xs font-bold">{conversation.unread}</span>
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-300 line-clamp-1">{conversation.lastMessage}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -736,8 +875,6 @@ export default function UserDashboard() {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   )
 }
