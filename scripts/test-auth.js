@@ -5,40 +5,65 @@ const prisma = new PrismaClient()
 
 async function testAuth() {
   try {
-    console.log('🔐 Testing authentication...')
+    console.log('🔍 Testing authentication...')
     
-    // Test admin user
-    const adminUser = await prisma.user.findUnique({
-      where: { email: 'admin@freelancehub.com' }
+    // Test database connection
+    console.log('📊 Testing database connection...')
+    const userCount = await prisma.user.count()
+    console.log(`✅ Database connected. Found ${userCount} users.`)
+    
+    // Test user lookup
+    console.log('👤 Testing user lookup...')
+    const testEmail = 'user@freelancehub.com'
+    const user = await prisma.user.findUnique({
+      where: { email: testEmail }
     })
     
-    if (adminUser) {
-      console.log('✅ Admin user found:', adminUser.email)
+    if (!user) {
+      console.log('❌ Test user not found. Creating test user...')
       
-      // Test password verification
-      const isPasswordValid = await bcrypt.compare('admin123', adminUser.password)
-      console.log('🔑 Password verification:', isPasswordValid ? '✅ Valid' : '❌ Invalid')
+      const hashedPassword = await bcrypt.hash('user123', 12)
+      const newUser = await prisma.user.create({
+        data: {
+          name: 'Test User',
+          email: testEmail,
+          password: hashedPassword,
+          role: 'USER',
+          bio: 'Test user for authentication',
+          skills: ['Testing']
+        }
+      })
+      console.log('✅ Test user created:', newUser.email)
     } else {
-      console.log('❌ Admin user not found')
+      console.log('✅ Test user found:', user.email)
+      console.log('📧 User has password:', !!user.password)
+      console.log('👤 User role:', user.role)
     }
     
-    // Test demo user
-    const demoUser = await prisma.user.findUnique({
-      where: { email: 'user@freelancehub.com' }
+    // Test password verification
+    console.log('🔐 Testing password verification...')
+    const testPassword = 'user123'
+    const isPasswordValid = await bcrypt.compare(testPassword, user.password)
+    console.log('✅ Password verification:', isPasswordValid ? 'PASSED' : 'FAILED')
+    
+    // List all users
+    console.log('📋 All users in database:')
+    const allUsers = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        password: true
+      }
     })
     
-    if (demoUser) {
-      console.log('✅ Demo user found:', demoUser.email)
-      
-      // Test password verification
-      const isPasswordValid = await bcrypt.compare('user123', demoUser.password)
-      console.log('🔑 Password verification:', isPasswordValid ? '✅ Valid' : '❌ Invalid')
-    } else {
-      console.log('❌ Demo user not found')
-    }
+    allUsers.forEach(u => {
+      console.log(`  - ${u.name} (${u.email}) - Role: ${u.role} - Has Password: ${!!u.password}`)
+    })
     
   } catch (error) {
-    console.error('❌ Error testing auth:', error.message)
+    console.error('❌ Test failed:', error)
   } finally {
     await prisma.$disconnect()
   }

@@ -80,7 +80,33 @@
 
 @layer utilities {
   .text-gradient {
-    @apply bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent;
+  }
+  
+  /* Dynamic menu styling utilities */
+  .menu-item {
+    @apply px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300;
+  }
+  
+  .menu-item-hover {
+    @apply hover:scale-105;
+  }
+  
+  .menu-item-active {
+    @apply bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg;
+  }
+  
+  /* Dynamic contrast classes that will be applied via JavaScript */
+  .menu-text-dynamic {
+    /* This class will be dynamically styled via inline styles */
+  }
+  
+  .menu-hover-dynamic {
+    /* This class will be dynamically styled via inline styles */
+  }
+  
+  .menu-background-dynamic {
+    /* This class will be dynamically styled via inline styles */
   }
   
   .bg-gradient-primary {

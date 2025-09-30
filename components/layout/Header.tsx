@@ -24,6 +24,7 @@ import {
 } from 'lucide-react'
 import { NotificationBell } from '@/components/notifications/NotificationBell'
 import { cn } from '@/lib/utils'
+import { useMenuContrast } from '@/lib/hooks/useDynamicContrast'
 
 export function Header() {
   const { data: session, status } = useSession()
@@ -31,6 +32,10 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const profileRef = useRef<HTMLDivElement | null>(null)
+  const headerRef = useRef<HTMLDivElement | null>(null)
+  
+  // Get dynamic contrast colors based on background
+  const menuContrast = useMenuContrast(headerRef)
 
   // Close profile dropdown when clicking outside
   useEffect(() => {
@@ -62,7 +67,7 @@ export function Header() {
   ]
 
   return (
-    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4">
+    <div ref={headerRef} className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4">
       <header className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-full shadow-2xl shadow-black/20" >
         <div className="flex items-center justify-between h-16 px-6">
             {/* Left: Mobile Menu + Profile Avatar */}
@@ -150,7 +155,19 @@ export function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="px-4 py-2 text-sm font-medium text-white/90 hover:text-white hover:bg-white/10 rounded-full transition-all duration-300 hover:scale-105"
+                  className="px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 hover:scale-105"
+                  style={{
+                    color: menuContrast.menuTextColorSubtle,
+                    backgroundColor: 'transparent'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = menuContrast.menuHoverTextColor
+                    e.currentTarget.style.backgroundColor = menuContrast.menuHoverBackground
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = menuContrast.menuTextColorSubtle
+                    e.currentTarget.style.backgroundColor = 'transparent'
+                  }}
                 >
                   {item.name}
                 </Link>
@@ -159,7 +176,19 @@ export function Header() {
               {/* Office link */}
               <Link
                 href="/mini-office"
-                className="px-4 py-2 text-sm font-medium text-white/90 hover:text-white hover:bg-white/10 rounded-full transition-all duration-300 hover:scale-105 flex items-center gap-2"
+                className="px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 hover:scale-105 flex items-center gap-2"
+                style={{
+                  color: menuContrast.menuTextColorSubtle,
+                  backgroundColor: 'transparent'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = menuContrast.menuHoverTextColor
+                  e.currentTarget.style.backgroundColor = menuContrast.menuHoverBackground
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = menuContrast.menuTextColorSubtle
+                  e.currentTarget.style.backgroundColor = 'transparent'
+                }}
               >
                 <Building className="w-4 h-4" />
                 Office
@@ -194,7 +223,19 @@ export function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-white/90 hover:bg-white/10 hover:text-white transition-all duration-300"
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300"
+                style={{
+                  color: menuContrast.menuTextColorSubtle,
+                  backgroundColor: 'transparent'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = menuContrast.menuHoverTextColor
+                  e.currentTarget.style.backgroundColor = menuContrast.menuHoverBackground
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = menuContrast.menuTextColorSubtle
+                  e.currentTarget.style.backgroundColor = 'transparent'
+                }}
                 onClick={() => setIsMenuOpen(false)}
               >
                 <span>{item.name}</span>
@@ -204,7 +245,19 @@ export function Header() {
             {/* Office link in mobile menu */}
             <Link
               href="/mini-office"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-white/90 hover:bg-white/10 hover:text-white transition-all duration-300"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300"
+              style={{
+                color: menuContrast.menuTextColorSubtle,
+                backgroundColor: 'transparent'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = menuContrast.menuHoverTextColor
+                e.currentTarget.style.backgroundColor = menuContrast.menuHoverBackground
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = menuContrast.menuTextColorSubtle
+                e.currentTarget.style.backgroundColor = 'transparent'
+              }}
               onClick={() => setIsMenuOpen(false)}
             >
               <Building className="w-4 h-4" />

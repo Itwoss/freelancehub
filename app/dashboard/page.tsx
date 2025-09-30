@@ -1,12 +1,13 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Button } from '@/components/ui/Button'
+import { useMenuContrast } from '@/lib/hooks/useDynamicContrast'
 import { 
   Briefcase, 
   Plus, 
@@ -84,6 +85,10 @@ export default function UserDashboard() {
   const [myStories, setMyStories] = useState<any[]>([])
   const [allPosts, setAllPosts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const sidebarRef = useRef<HTMLDivElement | null>(null)
+  
+  // Get dynamic contrast colors for sidebar
+  const menuContrast = useMenuContrast(sidebarRef)
 
   useEffect(() => {
     if (status === 'loading') return
@@ -223,24 +228,38 @@ export default function UserDashboard() {
     <div className="min-h-screen bg-black text-white">
       <div className="flex">
         {/* Left Sidebar */}
-        <div className="w-64 bg-black/90 backdrop-blur-sm border-r border-white/10 min-h-screen">
+        <div ref={sidebarRef} className="w-64 bg-black/90 backdrop-blur-sm border-r border-white/10 min-h-screen">
           <div className="p-6">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
                 <Briefcase className="w-5 h-5 text-white" />
               </div>
-              <h2 className="text-lg font-semibold text-white">Dashboard</h2>
+              <h2 className="text-lg font-semibold" style={{ color: menuContrast.menuTextColor }}>Dashboard</h2>
             </div>
             <nav className="space-y-2">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300 ${
-                    activeTab === tab.id
-                      ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
-                      : 'text-gray-300 hover:bg-white/10 hover:text-white'
-                  }`}
+                  className="w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300"
+                  style={{
+                    color: activeTab === tab.id ? '#ffffff' : menuContrast.menuTextColorSubtle,
+                    backgroundColor: activeTab === tab.id 
+                      ? 'linear-gradient(to right, #f97316, #ef4444)' 
+                      : 'transparent'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== tab.id) {
+                      e.currentTarget.style.color = menuContrast.menuHoverTextColor
+                      e.currentTarget.style.backgroundColor = menuContrast.menuHoverBackground
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== tab.id) {
+                      e.currentTarget.style.color = menuContrast.menuTextColorSubtle
+                      e.currentTarget.style.backgroundColor = 'transparent'
+                    }
+                  }}
                 >
                   <tab.icon className="w-4 h-4 mr-3" />
                   {tab.label}
