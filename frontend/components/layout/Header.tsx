@@ -20,7 +20,8 @@ import {
   Users,
   Building,
   FileText,
-  UserCircle
+  UserCircle,
+  MessageCircle
 } from 'lucide-react'
 import { NotificationBell } from '@/components/notifications/NotificationBell'
 import { cn } from '@/lib/utils'
@@ -63,6 +64,11 @@ export function Header() {
     { name: 'Dashboard', href: '/dashboard', icon: User },
     { name: 'My Projects', href: '/dashboard/projects', icon: Briefcase },
     { name: 'Orders', href: '/dashboard/orders', icon: Star },
+    { name: 'Chat', href: '/chat', icon: MessageCircle },
+    ...(session?.user?.role === 'ADMIN' ? [
+      { name: 'Admin Chat', href: '/admin/chat', icon: MessageCircle },
+      { name: 'Admin Panel', href: '/admin/dashboard', icon: Building }
+    ] : []),
     { name: 'Settings', href: '/dashboard/settings', icon: Settings }
   ]
 

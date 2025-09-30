@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { Label } from '@/components/ui/Label'
 import { 
   Send, 
   Image, 
@@ -14,9 +15,7 @@ import {
   Plus,
   Mic,
   MoreVertical,
-  ArrowLeft,
-  Crown,
-  Bell
+  ArrowLeft
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -34,116 +33,66 @@ interface ChatMessage {
   isAdmin: boolean
 }
 
-interface ChatGroup {
+interface AdminGroup {
   id: string
   name: string
   description: string
   memberCount: number
-  isAdmin: boolean
   isActive: boolean
   lastMessage?: ChatMessage
-  unreadCount?: number
 }
 
-export default function ChatPage() {
+export default function AdminChatPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [newMessage, setNewMessage] = useState('')
-  const [selectedGroup, setSelectedGroup] = useState<string>('admin-main')
+  const [selectedGroup, setSelectedGroup] = useState<string>('main')
   const [isUploading, setIsUploading] = useState(false)
-  const [chatGroups, setChatGroups] = useState<ChatGroup[]>([
+  const [uploadType, setUploadType] = useState<'image' | 'file' | 'text'>('text')
+  const [adminGroups, setAdminGroups] = useState<AdminGroup[]>([
     {
-      id: 'admin-main',
-      name: 'FreelanceHub Updates',
-      description: 'Official announcements and updates',
+      id: 'main',
+      name: 'Main Group',
+      description: 'All users can see this content',
       memberCount: 1250,
-      isAdmin: true,
       isActive: true,
-      unreadCount: 3,
       lastMessage: {
         id: '1',
-        content: 'Welcome to FreelanceHub! Check out our latest updates and new features.',
-        type: 'text',
-        sender: {
-          id: 'admin',
-          name: 'FreelanceHub Admin',
-          role: 'ADMIN'
-        },
-        timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
-        isAdmin: true
-      }
-    },
-    {
-      id: 'admin-announcements',
-      name: 'Announcements',
-      description: 'Important updates and news',
-      memberCount: 1250,
-      isAdmin: true,
-      isActive: true,
-      unreadCount: 1,
-      lastMessage: {
-        id: '2',
-        content: 'New payment system is now live!',
+        content: 'Welcome to FreelanceHub! Check out our latest updates.',
         type: 'text',
         sender: {
           id: 'admin',
           name: 'Admin',
           role: 'ADMIN'
         },
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
+        timestamp: new Date(),
         isAdmin: true
       }
     },
     {
-      id: 'general',
-      name: 'General Discussion',
-      description: 'General chat for all users',
+      id: 'announcements',
+      name: 'Announcements',
+      description: 'Important updates and news',
       memberCount: 1250,
-      isAdmin: false,
-      isActive: true,
-      lastMessage: {
-        id: '3',
-        content: 'Hey everyone! How is your day going?',
-        type: 'text',
-        sender: {
-          id: 'user1',
-          name: 'John Doe',
-          role: 'USER'
-        },
-        timestamp: new Date(Date.now() - 1000 * 60 * 5), // 5 minutes ago
-        isAdmin: false
-      }
+      isActive: true
     },
     {
-      id: 'freelancers',
-      name: 'Freelancers Hub',
-      description: 'Connect with other freelancers',
-      memberCount: 850,
-      isAdmin: false,
-      isActive: true,
-      lastMessage: {
-        id: '4',
-        content: 'Looking for a React developer for a project',
-        type: 'text',
-        sender: {
-          id: 'user2',
-          name: 'Sarah Wilson',
-          role: 'USER'
-        },
-        timestamp: new Date(Date.now() - 1000 * 60 * 15), // 15 minutes ago
-        isAdmin: false
-      }
+      id: 'promotions',
+      name: 'Promotions',
+      description: 'Special offers and deals',
+      memberCount: 1250,
+      isActive: true
     }
   ])
 
   useEffect(() => {
     if (status === 'loading') return
-    if (status === 'unauthenticated') {
+    if (status === 'unauthenticated' || session?.user?.role !== 'ADMIN') {
       router.push('/auth/signin')
       return
     }
-  }, [status, router])
+  }, [status, session, router])
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return
@@ -153,39 +102,42 @@ export default function ChatPage() {
       content: newMessage,
       type: 'text',
       sender: {
-        id: session?.user?.id || 'user',
-        name: session?.user?.name || 'You',
-        role: 'USER'
+        id: session?.user?.id || 'admin',
+        name: session?.user?.name || 'Admin',
+        role: 'ADMIN'
       },
       timestamp: new Date(),
-      isAdmin: false
+      isAdmin: true
     }
 
     setMessages(prev => [...prev, message])
     setNewMessage('')
-    toast.success('Message sent')
+    
+    // Simulate sending to all users
+    toast.success('Message sent to all users in main group')
   }
 
   const handleFileUpload = async (file: File) => {
     setIsUploading(true)
     
+    // Simulate file upload
     setTimeout(() => {
       const message: ChatMessage = {
         id: Date.now().toString(),
         content: file.name,
         type: file.type.startsWith('image/') ? 'image' : 'file',
         sender: {
-          id: session?.user?.id || 'user',
-          name: session?.user?.name || 'You',
-          role: 'USER'
+          id: session?.user?.id || 'admin',
+          name: session?.user?.name || 'Admin',
+          role: 'ADMIN'
         },
         timestamp: new Date(),
-        isAdmin: false
+        isAdmin: true
       }
 
       setMessages(prev => [...prev, message])
       setIsUploading(false)
-      toast.success('File uploaded')
+      toast.success('File uploaded and sent to all users')
     }, 1000)
   }
 
@@ -197,11 +149,9 @@ export default function ChatPage() {
     )
   }
 
-  if (status === 'unauthenticated') {
+  if (status === 'unauthenticated' || session?.user?.role !== 'ADMIN') {
     return null
   }
-
-  const selectedGroupData = chatGroups.find(g => g.id === selectedGroup)
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -221,31 +171,31 @@ export default function ChatPage() {
               <Users className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-semibold">Chat</h1>
-              <p className="text-sm text-gray-400">Connect with the community</p>
+              <h1 className="text-lg font-semibold">Admin Chat</h1>
+              <p className="text-sm text-gray-400">Manage group communications</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800">
-              <Bell className="w-5 h-5" />
+              <Settings className="w-5 h-5" />
             </Button>
             <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800">
-              <Settings className="w-5 h-5" />
+              <MoreVertical className="w-5 h-5" />
             </Button>
           </div>
         </div>
       </div>
 
       <div className="flex h-[calc(100vh-80px)]">
-        {/* Sidebar - Chat Groups */}
+        {/* Sidebar - Admin Groups */}
         <div className="w-80 bg-gray-900 border-r border-gray-800 flex flex-col">
           <div className="p-4 border-b border-gray-800">
-            <h2 className="text-lg font-semibold mb-2">Chat Groups</h2>
-            <p className="text-sm text-gray-400">Select a group to join</p>
+            <h2 className="text-lg font-semibold mb-2">Admin Groups</h2>
+            <p className="text-sm text-gray-400">Select group to manage</p>
           </div>
           
           <div className="flex-1 overflow-y-auto">
-            {chatGroups.map((group) => (
+            {adminGroups.map((group) => (
               <div
                 key={group.id}
                 onClick={() => setSelectedGroup(group.id)}
@@ -254,32 +204,44 @@ export default function ChatPage() {
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-medium">{group.name}</h3>
-                    {group.isAdmin && (
-                      <Crown className="w-4 h-4 text-yellow-400" />
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {group.unreadCount && group.unreadCount > 0 && (
-                      <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
-                        {group.unreadCount}
-                      </span>
-                    )}
-                    <span className="text-xs bg-gray-700 text-white px-2 py-1 rounded-full">
-                      {group.memberCount}
-                    </span>
-                  </div>
+                  <h3 className="font-medium">{group.name}</h3>
+                  <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded-full">
+                    {group.memberCount}
+                  </span>
                 </div>
                 <p className="text-sm text-gray-400 mb-2">{group.description}</p>
                 {group.lastMessage && (
                   <div className="text-xs text-gray-500">
-                    <span className="font-medium">{group.lastMessage.sender.name}:</span>{' '}
-                    {group.lastMessage.content.substring(0, 30)}...
+                    Last: {group.lastMessage.content.substring(0, 30)}...
                   </div>
                 )}
               </div>
             ))}
+          </div>
+
+          {/* Upload Section */}
+          <div className="p-4 border-t border-gray-800">
+            <h3 className="font-medium mb-3">Upload Content</h3>
+            <div className="space-y-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full justify-start text-white border-gray-700 hover:bg-gray-800"
+                onClick={() => setUploadType('image')}
+              >
+                <Image className="w-4 h-4 mr-2" />
+                Upload Image
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full justify-start text-white border-gray-700 hover:bg-gray-800"
+                onClick={() => setUploadType('file')}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                Upload File
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -288,29 +250,15 @@ export default function ChatPage() {
           {/* Chat Header */}
           <div className="bg-gray-900 border-b border-gray-800 px-4 py-3">
             <div className="flex items-center gap-3">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                selectedGroupData?.isAdmin ? 'bg-yellow-600' : 'bg-blue-600'
-              }`}>
-                {selectedGroupData?.isAdmin ? (
-                  <Crown className="w-4 h-4 text-white" />
-                ) : (
-                  <Users className="w-4 h-4 text-white" />
-                )}
+              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                <span className="text-sm font-bold">A</span>
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <h2 className="font-semibold">
-                    {selectedGroupData?.name}
-                  </h2>
-                  {selectedGroupData?.isAdmin && (
-                    <span className="text-xs bg-yellow-600 text-white px-2 py-1 rounded-full">
-                      Official
-                    </span>
-                  )}
-                </div>
+                <h2 className="font-semibold">
+                  {adminGroups.find(g => g.id === selectedGroup)?.name}
+                </h2>
                 <p className="text-sm text-gray-400">
-                  {selectedGroupData?.memberCount} members
-                  {selectedGroupData?.isAdmin && ' • Admin messages'}
+                  {adminGroups.find(g => g.id === selectedGroup)?.memberCount} members
                 </p>
               </div>
             </div>
@@ -318,51 +266,15 @@ export default function ChatPage() {
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {selectedGroupData?.lastMessage && (
-              <div className="flex items-start gap-3">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  selectedGroupData.lastMessage.isAdmin ? 'bg-yellow-600' : 'bg-blue-600'
-                }`}>
-                  {selectedGroupData.lastMessage.isAdmin ? (
-                    <Crown className="w-4 h-4 text-white" />
-                  ) : (
-                    <span className="text-sm font-bold">U</span>
-                  )}
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-medium text-sm">
-                      {selectedGroupData.lastMessage.sender.name}
-                    </span>
-                    {selectedGroupData.lastMessage.isAdmin && (
-                      <span className="text-xs bg-yellow-600 text-white px-2 py-1 rounded-full">
-                        Admin
-                      </span>
-                    )}
-                    <span className="text-xs text-gray-400">
-                      {selectedGroupData.lastMessage.timestamp.toLocaleTimeString()}
-                    </span>
-                  </div>
-                  <div className={`rounded-lg p-3 max-w-md ${
-                    selectedGroupData.lastMessage.isAdmin 
-                      ? 'bg-yellow-900/20 border border-yellow-600/30' 
-                      : 'bg-gray-800'
-                  }`}>
-                    <p className="text-sm">{selectedGroupData.lastMessage.content}</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {messages.map((message) => (
               <div key={message.id} className="flex items-start gap-3">
                 <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-bold">U</span>
+                  <span className="text-sm font-bold">A</span>
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-medium text-sm">{message.sender.name}</span>
-                    <span className="text-xs text-gray-400">You</span>
+                    <span className="text-xs text-gray-400">Admin</span>
                     <span className="text-xs text-gray-500">
                       {message.timestamp.toLocaleTimeString()}
                     </span>
@@ -399,7 +311,7 @@ export default function ChatPage() {
                 onClick={() => {
                   const input = document.createElement('input')
                   input.type = 'file'
-                  input.accept = 'image/*'
+                  input.accept = uploadType === 'image' ? 'image/*' : '*'
                   input.onchange = (e) => {
                     const file = (e.target as HTMLInputElement).files?.[0]
                     if (file) handleFileUpload(file)
@@ -438,10 +350,7 @@ export default function ChatPage() {
             </div>
             
             <div className="mt-2 text-xs text-gray-400">
-              {selectedGroupData?.isAdmin 
-                ? 'This is an official admin group. Only admins can send messages.'
-                : 'Messages will be sent to all members in this group'
-              }
+              Messages will be sent to all users in the selected group
             </div>
           </div>
         </div>
