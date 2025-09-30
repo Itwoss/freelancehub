@@ -15,6 +15,82 @@ const createProjectSchema = z.object({
 
 export async function GET(request: NextRequest) {
   try {
+    // Mock data for development - no database required
+    const mockProjects = [
+      {
+        id: '1',
+        title: 'E-commerce Platform Development',
+        description: 'Build a modern e-commerce platform with React, Node.js, and Stripe integration. Looking for a full-stack developer with e-commerce experience.',
+        price: 2500,
+        category: 'Web Development',
+        tags: ['React', 'Node.js', 'Stripe'],
+        images: ['/placeholder-image/ecommerce-1.jpg'],
+        status: 'ACTIVE',
+        featured: true,
+        createdAt: new Date('2024-01-15'),
+        author: {
+          id: '1',
+          name: 'Alex Johnson',
+          email: 'alex@example.com',
+          image: null,
+          rating: 4.9
+        },
+        reviews: [{ rating: 5 }, { rating: 4 }],
+        _count: {
+          reviews: 2,
+          orders: 1
+        }
+      },
+      {
+        id: '2',
+        title: 'Mobile App Design',
+        description: 'Design a sleek mobile app interface for a fitness tracking application. Need modern, intuitive design with excellent user experience.',
+        price: 1200,
+        category: 'UI/UX Design',
+        tags: ['Figma', 'UI/UX', 'Mobile'],
+        images: ['/placeholder-image/mobile-1.jpg'],
+        status: 'ACTIVE',
+        featured: true,
+        createdAt: new Date('2024-01-14'),
+        author: {
+          id: '2',
+          name: 'Sarah Chen',
+          email: 'sarah@example.com',
+          image: null,
+          rating: 4.8
+        },
+        reviews: [{ rating: 5 }, { rating: 4 }],
+        _count: {
+          reviews: 2,
+          orders: 0
+        }
+      },
+      {
+        id: '3',
+        title: 'Content Marketing Strategy',
+        description: 'Create engaging content strategy and social media campaigns for a tech startup. Looking for creative marketer with startup experience.',
+        price: 800,
+        category: 'Marketing',
+        tags: ['SEO', 'Social Media', 'Content'],
+        images: ['/placeholder-image/marketing-1.jpg'],
+        status: 'ACTIVE',
+        featured: false,
+        createdAt: new Date('2024-01-13'),
+        author: {
+          id: '3',
+          name: 'Mike Davis',
+          email: 'mike@example.com',
+          image: null,
+          rating: 4.7
+        },
+        reviews: [{ rating: 4 }],
+        _count: {
+          reviews: 1,
+          orders: 0
+        }
+      }
+    ]
+
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '10')
@@ -22,56 +98,27 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search')
     const featured = searchParams.get('featured') === 'true'
 
-    const where: any = {
-      status: 'ACTIVE'
-    }
+    let filteredProjects = mockProjects
 
     if (category) {
-      where.category = category
+      filteredProjects = filteredProjects.filter(p => p.category === category)
     }
 
     if (search) {
-      where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
-        { tags: { has: search } }
-      ]
+      filteredProjects = filteredProjects.filter(p => 
+        p.title.toLowerCase().includes(search.toLowerCase()) ||
+        p.description.toLowerCase().includes(search.toLowerCase()) ||
+        p.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase()))
+      )
     }
 
     if (featured) {
-      where.featured = true
+      filteredProjects = filteredProjects.filter(p => p.featured)
     }
 
-    const [projects, total] = await Promise.all([
-      prisma.project.findMany({
-        where,
-        include: {
-          author: {
-            select: {
-              id: true,
-              name: true,
-              image: true,
-              rating: true
-            }
-          },
-          reviews: {
-            select: {
-              rating: true
-            }
-          },
-          _count: {
-            select: {
-              orders: true,
-              reviews: true
-            }
-          }
-        },
-        orderBy: featured ? { createdAt: 'desc' } : { createdAt: 'desc' },
-        skip: (page - 1) * limit,
-        take: limit
-      }),
-      prisma.project.count({ where })
-    ])
+    const total = filteredProjects.length
+    const skip = (page - 1) * limit
+    const projects = filteredProjects.slice(skip, skip + limit)
 
     return NextResponse.json({
       projects,

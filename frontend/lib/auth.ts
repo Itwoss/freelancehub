@@ -25,13 +25,35 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
+        // Temporary mock authentication for development
+        // This allows login without database connection
+        const mockUsers = [
+          {
+            id: '1',
+            email: 'admin@freelancehub.com',
+            password: 'admin123',
+            name: 'Admin User',
+            role: 'ADMIN'
+          },
+          {
+            id: '2',
+            email: 'user@freelancehub.com',
+            password: 'user123',
+            name: 'Regular User',
+            role: 'USER'
+          },
+          {
+            id: '3',
+            email: 'freelancer@freelancehub.com',
+            password: 'freelancer123',
+            name: 'Freelancer User',
+            role: 'USER'
+          }
+        ]
+
         try {
-          console.log('📧 Looking up user in database...')
-          const user = await prisma.user.findUnique({
-            where: {
-              email: credentials.email
-            }
-          })
+          console.log('📧 Looking up user in mock data...')
+          const user = mockUsers.find(u => u.email === credentials.email)
 
           if (!user) {
             console.log('❌ User not found:', credentials.email)
@@ -42,23 +64,12 @@ export const authOptions: NextAuthOptions = {
             id: user.id, 
             email: user.email, 
             name: user.name, 
-            role: user.role,
-            hasPassword: !!user.password 
+            role: user.role
           })
 
-          if (!user.password) {
-            console.log('❌ User has no password set')
-            return null
-          }
-
-          console.log('🔐 Verifying password...')
-          const isPasswordValid = await bcrypt.compare(
-            credentials.password,
-            user.password
-          )
-
-          if (!isPasswordValid) {
-            console.log('❌ Invalid password for user:', credentials.email)
+          // Simple password check (in production, use bcrypt)
+          if (user.password !== credentials.password) {
+            console.log('❌ Invalid password')
             return null
           }
 
@@ -68,7 +79,7 @@ export const authOptions: NextAuthOptions = {
             email: user.email,
             name: user.name,
             role: user.role,
-            image: user.image,
+            image: null,
           }
           console.log('✅ Returning auth result:', authResult)
           return authResult
