@@ -219,6 +219,9 @@ export default function UserDashboard() {
     { id: 'orders', label: 'Orders', icon: DollarSign },
     { id: 'reviews', label: 'Reviews', icon: Star },
     { id: 'chat', label: 'Chat', icon: MessageSquare },
+    ...(session?.user?.role === 'ADMIN' ? [
+      { id: 'admin-chat', label: 'Admin Chat', icon: MessageSquare, href: '/admin/chat' }
+    ] : []),
     { id: 'content', label: 'My Content', icon: BookOpen },
     { id: 'feed', label: 'Social Feed', icon: Users },
     { id: 'settings', label: 'Settings', icon: Settings }
@@ -237,34 +240,67 @@ export default function UserDashboard() {
               <h2 className="text-lg font-semibold" style={{ color: menuContrast.menuTextColor }}>Dashboard</h2>
             </div>
             <nav className="space-y-2">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className="w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300"
-                  style={{
-                    color: activeTab === tab.id ? '#ffffff' : menuContrast.menuTextColorSubtle,
-                    backgroundColor: activeTab === tab.id 
-                      ? 'linear-gradient(to right, #f97316, #ef4444)' 
-                      : 'transparent'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (activeTab !== tab.id) {
-                      e.currentTarget.style.color = menuContrast.menuHoverTextColor
-                      e.currentTarget.style.backgroundColor = menuContrast.menuHoverBackground
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (activeTab !== tab.id) {
-                      e.currentTarget.style.color = menuContrast.menuTextColorSubtle
-                      e.currentTarget.style.backgroundColor = 'transparent'
-                    }
-                  }}
-                >
-                  <tab.icon className="w-4 h-4 mr-3" />
-                  {tab.label}
-                </button>
-              ))}
+              {tabs.map((tab) => {
+                const isActive = activeTab === tab.id
+                const buttonContent = (
+                  <>
+                    <tab.icon className="w-4 h-4 mr-3" />
+                    {tab.label}
+                  </>
+                )
+
+                if (tab.href) {
+                  return (
+                    <Link
+                      key={tab.id}
+                      href={tab.href}
+                      className="w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300"
+                      style={{
+                        color: menuContrast.menuTextColorSubtle,
+                        backgroundColor: 'transparent'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = menuContrast.menuHoverTextColor
+                        e.currentTarget.style.backgroundColor = menuContrast.menuHoverBackground
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = menuContrast.menuTextColorSubtle
+                        e.currentTarget.style.backgroundColor = 'transparent'
+                      }}
+                    >
+                      {buttonContent}
+                    </Link>
+                  )
+                }
+
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className="w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300"
+                    style={{
+                      color: isActive ? '#ffffff' : menuContrast.menuTextColorSubtle,
+                      backgroundColor: isActive 
+                        ? 'linear-gradient(to right, #f97316, #ef4444)' 
+                        : 'transparent'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isActive) {
+                        e.currentTarget.style.color = menuContrast.menuHoverTextColor
+                        e.currentTarget.style.backgroundColor = menuContrast.menuHoverBackground
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActive) {
+                        e.currentTarget.style.color = menuContrast.menuTextColorSubtle
+                        e.currentTarget.style.backgroundColor = 'transparent'
+                      }
+                    }}
+                  >
+                    {buttonContent}
+                  </button>
+                )
+              })}
             </nav>
           </div>
         </div>
