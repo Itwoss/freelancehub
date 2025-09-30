@@ -153,7 +153,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
       const booking = await bookingResponse.json()
       
       // If payment required, redirect to Stripe
-      if (product?.price > 0) {
+      if (product?.price && product.price > 0) {
         const paymentResponse = await fetch('/api/payments/create-checkout-session', {
           method: 'POST',
           headers: {
@@ -286,7 +286,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-3xl font-bold text-orange-500">${product.price}</div>
+                    <div className="text-3xl font-bold text-orange-500">${product?.price || 0}</div>
                     {product.isPopular && (
                       <div className="text-sm text-orange-400">Popular Choice</div>
                     )}
@@ -337,7 +337,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                         <div className="font-medium">{product.title}</div>
                         <div className="text-sm text-gray-400">One-time purchase</div>
                       </div>
-                      <div className="text-xl font-bold">${product.price}</div>
+                      <div className="text-xl font-bold">${product?.price || 0}</div>
                     </div>
 
                     <Button
@@ -345,7 +345,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                       className="w-full bg-orange-500 hover:bg-orange-600 text-lg py-4"
                     >
                       <BookOpen className="w-5 h-5 mr-2" />
-                      Book This Product - ${product.price}
+                      Book This Product - ${product?.price || 0}
                     </Button>
 
                     <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
@@ -418,7 +418,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                       <h3 className="text-lg font-semibold mb-4">Payment Method</h3>
                       <div className="grid grid-cols-2 gap-4 mb-4">
                         <Button
-                          variant={bookingForm.paymentMethod === 'card' ? 'default' : 'outline'}
+                          variant={bookingForm.paymentMethod === 'card' ? 'primary' : 'outline'}
                           onClick={() => setBookingForm({...bookingForm, paymentMethod: 'card'})}
                           className={bookingForm.paymentMethod === 'card' ? 'bg-orange-500' : 'border-gray-700'}
                         >
@@ -426,7 +426,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                           Pay by Card
                         </Button>
                         <Button
-                          variant={bookingForm.paymentMethod === 'paypal' ? 'default' : 'outline'}
+                          variant={bookingForm.paymentMethod === 'paypal' ? 'primary' : 'outline'}
                           onClick={() => setBookingForm({...bookingForm, paymentMethod: 'paypal'})}
                           className={bookingForm.paymentMethod === 'paypal' ? 'bg-orange-500' : 'border-gray-700'}
                         >
@@ -517,7 +517,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                     <div className="border-t border-gray-800 pt-4">
                       <div className="flex items-center justify-between text-xl font-bold">
                         <span>Total</span>
-                        <span>${product.price}</span>
+                        <span>${product?.price || 0}</span>
                       </div>
                     </div>
 
@@ -527,7 +527,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                       disabled={isBooking}
                       className="w-full bg-orange-500 hover:bg-orange-600 text-lg py-4"
                     >
-                      {isBooking ? 'Processing...' : `Complete Booking - $${product.price}`}
+                      {isBooking ? 'Processing...' : `Complete Booking - $${product?.price || 0}`}
                     </Button>
                   </div>
                 </div>
