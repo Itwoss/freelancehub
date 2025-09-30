@@ -1,0 +1,369 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          Role      @default(USER)
+  bio           String?
+  skills        String[]
+  rating        Float     @default(0)
+  totalReviews  Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Social features
+  canPost       Boolean   @default(false)
+  canChat       Boolean   @default(false)
+  isVerified    Boolean   @default(false)
+  followersCount Int      @default(0)
+  followingCount Int      @default(0)
+  
+  // Payment features
+  coins         Int       @default(0)
+  dailyMessages Int      @default(5)
+  messagesUsed  Int       @default(0)
+  lastMessageReset DateTime @default(now())
+
+  accounts     Account[]
+  sessions     Session[]
+  projects     Project[]
+  orders       Order[]
+  reviews      Review[]
+  notifications Notification[]
+  transactions Transaction[]
+  
+  // Social relationships
+  posts        Post[]
+  stories      Story[]
+  likes        Like[]
+  comments     Comment[]
+  followers    Follow[] @relation("UserFollowers")
+  following    Follow[] @relation("UserFollowing")
+  sentMessages Message[] @relation("MessageSender")
+  receivedMessages Message[] @relation("MessageReceiver")
+  chatRooms    ChatRoomMember[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Project {
+  id          String      @id @default(cuid())
+  title       String
+  description String      @db.Text
+  price       Float
+  category    String
+  tags        String[]
+  images      String[]
+  status      ProjectStatus @default(ACTIVE)
+  featured    Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  orders  Order[]
+  reviews Review[]
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  status      OrderStatus @default(PENDING)
+  totalAmount Float
+  paymentId   String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  buyerId  String
+  buyer    User    @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  projectId String
+  project  Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  review Review?
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reviewerId String
+  reviewer   User    @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  projectId  String
+  project    Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  orderId    String  @unique
+  order      Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String             @id @default(cuid())
+  title     String
+  message   String
+  type      NotificationType
+  read      Boolean            @default(false)
+  createdAt DateTime           @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ProjectStatus {
+  ACTIVE
+  INACTIVE
+  COMPLETED
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  COMPLETED
+  CANCELLED
+}
+
+// Social Media Models
+model Post {
+  id          String      @id @default(cuid())
+  title       String?
+  caption     String      @db.Text
+  images      String[]
+  audioUrl    String?
+  audioTitle  String?
+  isApproved  Boolean     @default(false)
+  isPublic    Boolean     @default(true)
+  likesCount  Int         @default(0)
+  commentsCount Int       @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  authorId    String
+  author      User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  likes       Like[]
+  comments    Comment[]
+}
+
+model Story {
+  id          String      @id @default(cuid())
+  content     String      // URL to image/video
+  type        StoryType
+  isApproved  Boolean     @default(false)
+  isPublic    Boolean     @default(true)
+  viewsCount  Int         @default(0)
+  expiresAt   DateTime    // Stories expire after 24 hours
+  createdAt   DateTime    @default(now())
+
+  authorId    String
+  author      User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Follow {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  followerId  String
+  follower    User    @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  followingId String
+  following   User    @relation("UserFollowing", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+}
+
+// Chat Models
+model ChatRoom {
+  id        String   @id @default(cuid())
+  name      String?
+  type      ChatRoomType @default(DIRECT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members   ChatRoomMember[]
+  messages  Message[]
+}
+
+model ChatRoomMember {
+  id        String   @id @default(cuid())
+  joinedAt  DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chatRoomId String
+  chatRoom  ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chatRoomId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  type      MessageType @default(TEXT)
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  senderId  String
+  sender    User     @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String?
+  receiver  User?    @relation("MessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  chatRoomId String?
+  chatRoom  ChatRoom? @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+}
+
+// Enums
+enum StoryType {
+  IMAGE
+  VIDEO
+}
+
+enum ChatRoomType {
+  DIRECT
+  GROUP
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+}
+
+enum NotificationType {
+  ORDER_CREATED
+  ORDER_UPDATED
+  PAYMENT_RECEIVED
+  REVIEW_RECEIVED
+  PROJECT_APPROVED
+  PROJECT_REJECTED
+  POST_APPROVED
+  POST_REJECTED
+  STORY_APPROVED
+  STORY_REJECTED
+  NEW_FOLLOWER
+  NEW_LIKE
+  NEW_COMMENT
+  NEW_MESSAGE
+  CONTACT_SUBMISSION
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String   @db.Text
+  status    ContactStatus @default(NEW)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ContactStatus {
+  NEW
+  READ
+  REPLIED
+  CLOSED
+}
+
+// Payment Models
+model Transaction {
+  id          String            @id @default(cuid())
+  type        TransactionType
+  amount      Int               // Amount in cents
+  currency    String            @default("usd")
+  status      TransactionStatus @default(PENDING)
+  description String?
+  metadata    Json?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum TransactionType {
+  COIN_PURCHASE
+  MESSAGE_PURCHASE
+  REFUND
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
