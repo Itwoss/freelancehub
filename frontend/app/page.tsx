@@ -13,7 +13,10 @@ import {
   Briefcase,
   Shield,
   Zap,
-  CheckCircle
+  CheckCircle,
+  BookOpen,
+  Eye,
+  ExternalLink
 } from "lucide-react"
 
 /**
@@ -411,6 +414,189 @@ export default function HomePage() {
               >
                 <Briefcase className="w-5 h-5" />
                 View All Projects
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* FEATURED PRODUCTS */}
+        <section className="py-20 bg-transparent">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 mb-4">
+                <span className="w-2 h-2 bg-orange-400 rounded-full"></span>
+                <span className="text-orange-400 font-medium text-sm uppercase tracking-wide">Featured Products</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Premium Digital
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500"> Products</span>
+              </h2>
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                Discover our collection of premium templates, designs, and digital products. 
+                Perfect for your next project or business venture.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {/* Product Card 1 */}
+              <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105">
+                <div className="relative aspect-video bg-gray-800 rounded-xl mb-6 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                    <BookOpen className="w-12 h-12 text-white/50" />
+                  </div>
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Button className="bg-white text-black hover:bg-gray-200">
+                      <Eye className="w-4 h-4 mr-2" />
+                      Preview
+                    </Button>
+                  </div>
+                  <div className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    Popular
+                  </div>
+                </div>
+                
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2">Nexus AI - Framer Template</h3>
+                    <p className="text-gray-400 text-sm">AI Platform Marketing Template</p>
+                  </div>
+                  <div className="text-2xl font-bold text-orange-400">$69</div>
+                </div>
+                
+                <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                  Dynamic solution combining AI Platform Marketing with 7 collections in an elegant Dark Theme.
+                </p>
+                
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                    <span className="text-sm text-gray-300">4.9 (127 reviews)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">Dark Theme</span>
+                    <span className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">AI</span>
+                  </div>
+                </div>
+                
+                <div className="flex gap-2">
+                  <Button className="flex-1 bg-orange-500 hover:bg-orange-600">
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    Book Now
+                  </Button>
+                  <Button variant="outline" size="sm" className="border-gray-700 text-gray-300 hover:bg-gray-800">
+                    <ExternalLink className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Product Card 2 */}
+              <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105">
+                <div className="relative aspect-video bg-gray-800 rounded-xl mb-6 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                    <BookOpen className="w-12 h-12 text-white/50" />
+                  </div>
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Button className="bg-white text-black hover:bg-gray-200">
+                      <Eye className="w-4 h-4 mr-2" />
+                      Preview
+                    </Button>
+                  </div>
+                  <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    New
+                  </div>
+                </div>
+                
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2">E-commerce Dashboard</h3>
+                    <p className="text-gray-400 text-sm">Analytics & Management Template</p>
+                  </div>
+                  <div className="text-2xl font-bold text-orange-400">$89</div>
+                </div>
+                
+                <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                  Modern e-commerce dashboard with analytics, order management, and customer insights.
+                </p>
+                
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                    <span className="text-sm text-gray-300">4.8 (89 reviews)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">React</span>
+                    <span className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">Dashboard</span>
+                  </div>
+                </div>
+                
+                <div className="flex gap-2">
+                  <Button className="flex-1 bg-orange-500 hover:bg-orange-600">
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    Book Now
+                  </Button>
+                  <Button variant="outline" size="sm" className="border-gray-700 text-gray-300 hover:bg-gray-800">
+                    <ExternalLink className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Product Card 3 */}
+              <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105">
+                <div className="relative aspect-video bg-gray-800 rounded-xl mb-6 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                    <BookOpen className="w-12 h-12 text-white/50" />
+                  </div>
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Button className="bg-white text-black hover:bg-gray-200">
+                      <Eye className="w-4 h-4 mr-2" />
+                      Preview
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2">Mobile App UI Kit</h3>
+                    <p className="text-gray-400 text-sm">Complete Mobile Design System</p>
+                  </div>
+                  <div className="text-2xl font-bold text-orange-400">$49</div>
+                </div>
+                
+                <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                  Complete mobile app UI kit with 50+ screens, components, and design system.
+                </p>
+                
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                    <span className="text-sm text-gray-300">4.7 (156 reviews)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">Mobile</span>
+                    <span className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">UI Kit</span>
+                  </div>
+                </div>
+                
+                <div className="flex gap-2">
+                  <Button className="flex-1 bg-orange-500 hover:bg-orange-600">
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    Book Now
+                  </Button>
+                  <Button variant="outline" size="sm" className="border-gray-700 text-gray-300 hover:bg-gray-800">
+                    <ExternalLink className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <Link 
+                href="/products" 
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              >
+                <BookOpen className="w-5 h-5" />
+                View All Products
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
