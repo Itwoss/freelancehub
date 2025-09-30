@@ -23,25 +23,35 @@ export default function SignInPage() {
     setLoading(true)
 
     try {
+      console.log('Attempting login with:', { email: formData.email })
+      
       const result = await signIn('credentials', {
         email: formData.email,
         password: formData.password,
         redirect: false,
       })
 
+      console.log('Login result:', result)
+
       if (result?.error) {
-        toast.error('Invalid credentials')
-      } else {
+        console.error('Login error:', result.error)
+        toast.error(`Login failed: ${result.error}`)
+      } else if (result?.ok) {
         toast.success('Welcome back!')
         const session = await getSession()
-        if (session?.user.role === 'ADMIN') {
+        console.log('Session after login:', session)
+        
+        if (session?.user?.role === 'ADMIN') {
           router.push('/admin/dashboard')
         } else {
           router.push('/dashboard')
         }
+      } else {
+        toast.error('Login failed. Please try again.')
       }
     } catch (error) {
-      toast.error('Something went wrong')
+      console.error('Login error:', error)
+      toast.error('Something went wrong. Please try again.')
     } finally {
       setLoading(false)
     }

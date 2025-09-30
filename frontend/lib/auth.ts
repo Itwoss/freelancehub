@@ -25,6 +25,13 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(credentials.email)) {
+          console.log('❌ Invalid email format')
+          return null
+        }
+
         // Temporary mock authentication for development
         // This allows login without database connection
         const mockUsers = [
