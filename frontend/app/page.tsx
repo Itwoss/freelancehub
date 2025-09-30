@@ -480,10 +480,12 @@ export default function HomePage() {
                 </div>
                 
                 <div className="flex gap-2">
-                  <Button className="flex-1 bg-orange-500 hover:bg-orange-600">
-                    <BookOpen className="w-4 h-4 mr-2" />
-                    Book Now
-                  </Button>
+                  <Link href="/products/1" className="flex-1">
+                    <Button className="w-full bg-orange-500 hover:bg-orange-600">
+                      <BookOpen className="w-4 h-4 mr-2" />
+                      Book Now
+                    </Button>
+                  </Link>
                   <Button variant="outline" size="sm" className="border-gray-700 text-gray-300 hover:bg-gray-800">
                     <ExternalLink className="w-4 h-4" />
                   </Button>
@@ -531,10 +533,12 @@ export default function HomePage() {
                 </div>
                 
                 <div className="flex gap-2">
-                  <Button className="flex-1 bg-orange-500 hover:bg-orange-600">
-                    <BookOpen className="w-4 h-4 mr-2" />
-                    Book Now
-                  </Button>
+                  <Link href="/products/2" className="flex-1">
+                    <Button className="w-full bg-orange-500 hover:bg-orange-600">
+                      <BookOpen className="w-4 h-4 mr-2" />
+                      Book Now
+                    </Button>
+                  </Link>
                   <Button variant="outline" size="sm" className="border-gray-700 text-gray-300 hover:bg-gray-800">
                     <ExternalLink className="w-4 h-4" />
                   </Button>
@@ -579,10 +583,12 @@ export default function HomePage() {
                 </div>
                 
                 <div className="flex gap-2">
-                  <Button className="flex-1 bg-orange-500 hover:bg-orange-600">
-                    <BookOpen className="w-4 h-4 mr-2" />
-                    Book Now
-                  </Button>
+                  <Link href="/products/3" className="flex-1">
+                    <Button className="w-full bg-orange-500 hover:bg-orange-600">
+                      <BookOpen className="w-4 h-4 mr-2" />
+                      Book Now
+                    </Button>
+                  </Link>
                   <Button variant="outline" size="sm" className="border-gray-700 text-gray-300 hover:bg-gray-800">
                     <ExternalLink className="w-4 h-4" />
                   </Button>

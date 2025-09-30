@@ -222,7 +222,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
           </Button>
 
           {/* Two Panel Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
             {/* Left Panel - Live Preview */}
             <div className={`${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
               <div className={`bg-gray-900 rounded-xl overflow-hidden ${isFullscreen ? 'h-screen' : 'aspect-video'}`}>
@@ -372,7 +372,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                     {/* Contact Information */}
                     <div>
                       <h3 className="text-lg font-semibold mb-4">Contact Information</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <Label htmlFor="name">Full Name</Label>
                           <Input

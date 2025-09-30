@@ -52,6 +52,7 @@ export default function ChatPage() {
   const [newMessage, setNewMessage] = useState('')
   const [selectedGroup, setSelectedGroup] = useState<string>('admin-main')
   const [isUploading, setIsUploading] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [chatGroups, setChatGroups] = useState<ChatGroup[]>([
     {
       id: 'admin-main',
@@ -226,6 +227,14 @@ export default function ChatPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="text-white hover:bg-gray-800 lg:hidden"
+            >
+              <Users className="w-5 h-5" />
+            </Button>
             <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800">
               <Bell className="w-5 h-5" />
             </Button>
@@ -236,9 +245,17 @@ export default function ChatPage() {
         </div>
       </div>
 
+      {/* Mobile Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       <div className="flex h-[calc(100vh-80px)]">
         {/* Sidebar - Chat Groups */}
-        <div className="w-80 bg-gray-900 border-r border-gray-800 flex flex-col">
+        <div className={`w-80 bg-gray-900 border-r border-gray-800 flex flex-col fixed lg:relative z-50 lg:z-auto h-full ${isSidebarOpen ? 'flex' : 'hidden'} lg:flex`}>
           <div className="p-4 border-b border-gray-800">
             <h2 className="text-lg font-semibold mb-2">Chat Groups</h2>
             <p className="text-sm text-gray-400">Select a group to join</p>
@@ -248,7 +265,10 @@ export default function ChatPage() {
             {chatGroups.map((group) => (
               <div
                 key={group.id}
-                onClick={() => setSelectedGroup(group.id)}
+                onClick={() => {
+                  setSelectedGroup(group.id)
+                  setIsSidebarOpen(false)
+                }}
                 className={`p-4 border-b border-gray-800 cursor-pointer hover:bg-gray-800 transition-colors ${
                   selectedGroup === group.id ? 'bg-gray-800' : ''
                 }`}

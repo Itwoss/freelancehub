@@ -229,7 +229,7 @@ export default function AdminBookingsPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <div className="flex flex-col lg:flex-row gap-4 mb-6">
           <div className="flex-1">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -246,7 +246,7 @@ export default function AdminBookingsPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-orange-500 focus:outline-none"
+              className="px-3 py-2 md:px-4 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-orange-500 focus:outline-none text-sm md:text-base"
             >
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
@@ -259,51 +259,51 @@ export default function AdminBookingsPage() {
         {/* Bookings Table */}
         <div className="bg-gray-900 rounded-xl overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[800px]">
               <thead className="bg-gray-800">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">Booking ID</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">Customer</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">Product</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">Amount</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">Status</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">Payment</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">Date</th>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">Actions</th>
+                  <th className="px-3 md:px-6 py-4 text-left text-xs md:text-sm font-medium text-gray-300">Booking ID</th>
+                  <th className="px-3 md:px-6 py-4 text-left text-xs md:text-sm font-medium text-gray-300">Customer</th>
+                  <th className="px-3 md:px-6 py-4 text-left text-xs md:text-sm font-medium text-gray-300 hidden md:table-cell">Product</th>
+                  <th className="px-3 md:px-6 py-4 text-left text-xs md:text-sm font-medium text-gray-300">Amount</th>
+                  <th className="px-3 md:px-6 py-4 text-left text-xs md:text-sm font-medium text-gray-300">Status</th>
+                  <th className="px-3 md:px-6 py-4 text-left text-xs md:text-sm font-medium text-gray-300 hidden sm:table-cell">Payment</th>
+                  <th className="px-3 md:px-6 py-4 text-left text-xs md:text-sm font-medium text-gray-300 hidden lg:table-cell">Date</th>
+                  <th className="px-3 md:px-6 py-4 text-left text-xs md:text-sm font-medium text-gray-300">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
                 {filteredBookings.map((booking) => (
                   <tr key={booking.id} className="hover:bg-gray-800/50">
-                    <td className="px-6 py-4 text-sm text-gray-300">
+                    <td className="px-3 md:px-6 py-4 text-xs md:text-sm text-gray-300">
                       #{booking.id}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-4">
                       <div>
-                        <div className="text-sm font-medium text-white">{booking.userName}</div>
-                        <div className="text-sm text-gray-400">{booking.userEmail}</div>
+                        <div className="text-xs md:text-sm font-medium text-white">{booking.userName}</div>
+                        <div className="text-xs md:text-sm text-gray-400">{booking.userEmail}</div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-300">
+                    <td className="px-3 md:px-6 py-4 text-xs md:text-sm text-gray-300 hidden md:table-cell">
                       Product #{booking.productId}
                     </td>
-                    <td className="px-6 py-4 text-sm text-white">
+                    <td className="px-3 md:px-6 py-4 text-xs md:text-sm text-white">
                       ${booking.amount}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-4">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`}>
                         {booking.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-4 hidden sm:table-cell">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPaymentStatusColor(booking.paymentStatus)}`}>
                         {booking.paymentStatus}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-400">
+                    <td className="px-3 md:px-6 py-4 text-xs md:text-sm text-gray-400 hidden lg:table-cell">
                       {new Date(booking.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-4">
                       <div className="flex items-center gap-2">
                         {booking.status === 'pending' && (
                           <>

@@ -4,10 +4,20 @@ import { Providers } from './providers'
 import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
-  title: 'Freelance Marketplace',
-  description: 'A modern freelance marketplace connecting talented freelancers with clients',
-  keywords: ['freelance', 'marketplace', 'projects', 'freelancers', 'clients'],
-  authors: [{ name: 'Freelance Marketplace Team' }],
+  title: 'FreelanceHub - Premium Digital Products & Services',
+  description: 'Discover amazing digital products, templates, and services. Connect with talented freelancers and find your next project.',
+  keywords: ['freelance', 'marketplace', 'digital products', 'templates', 'design', 'development', 'freelancers', 'clients'],
+  authors: [{ name: 'FreelanceHub Team' }],
+  openGraph: {
+    title: 'FreelanceHub - Premium Digital Products & Services',
+    description: 'Discover amazing digital products, templates, and services.',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'FreelanceHub - Premium Digital Products & Services',
+    description: 'Discover amazing digital products, templates, and services.',
+  },
 }
 
 export const viewport = {

@@ -170,7 +170,7 @@ export default function ProductsPage() {
           </div>
 
           {/* Filters */}
-          <div className="flex flex-col md:flex-row gap-4 mb-8">
+          <div className="flex flex-col lg:flex-row gap-4 mb-8">
             <div className="flex-1">
               <input
                 type="text"
@@ -180,19 +180,20 @@ export default function ProductsPage() {
                 className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none"
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`flex items-center gap-2 px-4 py-3 rounded-lg transition-colors ${
+                  className={`flex items-center gap-2 px-3 py-2 md:px-4 md:py-3 rounded-lg transition-colors text-sm md:text-base ${
                     selectedCategory === category.id
                       ? 'bg-orange-500 text-white'
                       : 'bg-gray-900 text-gray-300 hover:bg-gray-800'
                   }`}
                 >
                   <category.icon className="w-4 h-4" />
-                  {category.name}
+                  <span className="hidden sm:inline">{category.name}</span>
+                  <span className="sm:hidden">{category.name.split(' ')[0]}</span>
                 </button>
               ))}
             </div>
@@ -230,12 +231,12 @@ export default function ProductsPage() {
                 </div>
 
                 {/* Product Info */}
-                <div className="p-6">
+                <div className="p-4 md:p-6">
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-xl font-semibold group-hover:text-orange-500 transition-colors">
+                    <h3 className="text-lg md:text-xl font-semibold group-hover:text-orange-500 transition-colors">
                       {product.title}
                     </h3>
-                    <div className="text-2xl font-bold text-orange-500">
+                    <div className="text-xl md:text-2xl font-bold text-orange-500">
                       ${product.price}
                     </div>
                   </div>
