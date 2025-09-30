@@ -486,7 +486,12 @@ export default function HomePage() {
                       Book Now
                     </Button>
                   </Link>
-                  <Button variant="outline" size="sm" className="border-gray-700 text-gray-300 hover:bg-gray-800">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                    onClick={() => window.open('https://nexus-ai-template.framer.website', '_blank')}
+                  >
                     <ExternalLink className="w-4 h-4" />
                   </Button>
                 </div>
@@ -539,7 +544,12 @@ export default function HomePage() {
                       Book Now
                     </Button>
                   </Link>
-                  <Button variant="outline" size="sm" className="border-gray-700 text-gray-300 hover:bg-gray-800">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                    onClick={() => window.open('https://ecommerce-dashboard.framer.website', '_blank')}
+                  >
                     <ExternalLink className="w-4 h-4" />
                   </Button>
                 </div>
@@ -589,7 +599,12 @@ export default function HomePage() {
                       Book Now
                     </Button>
                   </Link>
-                  <Button variant="outline" size="sm" className="border-gray-700 text-gray-300 hover:bg-gray-800">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                    onClick={() => window.open('https://mobile-ui-kit.framer.website', '_blank')}
+                  >
                     <ExternalLink className="w-4 h-4" />
                   </Button>
                 </div>
