@@ -1,0 +1,15 @@
+{
+  "name": "freelance-marketplace-vercel",
+  "version": "1.0.0",
+  "description": "Freelance marketplace deployed on Vercel",
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm run start",
+    "dev": "cd frontend && npm run dev"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}
