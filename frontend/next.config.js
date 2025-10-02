@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['localhost', 'images.unsplash.com', 'vercel.app', 'yourdomain.com'],
+    domains: ['localhost', 'images.unsplash.com', 'vercel.app', 'itwos.store'],
   },
   env: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
