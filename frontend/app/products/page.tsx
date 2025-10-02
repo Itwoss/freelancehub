@@ -65,8 +65,8 @@ export default function ProductsPage() {
       description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
       price: 69,
       category: 'templates',
-      previewUrl: 'https://nexus-ai-template.framer.website',
-      liveUrl: 'https://nexus-ai-template.framer.website',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
       images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
       rating: 4.9,
       reviews: 127,
@@ -81,13 +81,390 @@ export default function ProductsPage() {
       isNew: false
     },
     {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    }, {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    }, {
+      id: '1',
+      title: 'Nexus AI - Framer Template',
+      description: 'Discover the Nexus AI Framer Template, a dynamic solution that effortlessly combines the power of an AI Platform Marketing website (CMS) with the versatility of 7 collections, all wrapped in an elegant Dark Theme.',
+      price: 69,
+      category: 'templates',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
+      images: ['/placeholder-image/nexus-ai-1.jpg', '/placeholder-image/nexus-ai-2.jpg'],
+      rating: 4.9,
+      reviews: 127,
+      features: ['Dark Theme', 'AI Platform', '7 Collections', 'CMS Ready', 'Responsive'],
+      tags: ['Framer', 'AI', 'Dark Theme', 'Marketing'],
+      author: {
+        name: 'Design Studio',
+        avatar: '/placeholder-image/author-1.jpg'
+      },
+      createdAt: '2024-01-15',
+      isPopular: true,
+      isNew: false
+    },
+    
+    {
       id: '2',
       title: 'E-commerce Dashboard',
       description: 'Modern e-commerce dashboard with analytics, order management, and customer insights. Built with React and TypeScript.',
       price: 89,
       category: 'templates',
-      previewUrl: 'https://ecommerce-dashboard.framer.website',
-      liveUrl: 'https://ecommerce-dashboard.framer.website',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
       images: ['/placeholder-image/ecommerce-1.jpg'],
       rating: 4.8,
       reviews: 89,
@@ -107,8 +484,8 @@ export default function ProductsPage() {
       description: 'Complete mobile app UI kit with 50+ screens, components, and design system. Perfect for iOS and Android apps.',
       price: 49,
       category: 'mobile',
-      previewUrl: 'https://mobile-ui-kit.framer.website',
-      liveUrl: 'https://mobile-ui-kit.framer.website',
+      previewUrl: 'https://examdodo-vercel.vercel.app/',
+      liveUrl: 'https://examdodo-vercel.vercel.app/',
       images: ['/placeholder-image/mobile-1.jpg'],
       rating: 4.7,
       reviews: 156,
@@ -159,12 +536,17 @@ export default function ProductsPage() {
         {/* Hero Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center mb-12">
+            <div className="inline-block mb-4">
+              <span className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-bold">
+                ✨ LIMITED TIME EVENT
+              </span>
+            </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Discover Amazing
-              <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent"> Products</span>
+              Dare to discover
+              <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent"> Amazing Products?</span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Browse our collection of premium templates, designs, and digital products. 
+            <p className="text-xl text-purple-200 max-w-3xl mx-auto font-medium">
+              Light your creativity and chase premium templates in our marketplace! 
               Find the perfect solution for your next project.
             </p>
           </div>
@@ -177,21 +559,21 @@ export default function ProductsPage() {
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:outline-none"
+                className="w-full px-6 py-4 bg-gradient-to-r from-purple-900/50 to-pink-900/50 border border-purple-500/50 rounded-xl text-white placeholder-purple-300 focus:border-yellow-400 focus:outline-none backdrop-blur-sm shadow-lg"
               />
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-3">
               {categories.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`flex items-center gap-2 px-3 py-2 md:px-4 md:py-3 rounded-lg transition-colors text-sm md:text-base ${
+                  className={`flex items-center gap-2 px-4 py-3 md:px-6 md:py-4 rounded-xl transition-all duration-200 text-sm md:text-base font-bold shadow-lg ${
                     selectedCategory === category.id
-                      ? 'bg-orange-500 text-white'
-                      : 'bg-gray-900 text-gray-300 hover:bg-gray-800'
+                      ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white transform scale-105'
+                      : 'bg-gradient-to-r from-purple-800/50 to-pink-800/50 text-purple-200 hover:from-purple-700/50 hover:to-pink-700/50 hover:text-white backdrop-blur-sm border border-purple-500/30'
                   }`}
                 >
-                  <category.icon className="w-4 h-4" />
+                  <category.icon className="w-5 h-5" />
                   <span className="hidden sm:inline">{category.name}</span>
                   <span className="sm:hidden">{category.name.split(' ')[0]}</span>
                 </button>
@@ -204,50 +586,62 @@ export default function ProductsPage() {
             {filteredProducts.map((product) => (
               <div
                 key={product.id}
-                className="bg-gray-900 rounded-xl overflow-hidden hover:bg-gray-800 transition-colors cursor-pointer group"
+                className="relative bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300 cursor-pointer group shadow-2xl border border-purple-700/50"
                 onClick={() => handleProductClick(product)}
               >
+                {/* Animated Background Pattern */}
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-pink-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
                 {/* Product Image */}
-                <div className="relative aspect-video bg-gray-800">
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
-                    <Play className="w-12 h-12 text-white/50" />
+                <div className="relative aspect-video bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-700/80 to-pink-600/80 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto backdrop-blur-sm">
+                        <Play className="w-8 h-8 text-white" />
+                      </div>
+                      <p className="text-white font-semibold text-sm">PREVIEW</p>
+                    </div>
                   </div>
+                  
+                  {/* Status Badges */}
                   {product.isNew && (
-                    <div className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                      New
+                    <div className="absolute top-4 left-4 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                      ✨ NEW
                     </div>
                   )}
                   {product.isPopular && (
-                    <div className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                      Popular
+                    <div className="absolute top-4 right-4 bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                      🔥 POPULAR
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <Button 
-                      className="bg-white text-black hover:bg-gray-200"
+                      className="bg-white text-purple-900 hover:bg-purple-100 font-bold px-6 py-3 rounded-full shadow-xl transform hover:scale-110 transition-all duration-200"
                       onClick={(e) => {
                         e.stopPropagation()
                         handleProductClick(product)
                       }}
                     >
-                      <Eye className="w-4 h-4 mr-2" />
-                      Preview
+                      <Eye className="w-5 h-5 mr-2" />
+                      PREVIEW NOW
                     </Button>
                   </div>
                 </div>
 
                 {/* Product Info */}
-                <div className="p-4 md:p-6">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-lg md:text-xl font-semibold group-hover:text-orange-500 transition-colors">
+                <div className="p-6 bg-gradient-to-b from-purple-900/50 to-purple-800/50 backdrop-blur-sm">
+                  <div className="flex items-start justify-between mb-4">
+                    <h3 className="text-xl font-bold text-white group-hover:text-yellow-300 transition-colors leading-tight">
                       {product.title}
                     </h3>
-                    <div className="text-xl md:text-2xl font-bold text-orange-500">
+                    <div className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
                       ${product.price}
                     </div>
                   </div>
 
-                  <p className="text-gray-300 mb-4 line-clamp-2">
+                  <p className="text-purple-100 mb-4 line-clamp-2 text-sm leading-relaxed">
                     {product.description}
                   </p>
 
@@ -260,12 +654,12 @@ export default function ProductsPage() {
                           className={`w-4 h-4 ${
                             i < Math.floor(product.rating)
                               ? 'text-yellow-400 fill-current'
-                              : 'text-gray-600'
+                              : 'text-purple-400'
                           }`}
                         />
                       ))}
                     </div>
-                    <span className="text-sm text-gray-400">
+                    <span className="text-sm text-purple-200 font-medium">
                       {product.rating} ({product.reviews} reviews)
                     </span>
                   </div>
@@ -275,7 +669,7 @@ export default function ProductsPage() {
                     {product.features.slice(0, 3).map((feature, index) => (
                       <span
                         key={index}
-                        className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-full"
+                        className="px-3 py-1 bg-white/20 text-white text-xs rounded-full font-medium backdrop-blur-sm border border-white/30"
                       >
                         {feature}
                       </span>
@@ -283,31 +677,31 @@ export default function ProductsPage() {
                   </div>
 
                   {/* Author */}
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
-                      <span className="text-sm font-medium">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                      <span className="text-sm font-bold text-white">
                         {product.author.name.charAt(0)}
                       </span>
                     </div>
                     <div>
-                      <div className="text-sm font-medium">{product.author.name}</div>
-                      <div className="text-xs text-gray-400">
+                      <div className="text-sm font-bold text-white">{product.author.name}</div>
+                      <div className="text-xs text-purple-200">
                         {new Date(product.createdAt).toLocaleDateString()}
                       </div>
                     </div>
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-2">
+                  <div className="flex gap-3">
                     <Button
                       onClick={(e) => {
                         e.stopPropagation()
                         handleProductClick(product)
                       }}
-                      className="flex-1 bg-orange-500 hover:bg-orange-600"
+                      className="flex-1 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
                     >
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      View Details
+                      <BookOpen className="w-5 h-5 mr-2" />
+                      GET NOW
                     </Button>
                     <Button
                       variant="outline"
@@ -316,10 +710,10 @@ export default function ProductsPage() {
                         e.stopPropagation()
                         window.open(product.liveUrl, '_blank')
                       }}
-                      className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                      className="border-white/30 text-white hover:bg-white/20 px-4 py-3 rounded-xl backdrop-blur-sm"
                       title="Open live preview"
                     >
-                      <ExternalLink className="w-4 h-4" />
+                      <ExternalLink className="w-5 h-5" />
                     </Button>
                   </div>
                 </div>
@@ -329,8 +723,11 @@ export default function ProductsPage() {
 
           {filteredProducts.length === 0 && (
             <div className="text-center py-12">
-              <div className="text-gray-400 text-lg">No products found</div>
-              <p className="text-gray-500 mt-2">Try adjusting your search or filters</p>
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">🔍</span>
+              </div>
+              <div className="text-purple-200 text-xl font-bold mb-2">No products found</div>
+              <p className="text-purple-300">Try adjusting your search or filters to discover amazing products!</p>
             </div>
           )}
         </div>

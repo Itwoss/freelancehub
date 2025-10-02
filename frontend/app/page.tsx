@@ -16,7 +16,11 @@ import {
   CheckCircle,
   BookOpen,
   Eye,
-  ExternalLink
+  ExternalLink,
+  Play,
+  Code,
+  Palette,
+  Calendar
 } from "lucide-react"
 
 /**
@@ -148,21 +152,21 @@ export default function HomePage() {
           <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-32">
             <div className="text-center max-w-4xl mx-auto">
               <div className="inline-flex items-center gap-3 mb-6">
-                <span className="rounded-full px-4 py-2 text-sm bg-white/10 text-white/90 backdrop-blur-sm border border-white/20">
-                  🚀 Discover Amazing Projects
+                <span className="rounded-full px-6 py-3 text-sm bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold shadow-lg">
+                  ✨ LIMITED TIME EVENT
                 </span>
               </div>
 
               <h1 className="text-5xl md:text-7xl font-extrabold leading-tight tracking-tight">
-                Find Your Next
+                Dare to discover
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">
-                  Project
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500">
+                  Amazing Projects?
                 </span>
               </h1>
 
-              <p className="mt-6 max-w-3xl mx-auto text-gray-300 text-xl">
-                Connect with talented freelancers and discover amazing projects. 
+              <p className="mt-6 max-w-3xl mx-auto text-purple-200 text-xl font-medium">
+                Light your creativity and chase premium projects in our marketplace! 
                 From web development to design, find the perfect match for your skills.
               </p>
 
@@ -425,188 +429,399 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-2 mb-4">
-                <span className="w-2 h-2 bg-orange-400 rounded-full"></span>
-                <span className="text-orange-400 font-medium text-sm uppercase tracking-wide">Featured Products</span>
+                <span className="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"></span>
+                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent font-bold text-sm uppercase tracking-wide">Featured Products</span>
               </div>
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Premium Digital
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500"> Products</span>
+                Dare to discover
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500"> Premium Products?</span>
               </h2>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Discover our collection of premium templates, designs, and digital products. 
+              <p className="text-xl text-purple-200 max-w-3xl mx-auto font-medium">
+                Light your creativity and chase premium templates in our marketplace! 
                 Perfect for your next project or business venture.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              {/* Product Card 1 */}
-              <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105">
-                <div className="relative aspect-video bg-gray-800 rounded-xl mb-6 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
-                    <BookOpen className="w-12 h-12 text-white/50" />
+              {/* YouTube Card */}
+              <div className="group relative bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300 cursor-pointer shadow-2xl border border-purple-700/50">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-pink-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                <div className="relative aspect-video bg-gradient-to-br from-red-600 via-red-500 to-red-400 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-red-700/80 to-red-600/80 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto backdrop-blur-sm">
+                        <Play className="w-8 h-8 text-white" />
+                      </div>
+                      <p className="text-white font-semibold text-sm">YOUTUBE</p>
+                    </div>
                   </div>
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <Button className="bg-white text-black hover:bg-gray-200">
-                      <Eye className="w-4 h-4 mr-2" />
-                      Preview
+                  
+                  <div className="absolute top-4 right-4 bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                    🔥 POPULAR
+                  </div>
+                  
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Button className="bg-white text-red-900 hover:bg-red-100 font-bold px-6 py-3 rounded-full shadow-xl transform hover:scale-110 transition-all duration-200">
+                      <Eye className="w-5 h-5 mr-2" />
+                      PREVIEW NOW
                     </Button>
                   </div>
-                  <div className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    Popular
-                  </div>
                 </div>
                 
+                <div className="p-6 bg-gradient-to-b from-purple-900/50 to-purple-800/50 backdrop-blur-sm">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-2">Nexus AI - Framer Template</h3>
-                    <p className="text-gray-400 text-sm">AI Platform Marketing Template</p>
+                      <h3 className="text-xl font-bold text-white group-hover:text-yellow-300 transition-colors mb-2">YouTube</h3>
+                      <p className="text-purple-200 text-sm">Video Sharing Platform</p>
                   </div>
-                  <div className="text-2xl font-bold text-orange-400">$69</div>
+                    <div className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">Free</div>
                 </div>
                 
-                <p className="text-gray-300 mb-4 text-sm leading-relaxed">
-                  Dynamic solution combining AI Platform Marketing with 7 collections in an elegant Dark Theme.
+                  <p className="text-purple-100 mb-4 text-sm leading-relaxed">
+                    The world's largest video sharing platform with billions of users and creators worldwide.
                 </p>
                 
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="text-sm text-gray-300">4.9 (127 reviews)</span>
+                      <span className="text-sm text-purple-200 font-medium">4.8 (2.3B users)</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">Dark Theme</span>
-                    <span className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">AI</span>
-                  </div>
-                </div>
-                
-                <div className="flex gap-2">
-                  <Link href="/products/1" className="flex-1">
-                    <Button className="w-full bg-orange-500 hover:bg-orange-600">
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      Book Now
+                  
+                  <div className="flex gap-3">
+                    <Link href="/products/youtube" className="flex-1">
+                      <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200">
+                        <Calendar className="w-5 h-5 mr-2" />
+                        PREBOOK - ₹1
+                      </Button>
+                    </Link>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="border-white/30 text-white hover:bg-white/20 px-4 py-3 rounded-xl backdrop-blur-sm"
+                      onClick={() => window.open('https://youtube.com', '_blank')}
+                    >
+                      <ExternalLink className="w-5 h-5" />
                     </Button>
-                  </Link>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="border-gray-700 text-gray-300 hover:bg-gray-800"
-                    onClick={() => window.open('https://nexus-ai-template.framer.website', '_blank')}
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                  </Button>
+                  </div>
                 </div>
               </div>
 
-              {/* Product Card 2 */}
-              <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105">
-                <div className="relative aspect-video bg-gray-800 rounded-xl mb-6 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
-                    <BookOpen className="w-12 h-12 text-white/50" />
+              {/* Spotify Card */}
+              <div className="group relative bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300 cursor-pointer shadow-2xl border border-purple-700/50">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-pink-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                <div className="relative aspect-video bg-gradient-to-br from-green-600 via-green-500 to-green-400 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-green-700/80 to-green-600/80 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto backdrop-blur-sm">
+                        <Play className="w-8 h-8 text-white" />
+                      </div>
+                      <p className="text-white font-semibold text-sm">SPOTIFY</p>
+                    </div>
                   </div>
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <Button className="bg-white text-black hover:bg-gray-200">
-                      <Eye className="w-4 h-4 mr-2" />
-                      Preview
+                  
+                  <div className="absolute top-4 right-4 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                    ✨ NEW
+                  </div>
+                  
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Button className="bg-white text-green-900 hover:bg-green-100 font-bold px-6 py-3 rounded-full shadow-xl transform hover:scale-110 transition-all duration-200">
+                      <Eye className="w-5 h-5 mr-2" />
+                      PREVIEW NOW
                     </Button>
                   </div>
-                  <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    New
-                  </div>
                 </div>
-                
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-white mb-2">E-commerce Dashboard</h3>
-                    <p className="text-gray-400 text-sm">Analytics & Management Template</p>
+
+                <div className="p-6 bg-gradient-to-b from-purple-900/50 to-purple-800/50 backdrop-blur-sm">
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className="text-xl font-bold text-white group-hover:text-yellow-300 transition-colors mb-2">Spotify</h3>
+                      <p className="text-purple-200 text-sm">Music Streaming Platform</p>
+                    </div>
+                    <div className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">$9.99</div>
                   </div>
-                  <div className="text-2xl font-bold text-orange-400">$89</div>
-                </div>
-                
-                <p className="text-gray-300 mb-4 text-sm leading-relaxed">
-                  Modern e-commerce dashboard with analytics, order management, and customer insights.
-                </p>
-                
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="text-sm text-gray-300">4.8 (89 reviews)</span>
+                  
+                  <p className="text-purple-100 mb-4 text-sm leading-relaxed">
+                    Premium music streaming service with millions of songs, podcasts, and personalized playlists.
+                  </p>
+                  
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-1">
+                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                      <span className="text-sm text-purple-200 font-medium">4.7 (515M users)</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">React</span>
-                    <span className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">Dashboard</span>
-                  </div>
-                </div>
-                
-                <div className="flex gap-2">
-                  <Link href="/products/2" className="flex-1">
-                    <Button className="w-full bg-orange-500 hover:bg-orange-600">
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      Book Now
+                  
+                  <div className="flex gap-3">
+                    <Link href="/products/spotify" className="flex-1">
+                      <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200">
+                        <Calendar className="w-5 h-5 mr-2" />
+                        PREBOOK - ₹1
                     </Button>
                   </Link>
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="border-gray-700 text-gray-300 hover:bg-gray-800"
-                    onClick={() => window.open('https://ecommerce-dashboard.framer.website', '_blank')}
+                      className="border-white/30 text-white hover:bg-white/20 px-4 py-3 rounded-xl backdrop-blur-sm"
+                      onClick={() => window.open('https://spotify.com', '_blank')}
                   >
-                    <ExternalLink className="w-4 h-4" />
+                      <ExternalLink className="w-5 h-5" />
                   </Button>
+                  </div>
                 </div>
               </div>
 
-              {/* Product Card 3 */}
-              <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105">
-                <div className="relative aspect-video bg-gray-800 rounded-xl mb-6 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
-                    <BookOpen className="w-12 h-12 text-white/50" />
+              {/* Netflix Card */}
+              <div className="group relative bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300 cursor-pointer shadow-2xl border border-purple-700/50">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-pink-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                <div className="relative aspect-video bg-gradient-to-br from-red-800 via-red-700 to-red-600 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-red-900/80 to-red-800/80 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto backdrop-blur-sm">
+                        <Play className="w-8 h-8 text-white" />
+                      </div>
+                      <p className="text-white font-semibold text-sm">NETFLIX</p>
+                    </div>
                   </div>
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <Button className="bg-white text-black hover:bg-gray-200">
-                      <Eye className="w-4 h-4 mr-2" />
-                      Preview
+                  
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Button className="bg-white text-red-900 hover:bg-red-100 font-bold px-6 py-3 rounded-full shadow-xl transform hover:scale-110 transition-all duration-200">
+                      <Eye className="w-5 h-5 mr-2" />
+                      PREVIEW NOW
                     </Button>
                   </div>
                 </div>
                 
+                <div className="p-6 bg-gradient-to-b from-purple-900/50 to-purple-800/50 backdrop-blur-sm">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-2">Mobile App UI Kit</h3>
-                    <p className="text-gray-400 text-sm">Complete Mobile Design System</p>
+                      <h3 className="text-xl font-bold text-white group-hover:text-yellow-300 transition-colors mb-2">Netflix</h3>
+                      <p className="text-purple-200 text-sm">Streaming Entertainment</p>
                   </div>
-                  <div className="text-2xl font-bold text-orange-400">$49</div>
+                    <div className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">$15.49</div>
                 </div>
                 
-                <p className="text-gray-300 mb-4 text-sm leading-relaxed">
-                  Complete mobile app UI kit with 50+ screens, components, and design system.
+                  <p className="text-purple-100 mb-4 text-sm leading-relaxed">
+                    Premium streaming service with thousands of movies, TV shows, and original content.
                 </p>
                 
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="text-sm text-gray-300">4.7 (156 reviews)</span>
+                      <span className="text-sm text-purple-200 font-medium">4.6 (238M users)</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">Mobile</span>
-                    <span className="px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">UI Kit</span>
+                  
+                  <div className="flex gap-3">
+                    <Link href="/products/netflix" className="flex-1">
+                      <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200">
+                        <Calendar className="w-5 h-5 mr-2" />
+                        PREBOOK - ₹1
+                      </Button>
+                    </Link>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="border-white/30 text-white hover:bg-white/20 px-4 py-3 rounded-xl backdrop-blur-sm"
+                      onClick={() => window.open('https://netflix.com', '_blank')}
+                    >
+                      <ExternalLink className="w-5 h-5" />
+                    </Button>
                   </div>
                 </div>
+              </div>
+
+              {/* GitHub Card */}
+              <div className="group relative bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300 cursor-pointer shadow-2xl border border-purple-700/50">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-pink-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 
-                <div className="flex gap-2">
-                  <Link href="/products/3" className="flex-1">
-                    <Button className="w-full bg-orange-500 hover:bg-orange-600">
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      Book Now
+                <div className="relative aspect-video bg-gradient-to-br from-gray-800 via-gray-700 to-gray-600 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-gray-800/80 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto backdrop-blur-sm">
+                        <Code className="w-8 h-8 text-white" />
+                      </div>
+                      <p className="text-white font-semibold text-sm">GITHUB</p>
+                    </div>
+                  </div>
+                  
+                  <div className="absolute top-4 right-4 bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                    🔥 POPULAR
+                  </div>
+                  
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Button className="bg-white text-gray-900 hover:bg-gray-100 font-bold px-6 py-3 rounded-full shadow-xl transform hover:scale-110 transition-all duration-200">
+                      <Eye className="w-5 h-5 mr-2" />
+                      PREVIEW NOW
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="p-6 bg-gradient-to-b from-purple-900/50 to-purple-800/50 backdrop-blur-sm">
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className="text-xl font-bold text-white group-hover:text-yellow-300 transition-colors mb-2">GitHub</h3>
+                      <p className="text-purple-200 text-sm">Code Repository Platform</p>
+                    </div>
+                    <div className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">Free</div>
+                  </div>
+                  
+                  <p className="text-purple-100 mb-4 text-sm leading-relaxed">
+                    The world's leading software development platform for version control and collaboration.
+                  </p>
+                  
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-1">
+                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                      <span className="text-sm text-purple-200 font-medium">4.9 (100M users)</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-3">
+                    <Link href="/products/github" className="flex-1">
+                      <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200">
+                        <Calendar className="w-5 h-5 mr-2" />
+                        PREBOOK - ₹1
                     </Button>
                   </Link>
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="border-gray-700 text-gray-300 hover:bg-gray-800"
-                    onClick={() => window.open('https://mobile-ui-kit.framer.website', '_blank')}
+                      className="border-white/30 text-white hover:bg-white/20 px-4 py-3 rounded-xl backdrop-blur-sm"
+                      onClick={() => window.open('https://github.com', '_blank')}
                   >
-                    <ExternalLink className="w-4 h-4" />
+                      <ExternalLink className="w-5 h-5" />
                   </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Instagram Card */}
+              <div className="group relative bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300 cursor-pointer shadow-2xl border border-purple-700/50">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-pink-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                <div className="relative aspect-video bg-gradient-to-br from-pink-600 via-purple-500 to-orange-400 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-pink-700/80 to-purple-600/80 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto backdrop-blur-sm">
+                        <Palette className="w-8 h-8 text-white" />
+                      </div>
+                      <p className="text-white font-semibold text-sm">INSTAGRAM</p>
+                    </div>
+                  </div>
+                  
+                  <div className="absolute top-4 right-4 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                    ✨ NEW
+                  </div>
+                  
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Button className="bg-white text-pink-900 hover:bg-pink-100 font-bold px-6 py-3 rounded-full shadow-xl transform hover:scale-110 transition-all duration-200">
+                      <Eye className="w-5 h-5 mr-2" />
+                      PREVIEW NOW
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="p-6 bg-gradient-to-b from-purple-900/50 to-purple-800/50 backdrop-blur-sm">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                      <h3 className="text-xl font-bold text-white group-hover:text-yellow-300 transition-colors mb-2">Instagram</h3>
+                      <p className="text-purple-200 text-sm">Photo & Video Sharing</p>
+                  </div>
+                    <div className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">Free</div>
+                </div>
+                
+                  <p className="text-purple-100 mb-4 text-sm leading-relaxed">
+                    Visual storytelling platform for sharing photos, videos, and stories with friends and followers.
+                </p>
+                
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                      <span className="text-sm text-purple-200 font-medium">4.5 (2B users)</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-3">
+                    <Link href="/products/instagram" className="flex-1">
+                      <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200">
+                        <Calendar className="w-5 h-5 mr-2" />
+                        PREBOOK - ₹1
+                      </Button>
+                    </Link>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="border-white/30 text-white hover:bg-white/20 px-4 py-3 rounded-xl backdrop-blur-sm"
+                      onClick={() => window.open('https://instagram.com', '_blank')}
+                    >
+                      <ExternalLink className="w-5 h-5" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Discord Card */}
+              <div className="group relative bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300 cursor-pointer shadow-2xl border border-purple-700/50">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-pink-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                <div className="relative aspect-video bg-gradient-to-br from-indigo-600 via-purple-500 to-blue-400 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-700/80 to-purple-600/80 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto backdrop-blur-sm">
+                        <Users className="w-8 h-8 text-white" />
+                      </div>
+                      <p className="text-white font-semibold text-sm">DISCORD</p>
+                    </div>
+                  </div>
+                  
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Button className="bg-white text-indigo-900 hover:bg-indigo-100 font-bold px-6 py-3 rounded-full shadow-xl transform hover:scale-110 transition-all duration-200">
+                      <Eye className="w-5 h-5 mr-2" />
+                      PREVIEW NOW
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="p-6 bg-gradient-to-b from-purple-900/50 to-purple-800/50 backdrop-blur-sm">
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className="text-xl font-bold text-white group-hover:text-yellow-300 transition-colors mb-2">Discord</h3>
+                      <p className="text-purple-200 text-sm">Voice & Text Chat</p>
+                    </div>
+                    <div className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">Free</div>
+                  </div>
+                  
+                  <p className="text-purple-100 mb-4 text-sm leading-relaxed">
+                    All-in-one voice and text chat for gamers, communities, and friends to hang out together.
+                  </p>
+                  
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-1">
+                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                      <span className="text-sm text-purple-200 font-medium">4.6 (150M users)</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-3">
+                    <Link href="/products/discord" className="flex-1">
+                      <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200">
+                        <Calendar className="w-5 h-5 mr-2" />
+                        PREBOOK - ₹1
+                    </Button>
+                  </Link>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                      className="border-white/30 text-white hover:bg-white/20 px-4 py-3 rounded-xl backdrop-blur-sm"
+                      onClick={() => window.open('https://discord.com', '_blank')}
+                  >
+                      <ExternalLink className="w-5 h-5" />
+                  </Button>
+                  </div>
                 </div>
               </div>
             </div>
