@@ -3,29 +3,18 @@
   "builds": [
     {
       "src": "frontend/package.json",
-      "use": "@vercel/next",
-      "config": {
-        "distDir": ".next"
-      }
+      "use": "@vercel/next"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "frontend/$1"
+      "dest": "/frontend/$1"
     }
   ],
   "functions": {
     "frontend/app/api/**/*.ts": {
       "runtime": "nodejs18.x"
     }
-  },
-  "env": {
-    "NEXT_PUBLIC_RAZORPAY_KEY_ID": "@razorpay_key_id",
-    "RAZORPAY_KEY_SECRET": "@razorpay_key_secret",
-    "RAZORPAY_ENVIRONMENT": "@razorpay_environment",
-    "RAZORPAY_WEBHOOK_SECRET": "@razorpay_webhook_secret",
-    "NEXT_PUBLIC_BASE_URL": "@base_url",
-    "ADMIN_EMAIL": "@admin_email"
   }
 }

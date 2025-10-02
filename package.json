@@ -28,10 +28,12 @@
     "db:studio": "cd backend && npm run db:studio"
   },
   "dependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "rimraf": "^4.4.1"
   },
   "devDependencies": {
     "@types/node": "^20.8.0",
+    "eslint": "^9.36.0",
     "typescript": "^5.2.0"
   },
   "engines": {
@@ -39,3 +41,4 @@
     "npm": ">=8.0.0"
   }
 }
+
