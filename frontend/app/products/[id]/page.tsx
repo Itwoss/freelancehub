@@ -29,7 +29,7 @@ import {
   Mail,
   User
 } from 'lucide-react'
-import RazorpayPayment from '@/components/payment/RazorpayPayment'
+// import RazorpayPayment from '@/components/payment/RazorpayPayment'
 
 interface Product {
   id: string
@@ -433,15 +433,45 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                   </span>
                 </div>
 
-                {/* Razorpay Payment Component */}
-                <RazorpayPayment
-                  amount={getPrebookPrice()}
-                  currency={getCurrency()}
-                  productTitle={product.title}
-                  userDetails={userDetails}
-                  onSuccess={handlePaymentSuccess}
-                  onFailure={handlePaymentFailure}
-                />
+                {/* Payment Section */}
+                <div className="bg-gradient-to-br from-blue-900/50 to-blue-800/50 backdrop-blur-sm rounded-2xl p-6 border border-blue-700/50">
+                  <div className="flex items-center gap-3 mb-4">
+                    <CreditCard className="w-8 h-8 text-blue-400" />
+                    <div>
+                      <h3 className="text-xl font-bold text-white">Secure Payment</h3>
+                      <p className="text-blue-200">Prebook this amazing product</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 mb-6">
+                    <div className="flex justify-between">
+                      <span className="text-blue-200">Amount:</span>
+                      <span className="text-white font-bold">
+                        {getCurrencySymbol()}{getPrebookPrice()}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-blue-200">Product:</span>
+                      <span className="text-white">{product.title}</span>
+                    </div>
+                  </div>
+
+                  <Button
+                    onClick={handlePrebook}
+                    className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-4 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-5 h-5" />
+                      PREBOOK - {getCurrencySymbol()}{getPrebookPrice()}
+                    </div>
+                  </Button>
+
+                  <div className="mt-4 text-center">
+                    <p className="text-blue-200 text-sm">
+                      🔒 Your payment is secure and encrypted
+                    </p>
+                  </div>
+                </div>
 
                 {/* Action Buttons */}
                 <div className="flex gap-3 mt-4">
