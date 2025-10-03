@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
     ])
 
     // Add social data from database
-    const usersWithSocialData = users.map(user => ({
+    const usersWithSocialData = users.map((user: any) => ({
       ...user,
       isVerified: user.isVerified || false,
       followersCount: user.followersCount || 0,

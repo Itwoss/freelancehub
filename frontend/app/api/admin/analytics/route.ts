@@ -133,22 +133,22 @@ export async function GET(request: NextRequest) {
     })
 
     // Format data for charts
-    const formattedUserGrowth = userGrowth.map(item => ({
+    const formattedUserGrowth = userGrowth.map((item: any) => ({
       date: item.createdAt.toISOString().split('T')[0],
       users: item._count.id
     }))
 
-    const formattedRevenueGrowth = revenueGrowth.map(item => ({
+    const formattedRevenueGrowth = revenueGrowth.map((item: any) => ({
       date: item.createdAt.toISOString().split('T')[0],
       revenue: item._sum.totalAmount || 0
     }))
 
-    const formattedProjectCategories = projectCategories.map(item => ({
+    const formattedProjectCategories = projectCategories.map((item: any) => ({
       category: item.category,
       count: item._count.id
     }))
 
-    const formattedTopProjects = topProjects.map(project => ({
+    const formattedTopProjects = topProjects.map((project: any) => ({
       id: project.id,
       title: project.title,
       author: project.author,
@@ -158,11 +158,11 @@ export async function GET(request: NextRequest) {
       orderCount: project._count.orders,
       reviewCount: project._count.reviews,
       averageRating: project.reviews.length > 0 
-        ? project.reviews.reduce((sum, review) => sum + review.rating, 0) / project.reviews.length 
+        ? project.reviews.reduce((sum: number, review: any) => sum + review.rating, 0) / project.reviews.length 
         : 0
     }))
 
-    const formattedUserActivity = userActivity.map(item => ({
+    const formattedUserActivity = userActivity.map((item: any) => ({
       date: item.createdAt.toISOString().split('T')[0],
       logins: item._count.id,
       projects: 0, // This would need additional queries

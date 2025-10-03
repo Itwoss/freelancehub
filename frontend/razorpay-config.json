@@ -1,8 +1,8 @@
 {
-  "keyId": "rzp_live_ROUgP2Lh4axBmJ",
-  "keySecret": "AS5OG9kx4JcJvSENFmKZQEs4",
+  "keyId": "rzp_live_ROrn7ahgdd5X2d",
+  "keySecret": "u8DBqFba66vdYLTLYXr0yDAh",
   "environment": "live",
-  "webhookSecret": "https://itwos.store/api/payment/razorpay/webhook",
+  "webhookSecret": "YOUR_WEBHOOK_SECRET_HERE",
   "domain": "https://www.itwos.store/",
   "adminEmail": "sjay9327@gmail.com",
   "databaseUrl": ""

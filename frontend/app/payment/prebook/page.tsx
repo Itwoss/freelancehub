@@ -18,6 +18,7 @@ import {
   MapPin
 } from 'lucide-react'
 import Link from 'next/link'
+import toast from 'react-hot-toast'
 
 interface PaymentDetails {
   orderId: string
@@ -36,22 +37,40 @@ export default function PrebookPaymentPage() {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'razorpay' | 'card' | 'upi'>('razorpay')
 
   useEffect(() => {
-    // Get payment details from URL params
-    const orderId = searchParams.get('orderId')
-    const amount = searchParams.get('amount')
-    const currency = searchParams.get('currency')
-
-    if (orderId && amount && currency) {
-      setPaymentDetails({
-        orderId,
-        amount: parseFloat(amount),
-        currency,
-        productTitle: 'Website Prebook',
-        userDetails: {} // This would come from the previous step
-      })
+    // Get payment details from sessionStorage
+    const storedOrder = sessionStorage.getItem('prebookOrder')
+    
+    if (storedOrder) {
+      try {
+        const orderData = JSON.parse(storedOrder)
+        console.log('Loaded order data:', orderData)
+        console.log('Amount from orderData:', orderData.amount)
+        console.log('Setting paymentDetails with amount:', orderData.amount)
+        
+        // Force the amount to be 1 if it's 100
+        const correctedAmount = orderData.amount === 100 ? 1 : orderData.amount
+        console.log('Corrected amount:', correctedAmount)
+        
+        setPaymentDetails({
+          orderId: orderData.productId + '_' + Date.now(),
+          amount: correctedAmount,
+          currency: orderData.currency,
+          productTitle: orderData.productTitle,
+          userDetails: orderData.userDetails
+        })
+      } catch (error) {
+        console.error('Error parsing stored order:', error)
+        // Redirect back to products if no valid order data
+        router.push('/products')
+      }
+    } else {
+      // No order data found, redirect to products
+      console.log('No order data found, redirecting to products')
+      router.push('/products')
     }
+    
     setLoading(false)
-  }, [searchParams])
+  }, [router])
 
   const getCurrencySymbol = () => {
     return paymentDetails?.currency === 'INR' ? '₹' : '$'
@@ -63,7 +82,7 @@ export default function PrebookPaymentPage() {
     try {
       // Razorpay Payment Integration
       const razorpayConfig = {
-        amount: paymentDetails?.amount ? paymentDetails.amount * 100 : 10000, // Amount in paise
+        amount: 1, // ₹1 (will be converted to 100 paise by razorpay-service)
         currency: paymentDetails?.currency || 'INR',
         receipt: `receipt_${Date.now()}`,
         productTitle: paymentDetails?.productTitle || 'Website Prebook',
@@ -81,14 +100,58 @@ export default function PrebookPaymentPage() {
 
       if (response.ok) {
         const data = await response.json()
-        // Redirect to Razorpay payment page
-        window.location.href = data.paymentUrl
+      console.log('Razorpay order created:', data)
+      console.log('Amount being sent to Razorpay:', data.amount)
+      
+      // Initialize Razorpay checkout
+      const options = {
+        key: data.keyId,
+        amount: data.amount,
+          currency: data.currency,
+          name: 'FreelanceHub',
+          description: paymentDetails?.productTitle || 'Product Purchase',
+          order_id: data.orderId,
+          handler: function (response: any) {
+            console.log('Payment successful:', response)
+            setPaymentStatus('success')
+            // Handle successful payment
+            toast.success('Payment successful!')
+            // Redirect to success page
+            setTimeout(() => {
+              router.push(`/payment/success?paymentId=${response.razorpay_payment_id}`)
+            }, 2000)
+          },
+          prefill: {
+            name: paymentDetails?.userDetails?.name || '',
+            email: paymentDetails?.userDetails?.email || '',
+            contact: paymentDetails?.userDetails?.phone || ''
+          },
+          notes: {
+            product_title: paymentDetails?.productTitle || 'Product Purchase'
+          },
+          theme: {
+            color: '#f97316'
+          }
+        }
+
+        // Load Razorpay script and open checkout
+        const script = document.createElement('script')
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+        script.onload = () => {
+          const rzp = new (window as any).Razorpay(options)
+          rzp.open()
+        }
+        document.body.appendChild(script)
       } else {
+        const errorData = await response.json()
+        console.error('Payment API error:', errorData)
         setPaymentStatus('failed')
+        toast.error(`Payment failed: ${errorData.error || 'Please try again.'}`)
       }
     } catch (error) {
       console.error('Razorpay payment error:', error)
       setPaymentStatus('failed')
+      toast.error(`Payment error: ${error instanceof Error ? error.message : 'Please try again.'}`)
     }
   }
 
@@ -164,7 +227,7 @@ export default function PrebookPaymentPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-purple-200">Amount:</span>
-                  <span className="text-white">{getCurrencySymbol()}{paymentDetails.amount}</span>
+                  <span className="text-white">{getCurrencySymbol()}1</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-purple-200">Status:</span>
@@ -252,7 +315,7 @@ export default function PrebookPaymentPage() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-purple-200">Amount:</span>
-                    <span className="text-white font-bold">{getCurrencySymbol()}{paymentDetails.amount}</span>
+                    <span className="text-white font-bold">{getCurrencySymbol()}1</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-purple-200">Order ID:</span>
@@ -340,7 +403,7 @@ export default function PrebookPaymentPage() {
                 ) : (
                   <div className="flex items-center gap-2">
                     <CreditCard className="w-5 h-5" />
-                    Pay {getCurrencySymbol()}{paymentDetails.amount}
+                    Pay {getCurrencySymbol()}1
                   </div>
                 )}
               </Button>

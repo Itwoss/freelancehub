@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
     ])
 
     // Calculate total spent for each user
-    const usersWithStats = users.map(user => ({
+    const usersWithStats = users.map((user: any) => ({
       id: user.id,
       name: user.name,
       email: user.email,
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
       lastLoginAt: user.updatedAt, // Use updatedAt as proxy for last activity
       projectCount: user._count.projects,
       orderCount: user._count.orders,
-      totalSpent: user.orders.reduce((sum, order) => sum + order.totalAmount, 0)
+      totalSpent: user.orders.reduce((sum: number, order: any) => sum + order.totalAmount, 0)
     }))
 
     return NextResponse.json({

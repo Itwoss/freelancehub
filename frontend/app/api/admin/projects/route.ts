@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
     ])
 
     // Calculate average rating for each project
-    const projectsWithStats = projects.map(project => ({
+    const projectsWithStats = projects.map((project: any) => ({
       id: project.id,
       title: project.title,
       author: project.author,
@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
       orderCount: project._count.orders,
       reviewCount: project._count.reviews,
       averageRating: project.reviews.length > 0 
-        ? project.reviews.reduce((sum, review) => sum + review.rating, 0) / project.reviews.length 
+        ? project.reviews.reduce((sum: number, review: any) => sum + review.rating, 0) / project.reviews.length 
         : 0
     }))
 

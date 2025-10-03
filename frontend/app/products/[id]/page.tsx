@@ -110,7 +110,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     try {
       // Create prebook order
       const orderData = {
-          productId: product?.id,
+        productId: product?.id,
         productTitle: product?.title,
         userDetails,
         amount: getPrebookPrice(),
@@ -118,11 +118,17 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
         status: 'pending'
       }
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      console.log('Storing order data:', orderData)
+      console.log('Amount being stored:', orderData.amount)
       
-      // Close modal and show payment
+      // Store order data in sessionStorage for payment page
+      sessionStorage.setItem('prebookOrder', JSON.stringify(orderData))
+      
+      // Close modal and redirect to payment page
       setShowPrebookModal(false)
+      
+      // Redirect to payment page
+      router.push('/payment/prebook')
       
     } catch (error) {
       console.error('Prebook error:', error)

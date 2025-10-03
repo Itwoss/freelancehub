@@ -54,7 +54,7 @@ export async function GET() {
     })
 
     // Transform the data to include isLiked flag
-    const transformedPosts = posts.map(post => ({
+    const transformedPosts = posts.map((post: any) => ({
       ...post,
       isLiked: post.likes.length > 0
     }))

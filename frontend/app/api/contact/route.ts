@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
       console.log('👥 Found admin users:', adminUsers.length)
 
       await Promise.all(
-        adminUsers.map(admin => 
+        adminUsers.map((admin: any) => 
           prisma.notification.create({
             data: {
               title: 'New Contact Form Submission',

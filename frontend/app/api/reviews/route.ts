@@ -156,7 +156,7 @@ export async function POST(request: NextRequest) {
 
     if (projectAuthor) {
       const totalReviews = projectAuthor.reviews.length
-      const averageRating = projectAuthor.reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews
+      const averageRating = projectAuthor.reviews.reduce((sum: number, r: any) => sum + r.rating, 0) / totalReviews
 
       await prisma.user.update({
         where: { id: order.project.authorId },
