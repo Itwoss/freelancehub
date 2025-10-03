@@ -74,6 +74,26 @@ interface Review {
   createdAt: string
 }
 
+interface Prebooking {
+  id: string
+  productId: string
+  productTitle: string
+  userDetails: {
+    name: string
+    email: string
+    phone?: string
+    message?: string
+  }
+  amount: number
+  currency: string
+  status: 'PENDING' | 'PAID' | 'COMPLETED' | 'CANCELLED' | 'REFUNDED'
+  paymentId?: string
+  orderId?: string
+  receipt?: string
+  createdAt: string
+  updatedAt: string
+}
+
 export default function UserDashboard() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -81,6 +101,7 @@ export default function UserDashboard() {
   const [projects, setProjects] = useState<Project[]>([])
   const [orders, setOrders] = useState<Order[]>([])
   const [reviews, setReviews] = useState<Review[]>([])
+  const [prebookings, setPrebookings] = useState<Prebooking[]>([])
   const [myPosts, setMyPosts] = useState<any[]>([])
   const [myStories, setMyStories] = useState<any[]>([])
   const [allPosts, setAllPosts] = useState<any[]>([])
@@ -118,10 +139,11 @@ export default function UserDashboard() {
         }
       }
 
-      const [projectsData, ordersData, reviewsData, myPostsData, myStoriesData, allPostsData] = await Promise.all([
+      const [projectsData, ordersData, reviewsData, prebookingsData, myPostsData, myStoriesData, allPostsData] = await Promise.all([
         fetchWithFallback('/api/projects?my=true', []),
         fetchWithFallback('/api/orders', []),
         fetchWithFallback('/api/reviews?my=true', []),
+        fetchWithFallback('/api/prebookings', []),
         fetchWithFallback('/api/social/posts?authorId=' + session?.user?.id, []),
         fetchWithFallback('/api/social/stories?authorId=' + session?.user?.id, []),
         fetchWithFallback('/api/social/posts', [])
@@ -130,6 +152,7 @@ export default function UserDashboard() {
       setProjects(projectsData)
       setOrders(ordersData)
       setReviews(reviewsData)
+      setPrebookings(prebookingsData)
       setMyPosts(myPostsData)
       setMyStories(myStoriesData)
       setAllPosts(allPostsData)
@@ -217,6 +240,7 @@ export default function UserDashboard() {
     { id: 'overview', label: 'Overview', icon: TrendingUp },
     { id: 'projects', label: 'My Projects', icon: Briefcase },
     { id: 'orders', label: 'Orders', icon: DollarSign },
+    { id: 'prebookings', label: 'Prebookings', icon: Calendar },
     { id: 'reviews', label: 'Reviews', icon: Star },
     { id: 'chat', label: 'Chat', icon: MessageSquare },
     ...(session?.user?.role === 'ADMIN' ? [
@@ -512,6 +536,56 @@ export default function UserDashboard() {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* Prebookings Tab */}
+          {activeTab === 'prebookings' && (
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+              <h3 className="text-2xl font-bold text-white mb-6">My Prebookings</h3>
+              <div className="space-y-4">
+                {prebookings.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                    <h4 className="text-xl font-semibold text-white mb-2">No Prebookings Yet</h4>
+                    <p className="text-gray-400 mb-6">You haven't made any prebookings yet.</p>
+                    <Link href="/products">
+                      <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white">
+                        Browse Products
+                      </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  prebookings.map((prebooking) => (
+                    <div key={prebooking.id} className="flex items-center justify-between p-6 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all duration-300">
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-white">{prebooking.productTitle}</h4>
+                        <p className="text-sm text-gray-400">Prebooking #{prebooking.id.slice(-8)}</p>
+                        <div className="mt-2 text-sm text-gray-300">
+                          <p><strong>Name:</strong> {prebooking.userDetails.name}</p>
+                          <p><strong>Email:</strong> {prebooking.userDetails.email}</p>
+                          {prebooking.userDetails.phone && <p><strong>Phone:</strong> {prebooking.userDetails.phone}</p>}
+                          {prebooking.userDetails.message && <p><strong>Message:</strong> {prebooking.userDetails.message}</p>}
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="text-xl font-bold text-orange-400">
+                          {prebooking.currency === 'INR' ? '₹' : '$'}{prebooking.amount}
+                        </span>
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          prebooking.status === 'PAID' ? 'bg-green-500/20 text-green-300' :
+                          prebooking.status === 'COMPLETED' ? 'bg-blue-500/20 text-blue-300' :
+                          prebooking.status === 'PENDING' ? 'bg-yellow-500/20 text-yellow-300' :
+                          prebooking.status === 'CANCELLED' ? 'bg-red-500/20 text-red-300' :
+                          'bg-gray-500/20 text-gray-300'
+                        }`}>
+                          {prebooking.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           )}

@@ -111,9 +111,33 @@ export default function PrebookPaymentPage() {
           name: 'FreelanceHub',
           description: paymentDetails?.productTitle || 'Product Purchase',
           order_id: data.orderId,
-          handler: function (response: any) {
+          handler: async function (response: any) {
             console.log('Payment successful:', response)
             setPaymentStatus('success')
+            
+            // Save prebooking data to database
+            try {
+              const prebookingResponse = await fetch('/api/prebookings', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  productId: paymentDetails?.productTitle || 'Unknown Product',
+                  productTitle: paymentDetails?.productTitle || 'Product Prebook',
+                  userDetails: paymentDetails?.userDetails || {},
+                  amount: paymentDetails?.amount || 1,
+                  currency: paymentDetails?.currency || 'INR'
+                })
+              })
+              
+              if (prebookingResponse.ok) {
+                console.log('Prebooking saved successfully')
+              }
+            } catch (error) {
+              console.error('Error saving prebooking:', error)
+            }
+            
             // Handle successful payment
             toast.success('Payment successful!')
             // Redirect to success page

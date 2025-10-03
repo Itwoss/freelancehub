@@ -72,6 +72,7 @@ model User {
   reviews      Review[]
   notifications Notification[]
   transactions Transaction[]
+  prebookings Prebooking[]
   
   // Social relationships
   posts        Post[]
@@ -355,6 +356,28 @@ model Transaction {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Prebooking {
+  id          String            @id @default(cuid())
+  productId   String
+  productTitle String
+  userDetails Json              // Store user details from form
+  amount      Float
+  currency    String            @default("INR")
+  status      PrebookingStatus @default(PENDING)
+  paymentId   String?          // Razorpay payment ID
+  orderId    String?          // Razorpay order ID
+  receipt     String?          // Payment receipt
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
 enum TransactionType {
   COIN_PURCHASE
   MESSAGE_PURCHASE
@@ -366,4 +389,12 @@ enum TransactionStatus {
   COMPLETED
   FAILED
   CANCELLED
+}
+
+enum PrebookingStatus {
+  PENDING
+  PAID
+  COMPLETED
+  CANCELLED
+  REFUNDED
 }
