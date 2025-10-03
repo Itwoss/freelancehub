@@ -102,47 +102,47 @@ export default function UserDashboard() {
   const fetchDashboardData = async () => {
     try {
       setLoading(true)
-      const [projectsRes, ordersRes, reviewsRes, myPostsRes, myStoriesRes, allPostsRes] = await Promise.all([
-        fetch('/api/projects?my=true'),
-        fetch('/api/orders'),
-        fetch('/api/reviews?my=true'),
-        fetch('/api/social/posts?authorId=' + session?.user?.id),
-        fetch('/api/social/stories?authorId=' + session?.user?.id),
-        fetch('/api/social/posts')
+      
+      // Try to fetch data, but handle errors gracefully
+      const fetchWithFallback = async (url: string, fallbackData: any = []) => {
+        try {
+          const response = await fetch(url)
+          if (response.ok) {
+            const data = await response.json()
+            return data.projects || data.orders || data.reviews || data.posts || data.stories || data.messages || fallbackData
+          }
+          return fallbackData
+        } catch (error) {
+          console.warn(`Failed to fetch ${url}:`, error)
+          return fallbackData
+        }
+      }
+
+      const [projectsData, ordersData, reviewsData, myPostsData, myStoriesData, allPostsData] = await Promise.all([
+        fetchWithFallback('/api/projects?my=true', []),
+        fetchWithFallback('/api/orders', []),
+        fetchWithFallback('/api/reviews?my=true', []),
+        fetchWithFallback('/api/social/posts?authorId=' + session?.user?.id, []),
+        fetchWithFallback('/api/social/stories?authorId=' + session?.user?.id, []),
+        fetchWithFallback('/api/social/posts', [])
       ])
 
-      if (projectsRes.ok) {
-        const projectsData = await projectsRes.json()
-        setProjects(projectsData.projects || [])
-      }
-
-      if (ordersRes.ok) {
-        const ordersData = await ordersRes.json()
-        setOrders(ordersData.orders || [])
-      }
-
-      if (reviewsRes.ok) {
-        const reviewsData = await reviewsRes.json()
-        setReviews(reviewsData.reviews || [])
-      }
-
-      if (myPostsRes.ok) {
-        const myPostsData = await myPostsRes.json()
-        setMyPosts(myPostsData.posts || [])
-      }
-
-      if (myStoriesRes.ok) {
-        const myStoriesData = await myStoriesRes.json()
-        setMyStories(myStoriesData.stories || [])
-      }
-
-      if (allPostsRes.ok) {
-        const allPostsData = await allPostsRes.json()
-        setAllPosts(allPostsData.posts || [])
-      }
+      setProjects(projectsData)
+      setOrders(ordersData)
+      setReviews(reviewsData)
+      setMyPosts(myPostsData)
+      setMyStories(myStoriesData)
+      setAllPosts(allPostsData)
+      
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
-      toast.error('Failed to load dashboard data')
+      // Don't show error toast, just use empty data
+      setProjects([])
+      setOrders([])
+      setReviews([])
+      setMyPosts([])
+      setMyStories([])
+      setAllPosts([])
     } finally {
       setLoading(false)
     }

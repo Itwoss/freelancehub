@@ -14,8 +14,67 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const projectId = searchParams.get('projectId')
+    const my = searchParams.get('my')
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '10')
+
+    // Handle "my=true" parameter for user's own reviews
+    if (my === 'true') {
+      const session = await getServerSession(authOptions)
+      
+      if (!session?.user) {
+        return NextResponse.json(
+          { error: 'Unauthorized' },
+          { status: 401 }
+        )
+      }
+
+      const where = {
+        reviewerId: session.user.id
+      }
+
+      const [reviews, total] = await Promise.all([
+        prisma.review.findMany({
+          where,
+          include: {
+            reviewer: {
+              select: {
+                id: true,
+                name: true,
+                image: true
+              }
+            },
+            project: {
+              select: {
+                id: true,
+                title: true,
+                author: {
+                  select: {
+                    id: true,
+                    name: true,
+                    image: true
+                  }
+                }
+              }
+            }
+          },
+          orderBy: { createdAt: 'desc' },
+          skip: (page - 1) * limit,
+          take: limit
+        }),
+        prisma.review.count({ where })
+      ])
+
+      return NextResponse.json({
+        reviews,
+        pagination: {
+          page,
+          limit,
+          total,
+          pages: Math.ceil(total / limit)
+        }
+      })
+    }
 
     if (!projectId) {
       return NextResponse.json(
