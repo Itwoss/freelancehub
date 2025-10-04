@@ -1,323 +1,165 @@
-# Deployment Guide
+# 🚀 Deployment Guide for GoDaddy Domain
 
-This guide covers deploying the Freelance Marketplace application to various platforms.
+## Option 1: Vercel (Recommended - Easiest)
 
-## 🚀 Quick Deployment Options
+### Step 1: Prepare Your Project
+1. Ensure all changes are committed to GitHub
+2. Create a Vercel account at [vercel.com](https://vercel.com)
+3. Connect your GitHub repository
 
-### Option 1: Vercel (Recommended)
-**Best for**: Frontend deployment with automatic builds
+### Step 2: Deploy to Vercel
+1. Go to [vercel.com/dashboard](https://vercel.com/dashboard)
+2. Click "New Project"
+3. Import your GitHub repository
+4. Configure environment variables (see below)
+5. Deploy!
 
-1. **Connect Repository**
-   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
-   - Click "New Project"
-   - Import your GitHub repository
+### Step 3: Configure Custom Domain
+1. In Vercel dashboard, go to your project
+2. Go to "Settings" → "Domains"
+3. Add your GoDaddy domain
+4. Update DNS records in GoDaddy (see DNS configuration below)
 
-2. **Configure Environment Variables**
-   ```env
-   DATABASE_URL=postgresql://user:pass@host:5432/db
-   NEXTAUTH_URL=https://your-app.vercel.app
-   NEXTAUTH_SECRET=your-secret-key
-   STRIPE_SECRET_KEY=sk_live_...
-   STRIPE_PUBLISHABLE_KEY=pk_live_...
-   ```
+## Option 2: Netlify
 
-3. **Deploy**
-   - Vercel automatically builds and deploys
-   - Get your live URL
+### Step 1: Build Configuration
+Create `netlify.toml` in your project root:
 
-### Option 2: Render (Full Stack)
-**Best for**: Complete application with database
+```toml
+[build]
+  command = "npm run build"
+  publish = ".next"
 
-1. **Create Web Service**
-   - Go to [Render Dashboard](https://dashboard.render.com)
-   - Click "New +" → "Web Service"
-   - Connect your GitHub repository
+[build.environment]
+  NODE_VERSION = "18"
 
-2. **Configure Build Settings**
-   ```yaml
-   Build Command: npm run build
-   Start Command: npm start
-   Environment: Node
-   ```
-
-3. **Set Environment Variables**
-   - Add all required environment variables
-   - Include database connection string
-
-4. **Deploy**
-   - Render builds and deploys automatically
-   - Get your live URL
-
-## 🗄️ Database Setup
-
-### PostgreSQL Options
-
-#### Option 1: Render PostgreSQL
-1. Create PostgreSQL service in Render
-2. Copy connection string
-3. Use in environment variables
-
-#### Option 2: Supabase
-1. Create project at [Supabase](https://supabase.com)
-2. Get connection string from Settings → Database
-3. Use in environment variables
-
-#### Option 3: Railway
-1. Create PostgreSQL service in Railway
-2. Get connection string from Variables tab
-3. Use in environment variables
-
-### Database Migration
-```bash
-# Generate Prisma client
-npm run db:generate
-
-# Run migrations
-npm run db:migrate
-
-# Seed database (optional)
-npm run db:seed
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
 ```
 
-## 🔧 Environment Configuration
+### Step 2: Deploy to Netlify
+1. Go to [netlify.com](https://netlify.com)
+2. Connect your GitHub repository
+3. Configure build settings
+4. Deploy!
 
-### Required Variables
-```env
-# Database
-DATABASE_URL="postgresql://user:pass@host:5432/db"
+## Option 3: DigitalOcean App Platform
 
-# Authentication
-NEXTAUTH_URL="https://your-domain.com"
-NEXTAUTH_SECRET="your-secret-key-here"
+### Step 1: Create App Spec
+Create `.do/app.yaml`:
 
-# Stripe
-STRIPE_PUBLISHABLE_KEY="pk_live_..."
-STRIPE_SECRET_KEY="sk_live_..."
-STRIPE_WEBHOOK_SECRET="whsec_..."
-
-# Email (Optional)
-EMAIL_SERVER_HOST="smtp.gmail.com"
-EMAIL_SERVER_PORT=587
-EMAIL_SERVER_USER="your-email@gmail.com"
-EMAIL_SERVER_PASSWORD="your-app-password"
-EMAIL_FROM="noreply@yourdomain.com"
-
-# App
-NEXT_PUBLIC_APP_URL="https://your-domain.com"
-```
-
-### Production Secrets
-- Use strong, unique secrets for `NEXTAUTH_SECRET`
-- Use live Stripe keys for production
-- Set up proper email service for notifications
-- Use HTTPS URLs for all webhook endpoints
-
-## 🐳 Docker Deployment
-
-### Build Docker Image
-```bash
-# Build image
-docker build -t freelance-marketplace .
-
-# Run container
-docker run -p 3000:3000 \
-  -e DATABASE_URL="postgresql://user:pass@host:5432/db" \
-  -e NEXTAUTH_SECRET="your-secret" \
-  freelance-marketplace
-```
-
-### Docker Compose
 ```yaml
-version: '3.8'
+name: freelancehub
 services:
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      - DATABASE_URL=postgresql://postgres:password@db:5432/freelance_marketplace
-      - NEXTAUTH_SECRET=your-secret
-    depends_on:
-      - db
-
-  db:
-    image: postgres:14
-    environment:
-      - POSTGRES_DB=freelance_marketplace
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:
+- name: web
+  source_dir: /
+  github:
+    repo: your-username/freelancehub
+    branch: main
+  run_command: npm start
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  routes:
+  - path: /
+  envs:
+  - key: NODE_ENV
+    value: production
 ```
 
-## 🔄 CI/CD Setup
+### Step 2: Deploy to DigitalOcean
+1. Go to DigitalOcean App Platform
+2. Create new app from GitHub
+3. Configure environment variables
+4. Deploy!
 
-### GitHub Actions
-The repository includes automated CI/CD workflows:
+## DNS Configuration for GoDaddy
 
-1. **Automatic Testing**: Runs on every push/PR
-2. **Security Scanning**: Weekly security audits
-3. **Database Migration**: Manual migration workflow
-4. **Deployment**: Automatic deployment to staging/production
+### For Vercel:
+1. Go to GoDaddy DNS Management
+2. Add these records:
+   - Type: CNAME, Name: www, Value: cname.vercel-dns.com
+   - Type: A, Name: @, Value: 76.76.19.61
+3. Wait for DNS propagation (up to 24 hours)
 
-### Required Secrets
-Add these secrets to your GitHub repository:
+### For Netlify:
+1. Go to GoDaddy DNS Management
+2. Add these records:
+   - Type: CNAME, Name: www, Value: your-site.netlify.app
+   - Type: A, Name: @, Value: 75.2.60.5
 
-```env
+## Environment Variables Setup
+
+### Required Production Variables:
+```bash
 # Database
-DATABASE_URL=postgresql://user:pass@host:5432/db
+DATABASE_URL="your_production_database_url"
+MONGODB_URI="your_production_mongodb_uri"
 
-# Authentication
-NEXTAUTH_SECRET=your-secret-key
-NEXTAUTH_URL=https://your-domain.com
+# NextAuth
+NEXTAUTH_URL="https://your-domain.com"
+NEXTAUTH_SECRET="your_production_secret"
 
-# Stripe
-STRIPE_SECRET_KEY=sk_live_...
-STRIPE_WEBHOOK_SECRET=whsec_...
+# Razorpay (Get from Razorpay Dashboard)
+NEXT_PUBLIC_RAZORPAY_KEY_ID="rzp_live_..."
+RAZORPAY_KEY_SECRET="your_live_secret"
+RAZORPAY_WEBHOOK_SECRET="your_webhook_secret"
 
-# Deployment
-VERCEL_TOKEN=your-vercel-token
-VERCEL_ORG_ID=your-org-id
-VERCEL_PROJECT_ID=your-project-id
-RENDER_API_KEY=your-render-api-key
-RENDER_STAGING_SERVICE_ID=your-staging-service-id
-RENDER_PRODUCTION_SERVICE_ID=your-production-service-id
+# Email
+EMAIL_USER="your_email@domain.com"
+EMAIL_PASS="your_email_password"
+EMAIL_FROM="noreply@your-domain.com"
 
-# Notifications
-SLACK_WEBHOOK=your-slack-webhook-url
-SNYK_TOKEN=your-snyk-token
+# Admin
+ADMIN_EMAIL="admin@your-domain.com"
+NEXT_PUBLIC_BASE_URL="https://your-domain.com"
 ```
 
-## 📊 Monitoring & Analytics
+## Database Setup
 
-### Application Monitoring
-- **Vercel Analytics**: Built-in performance monitoring
-- **Sentry**: Error tracking and performance monitoring
-- **LogRocket**: Session replay and debugging
+### Option 1: MongoDB Atlas (Recommended)
+1. Create account at [mongodb.com/atlas](https://mongodb.com/atlas)
+2. Create new cluster
+3. Get connection string
+4. Update MONGODB_URI in environment variables
 
-### Database Monitoring
-- **Prisma Studio**: Database management interface
-- **PostgreSQL Monitoring**: Query performance and health
-- **Backup Strategy**: Automated daily backups
+### Option 2: Railway
+1. Go to [railway.app](https://railway.app)
+2. Create new project
+3. Add MongoDB service
+4. Get connection string
 
-## 🔒 Security Considerations
+### Option 3: PlanetScale
+1. Go to [planetscale.com](https://planetscale.com)
+2. Create database
+3. Get connection string
 
-### Production Security
-1. **HTTPS Only**: Ensure all traffic uses HTTPS
-2. **Environment Variables**: Never commit secrets to repository
-3. **Database Security**: Use strong passwords and connection limits
-4. **API Rate Limiting**: Implement rate limiting on API endpoints
-5. **CORS Configuration**: Properly configure CORS for your domain
+## SSL Certificate
+- Vercel: Automatic SSL
+- Netlify: Automatic SSL
+- DigitalOcean: Automatic SSL
 
-### Stripe Security
-1. **Webhook Verification**: Always verify Stripe webhook signatures
-2. **Key Rotation**: Regularly rotate API keys
-3. **PCI Compliance**: Use Stripe Elements for card handling
-4. **Fraud Prevention**: Enable Stripe Radar for fraud detection
+## Monitoring & Analytics
+- Vercel Analytics (built-in)
+- Google Analytics
+- Sentry for error tracking
 
-## 🚨 Troubleshooting
+## Backup Strategy
+1. Database backups (automated with MongoDB Atlas)
+2. Code backups (GitHub)
+3. Environment variables backup
 
-### Common Issues
+## Troubleshooting
 
-#### Build Failures
-```bash
-# Clear cache and reinstall
-rm -rf node_modules .next
-npm install
-npm run build
-```
+### Common Issues:
+1. **Build Failures**: Check Node.js version compatibility
+2. **Database Connection**: Verify connection strings
+3. **Environment Variables**: Ensure all required variables are set
+4. **DNS Issues**: Wait for DNS propagation (up to 24 hours)
 
-#### Database Connection Issues
-- Verify DATABASE_URL format
-- Check database server accessibility
-- Ensure proper firewall rules
-- Test connection with Prisma Studio
-
-#### Authentication Issues
-- Verify NEXTAUTH_URL matches your domain
-- Check NEXTAUTH_SECRET is set
-- Ensure session cookies work with your domain
-- Check CORS settings
-
-#### Payment Issues
-- Verify Stripe keys are correct
-- Check webhook endpoint configuration
-- Ensure webhook secret is set
-- Test with Stripe test mode first
-
-### Debug Mode
-```bash
-# Enable debug logging
-DEBUG=* npm run dev
-
-# Check Prisma connection
-npm run db:studio
-```
-
-## 📈 Performance Optimization
-
-### Frontend Optimization
-- **Image Optimization**: Use Next.js Image component
-- **Code Splitting**: Automatic with Next.js
-- **Caching**: Implement proper caching headers
-- **CDN**: Use Vercel's global CDN
-
-### Database Optimization
-- **Indexing**: Add indexes for frequently queried fields
-- **Connection Pooling**: Configure Prisma connection pooling
-- **Query Optimization**: Use Prisma's query optimization features
-- **Caching**: Implement Redis for frequently accessed data
-
-### API Optimization
-- **Rate Limiting**: Implement API rate limiting
-- **Response Caching**: Cache API responses where appropriate
-- **Database Queries**: Optimize database queries
-- **Error Handling**: Proper error handling and logging
-
-## 🔄 Backup & Recovery
-
-### Database Backups
-```bash
-# Create backup
-pg_dump $DATABASE_URL > backup.sql
-
-# Restore backup
-psql $DATABASE_URL < backup.sql
-```
-
-### Automated Backups
-- Set up daily automated backups
-- Store backups in secure cloud storage
-- Test backup restoration regularly
-- Implement backup retention policies
-
-## 📞 Support
-
-### Getting Help
-- Check the [Issues](https://github.com/yourusername/freelance-marketplace/issues) page
-- Review deployment logs
-- Check environment variable configuration
-- Verify database connectivity
-
-### Emergency Procedures
-1. **Rollback**: Use previous deployment version
-2. **Database Recovery**: Restore from latest backup
-3. **Security Incident**: Rotate all secrets immediately
-4. **Performance Issues**: Scale resources or optimize queries
-
-### Monitoring Checklist
-- [ ] Application is accessible
-- [ ] Database is connected
-- [ ] Authentication is working
-- [ ] Payments are processing
-- [ ] Emails are being sent
-- [ ] Performance metrics are normal
-- [ ] Error rates are low
-- [ ] Security scans are clean
-
----
-
-**Need help?** Contact our support team at [support@freelancehub.com](mailto:support@freelancehub.com) or join our [Discord Community](https://discord.gg/freelancehub).
+### Support:
+- Vercel: [vercel.com/help](https://vercel.com/help)
+- Netlify: [netlify.com/support](https://netlify.com/support)
+- DigitalOcean: [digitalocean.com/support](https://digitalocean.com/support)

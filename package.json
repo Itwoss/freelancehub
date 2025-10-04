@@ -25,7 +25,11 @@
     "db:push": "cd backend && npm run db:push",
     "db:migrate": "cd backend && npm run db:migrate",
     "db:seed": "cd backend && npm run db:seed",
-    "db:studio": "cd backend && npm run db:studio"
+    "db:studio": "cd backend && npm run db:studio",
+    "deploy:vercel": "cd frontend && vercel --prod",
+    "deploy:netlify": "cd frontend && netlify deploy --prod",
+    "deploy:build": "npm run build:frontend",
+    "preview": "cd frontend && npm run start"
   },
   "dependencies": {
     "concurrently": "^8.2.2",
