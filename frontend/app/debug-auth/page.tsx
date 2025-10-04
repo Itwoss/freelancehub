@@ -1,68 +1,85 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { getSession } from 'next-auth/react'
+import React, { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/Button'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
 
 export default function DebugAuthPage() {
-  const [session, setSession] = useState<any>(null)
-  const [env, setEnv] = useState<any>({})
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [debugInfo, setDebugInfo] = useState<any>({})
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const currentSession = await getSession()
-      setSession(currentSession)
-      
-      // Check environment variables (only show public ones)
-      setEnv({
-        NEXTAUTH_URL: process.env.NEXT_PUBLIC_NEXTAUTH_URL || 'Not set',
-        NODE_ENV: process.env.NODE_ENV || 'Not set',
-      })
-    }
-    
-    checkAuth()
-  }, [])
+    setDebugInfo({
+      session,
+      status,
+      user: session?.user,
+      role: session?.user?.role,
+      timestamp: new Date().toISOString()
+    })
+  }, [session, status])
+
+  const handleRedirect = (path: string) => {
+    router.push(path)
+  }
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Authentication Debug</h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-gray-900 p-6 rounded-lg">
-            <h2 className="text-xl font-bold mb-4">Current Session</h2>
-            <pre className="text-sm text-gray-300 overflow-auto">
-              {session ? JSON.stringify(session, null, 2) : 'No session found'}
-            </pre>
-          </div>
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">Auth Debug Page</h1>
           
-          <div className="bg-gray-900 p-6 rounded-lg">
-            <h2 className="text-xl font-bold mb-4">Environment</h2>
-            <pre className="text-sm text-gray-300 overflow-auto">
-              {JSON.stringify(env, null, 2)}
+          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 className="text-xl font-semibold mb-4">Session Status</h2>
+            <div className="space-y-2">
+              <p><strong>Status:</strong> {status}</p>
+              <p><strong>Authenticated:</strong> {session ? 'Yes' : 'No'}</p>
+              <p><strong>User ID:</strong> {session?.user?.id || 'N/A'}</p>
+              <p><strong>User Name:</strong> {session?.user?.name || 'N/A'}</p>
+              <p><strong>User Email:</strong> {session?.user?.email || 'N/A'}</p>
+              <p><strong>User Role:</strong> {session?.user?.role || 'N/A'}</p>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 className="text-xl font-semibold mb-4">Debug Info</h2>
+            <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
+              {JSON.stringify(debugInfo, null, 2)}
             </pre>
           </div>
-        </div>
 
-        <div className="mt-6 bg-blue-900/20 p-6 rounded-lg">
-          <h2 className="text-xl font-bold mb-4">Test Credentials</h2>
-          <div className="space-y-2 text-sm">
-            <div><strong>Admin:</strong> admin@freelancehub.com / admin123</div>
-            <div><strong>User:</strong> user@freelancehub.com / user123</div>
-            <div><strong>Freelancer:</strong> freelancer@freelancehub.com / freelancer123</div>
+          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 className="text-xl font-semibold mb-4">Navigation Tests</h2>
+            <div className="space-x-4">
+              <Button onClick={() => handleRedirect('/dashboard')}>
+                Go to Dashboard
+              </Button>
+              <Button onClick={() => handleRedirect('/admin/dashboard')}>
+                Go to Admin Dashboard
+              </Button>
+              <Button onClick={() => handleRedirect('/')}>
+                Go to Home
+              </Button>
+            </div>
           </div>
-        </div>
 
-        <div className="mt-6 bg-yellow-900/20 p-6 rounded-lg">
-          <h2 className="text-xl font-bold mb-4">Debug Steps</h2>
-          <ol className="list-decimal list-inside space-y-2 text-sm">
-            <li>Go to <a href="/auth/signin" className="text-orange-400 hover:underline">/auth/signin</a></li>
-            <li>Try logging in with the test credentials</li>
-            <li>Check browser console for any errors</li>
-            <li>Check this page to see if session is created</li>
-            <li>If login fails, check the network tab for API errors</li>
-          </ol>
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-xl font-semibold mb-4">Current URL Info</h2>
+            <div className="space-y-2">
+              <p><strong>Current URL:</strong> {typeof window !== 'undefined' ? window.location.href : 'N/A'}</p>
+              <p><strong>Pathname:</strong> {typeof window !== 'undefined' ? window.location.pathname : 'N/A'}</p>
+              <p><strong>Search:</strong> {typeof window !== 'undefined' ? window.location.search : 'N/A'}</p>
+            </div>
+          </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   )
 }

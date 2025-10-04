@@ -12,9 +12,14 @@ export default withAuth(
       return NextResponse.redirect(new URL('/auth/signin', req.url))
     }
 
-    // If admin user accessing non-admin routes, allow but could redirect to admin dashboard
+    // If admin user accessing dashboard, redirect to admin dashboard
     if (isAdmin && req.nextUrl.pathname === '/dashboard') {
       return NextResponse.redirect(new URL('/admin/dashboard', req.url))
+    }
+    
+    // If regular user accessing dashboard, allow access
+    if (!isAdmin && req.nextUrl.pathname === '/dashboard') {
+      return NextResponse.next()
     }
   },
   {
