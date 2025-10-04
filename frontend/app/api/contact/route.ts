@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
       
       const adminEmailOptions = {
         from: process.env.EMAIL_FROM || 'FreelanceHub <noreply@freelancehub.com>',
-        to: process.env.ADMIN_EMAIL || process.env.EMAIL_USER || 'admin@freelancehub.com',
+        to: 'sjay9327@gmail.com',
         subject: `New Contact Form Submission: ${subject}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

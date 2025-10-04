@@ -1,27 +1,29 @@
-"use client"
+'use client'
 
-import React, { useState, useEffect } from "react"
-import { Header } from "@/components/layout/Header"
-import { Footer } from "@/components/layout/Footer"
-import { Button } from "@/components/ui/Button"
-import { Input } from "@/components/ui/Input"
+import React, { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
+import { Button } from '@/components/ui/Button'
 import { 
   Mail, 
-  User, 
-  Calendar, 
-  MessageSquare, 
   Search, 
-  Filter,
-  Eye,
-  Reply,
-  Archive,
-  Trash2,
-  CheckCircle,
+  Filter, 
+  Download, 
+  Eye, 
+  CheckCircle, 
+  XCircle, 
   Clock,
-  AlertCircle
-} from "lucide-react"
+  User,
+  MessageSquare,
+  Calendar,
+  Phone,
+  Send
+} from 'lucide-react'
+import toast from 'react-hot-toast'
 
-interface ContactSubmission {
+interface Contact {
   id: string
   name: string
   email: string
@@ -33,245 +35,403 @@ interface ContactSubmission {
 }
 
 export default function AdminContactsPage() {
-  const [contacts, setContacts] = useState<ContactSubmission[]>([])
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [contacts, setContacts] = useState<Contact[]>([])
   const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState<string>("all")
-  const [selectedContact, setSelectedContact] = useState<ContactSubmission | null>(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [statusFilter, setStatusFilter] = useState('')
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null)
+  const [replyMessage, setReplyMessage] = useState('')
 
   useEffect(() => {
+    if (status === 'loading') return
+    if (status === 'unauthenticated' || session?.user?.role !== 'ADMIN') {
+      router.push('/auth/signin')
+      return
+    }
     fetchContacts()
-  }, [])
+  }, [status, session])
 
   const fetchContacts = async () => {
     try {
+      setLoading(true)
       const response = await fetch('/api/contact')
-      const data = await response.json()
-      setContacts(data.contacts || [])
+      if (response.ok) {
+        const data = await response.json()
+        setContacts(data.contacts || [])
+      }
     } catch (error) {
       console.error('Error fetching contacts:', error)
+      toast.error('Failed to load contacts')
     } finally {
       setLoading(false)
     }
   }
 
-  const updateContactStatus = async (id: string, status: string) => {
+  const updateContactStatus = async (id: string, newStatus: string) => {
     try {
-      // You would implement this API endpoint
-      console.log(`Updating contact ${id} to status ${status}`)
-      // For now, just update locally
-      setContacts(prev => prev.map(contact => 
-        contact.id === id ? { ...contact, status: status as any } : contact
-      ))
+      const response = await fetch(`/api/contact/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus })
+      })
+
+      if (response.ok) {
+        toast.success('Contact status updated')
+        fetchContacts()
+      } else {
+        toast.error('Failed to update status')
+      }
     } catch (error) {
-      console.error('Error updating contact status:', error)
+      console.error('Error updating contact:', error)
+      toast.error('Failed to update contact')
     }
   }
 
-  const filteredContacts = contacts.filter(contact => {
-    const matchesSearch = contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         contact.subject.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === "all" || contact.status === statusFilter
-    return matchesSearch && matchesStatus
-  })
+  const sendReply = async (contactId: string) => {
+    if (!replyMessage.trim()) {
+      toast.error('Please enter a reply message')
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/contact/${contactId}/reply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: replyMessage })
+      })
+
+      if (response.ok) {
+        toast.success('Reply sent successfully')
+        setReplyMessage('')
+        setSelectedContact(null)
+        fetchContacts()
+      } else {
+        toast.error('Failed to send reply')
+      }
+    } catch (error) {
+      console.error('Error sending reply:', error)
+      toast.error('Failed to send reply')
+    }
+  }
 
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'NEW':
-        return <AlertCircle className="w-4 h-4 text-red-400" />
+        return <Clock className="w-4 h-4 text-yellow-500" />
       case 'READ':
-        return <Eye className="w-4 h-4 text-blue-400" />
+        return <Eye className="w-4 h-4 text-blue-500" />
       case 'REPLIED':
-        return <Reply className="w-4 h-4 text-green-400" />
+        return <CheckCircle className="w-4 h-4 text-green-500" />
       case 'CLOSED':
-        return <CheckCircle className="w-4 h-4 text-gray-400" />
+        return <XCircle className="w-4 h-4 text-red-500" />
       default:
-        return <Clock className="w-4 h-4 text-gray-400" />
+        return <Clock className="w-4 h-4 text-gray-500" />
     }
   }
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'NEW':
-        return 'bg-red-500/20 text-red-300 border-red-500/50'
+        return 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30'
       case 'READ':
-        return 'bg-blue-500/20 text-blue-300 border-blue-500/50'
+        return 'bg-blue-500/20 text-blue-300 border-blue-500/30'
       case 'REPLIED':
-        return 'bg-green-500/20 text-green-300 border-green-500/50'
+        return 'bg-green-500/20 text-green-300 border-green-500/30'
       case 'CLOSED':
-        return 'bg-gray-500/20 text-gray-300 border-gray-500/50'
+        return 'bg-red-500/20 text-red-300 border-red-500/30'
       default:
-        return 'bg-gray-500/20 text-gray-300 border-gray-500/50'
+        return 'bg-gray-500/20 text-gray-300 border-gray-500/30'
     }
   }
 
-  if (loading) {
+  const filteredContacts = contacts.filter(contact => {
+    const matchesSearch = !searchTerm || 
+      contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contact.subject.toLowerCase().includes(searchTerm.toLowerCase())
+    
+    const matchesStatus = !statusFilter || contact.status === statusFilter
+    
+    return matchesSearch && matchesStatus
+  })
+
+  if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-black text-white antialiased">
-        <Header />
-        <main className="pt-24">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-32">
-            <div className="text-center">
-              <div className="w-8 h-8 border-2 border-pink-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-gray-400">Loading contacts...</p>
-            </div>
-          </div>
-        </main>
-        <Footer />
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading contacts...</p>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-black text-white antialiased">
+    <div className="min-h-screen bg-black text-white">
       <Header />
       
-      <main className="pt-24">
-        {/* Header */}
-        <section className="py-8">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-8">
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Contact Management</h1>
+          <p className="text-gray-400">Manage all contact form submissions and customer inquiries</p>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+            <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-white">Contact Submissions</h1>
-                <p className="text-gray-400 mt-2">Manage and respond to contact form submissions</p>
+                <p className="text-gray-400 text-sm">Total Contacts</p>
+                <p className="text-2xl font-bold text-white">{contacts.length}</p>
               </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-pink-300">{contacts.length}</div>
-                <div className="text-sm text-gray-400">Total Submissions</div>
-              </div>
-            </div>
-
-            {/* Search and Filter */}
-            <div className="flex flex-col md:flex-row gap-4 mb-8">
-              <div className="flex-1 max-w-md">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <Input
-                    type="text"
-                    placeholder="Search contacts..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 bg-white/10 border-white/20 text-white placeholder-gray-400"
-                  />
-                </div>
-              </div>
-              
-              <div className="flex gap-2">
-                {['all', 'NEW', 'READ', 'REPLIED', 'CLOSED'].map((status) => (
-                  <button
-                    key={status}
-                    onClick={() => setStatusFilter(status)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      statusFilter === status
-                        ? "bg-pink-500 text-white"
-                        : "bg-white/10 text-gray-300 hover:bg-white/20"
-                    }`}
-                  >
-                    {status === 'all' ? 'All' : status}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Contacts List */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Contacts List */}
-              <div className="lg:col-span-1">
-                <div className="bg-white/6 rounded-xl p-6">
-                  <h3 className="font-semibold text-white mb-4">Contact Messages ({filteredContacts.length})</h3>
-                  <div className="space-y-3 max-h-96 overflow-y-auto">
-                    {filteredContacts.map((contact) => (
-                      <div
-                        key={contact.id}
-                        onClick={() => setSelectedContact(contact)}
-                        className={`p-4 rounded-lg cursor-pointer transition-colors ${
-                          selectedContact?.id === contact.id
-                            ? "bg-pink-500/20 border border-pink-500/50"
-                            : "bg-white/5 hover:bg-white/10"
-                        }`}
-                      >
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            {getStatusIcon(contact.status)}
-                            <span className="font-medium text-white">{contact.name}</span>
-                          </div>
-                          <span className={`px-2 py-1 rounded text-xs border ${getStatusColor(contact.status)}`}>
-                            {contact.status}
-                          </span>
-                        </div>
-                        <p className="text-sm text-gray-300 mb-1">{contact.subject}</p>
-                        <p className="text-xs text-gray-400">{contact.email}</p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {new Date(contact.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Contact Details */}
-              <div className="lg:col-span-2">
-                {selectedContact ? (
-                  <div className="bg-white/6 rounded-xl p-6">
-                    <div className="flex items-center justify-between mb-6">
-                      <div>
-                        <h3 className="text-xl font-bold text-white">{selectedContact.subject}</h3>
-                        <p className="text-gray-400">From: {selectedContact.name} ({selectedContact.email})</p>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          onClick={() => updateContactStatus(selectedContact.id, 'READ')}
-                          variant="outline"
-                          className="border-white/20 text-white hover:bg-white/10"
-                        >
-                          <Eye className="w-4 h-4 mr-2" />
-                          Mark as Read
-                        </Button>
-                        <Button
-                          onClick={() => updateContactStatus(selectedContact.id, 'REPLIED')}
-                          className="bg-green-500 hover:bg-green-600 text-white"
-                        >
-                          <Reply className="w-4 h-4 mr-2" />
-                          Mark as Replied
-                        </Button>
-                      </div>
-                    </div>
-
-                    <div className="bg-white/5 rounded-lg p-4 mb-6">
-                      <h4 className="font-semibold text-white mb-2">Message:</h4>
-                      <p className="text-gray-300 whitespace-pre-wrap">{selectedContact.message}</p>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <div className="text-sm text-gray-400">
-                        Received: {new Date(selectedContact.createdAt).toLocaleString()}
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          onClick={() => updateContactStatus(selectedContact.id, 'CLOSED')}
-                          variant="outline"
-                          className="border-white/20 text-white hover:bg-white/10"
-                        >
-                          <Archive className="w-4 h-4 mr-2" />
-                          Close
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="bg-white/6 rounded-xl p-6 text-center">
-                    <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-400">Select a contact to view details</p>
-                  </div>
-                )}
-              </div>
+              <Mail className="w-8 h-8 text-orange-500" />
             </div>
           </div>
-        </section>
-      </main>
+          
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-400 text-sm">New Messages</p>
+                <p className="text-2xl font-bold text-yellow-400">
+                  {contacts.filter(c => c.status === 'NEW').length}
+                </p>
+              </div>
+              <Clock className="w-8 h-8 text-yellow-500" />
+            </div>
+          </div>
+          
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-400 text-sm">Replied</p>
+                <p className="text-2xl font-bold text-green-400">
+                  {contacts.filter(c => c.status === 'REPLIED').length}
+                </p>
+              </div>
+              <CheckCircle className="w-8 h-8 text-green-500" />
+            </div>
+          </div>
+          
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-400 text-sm">Closed</p>
+                <p className="text-2xl font-bold text-red-400">
+                  {contacts.filter(c => c.status === 'CLOSED').length}
+                </p>
+              </div>
+              <XCircle className="w-8 h-8 text-red-500" />
+            </div>
+          </div>
+        </div>
 
+        {/* Filters */}
+        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-8">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <input
+                  type="text"
+                  placeholder="Search by name, email, or subject..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+              >
+                <option value="">All Status</option>
+                <option value="NEW">New</option>
+                <option value="READ">Read</option>
+                <option value="REPLIED">Replied</option>
+                <option value="CLOSED">Closed</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Contacts List */}
+        <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+          <div className="p-6">
+            <h3 className="text-xl font-semibold text-white mb-6">All Contact Submissions</h3>
+            
+            {filteredContacts.length === 0 ? (
+              <div className="text-center py-12">
+                <Mail className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h4 className="text-xl font-semibold text-white mb-2">No Contacts Found</h4>
+                <p className="text-gray-400">No contacts match your current filters.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredContacts.map((contact) => (
+                  <div key={contact.id} className="bg-white/5 rounded-xl border border-white/10 p-6 hover:bg-white/10 transition-all duration-300">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-3">
+                          <h4 className="text-lg font-semibold text-white">{contact.subject}</h4>
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(contact.status)}`}>
+                            {getStatusIcon(contact.status)}
+                            <span className="ml-1">{contact.status}</span>
+                          </span>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <p className="text-sm text-gray-400 mb-1">Contact Details</p>
+                            <div className="space-y-1">
+                              <p className="text-white flex items-center gap-2">
+                                <User className="w-4 h-4 text-gray-400" />
+                                {contact.name}
+                              </p>
+                              <p className="text-white flex items-center gap-2">
+                                <Mail className="w-4 h-4 text-gray-400" />
+                                {contact.email}
+                              </p>
+                              <p className="text-white flex items-center gap-2">
+                                <Calendar className="w-4 h-4 text-gray-400" />
+                                {new Date(contact.createdAt).toLocaleDateString()}
+                              </p>
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <p className="text-sm text-gray-400 mb-1">Message</p>
+                            <p className="text-white text-sm line-clamp-3">
+                              {contact.message}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex flex-col gap-2 ml-4">
+                        <Button
+                          onClick={() => setSelectedContact(contact)}
+                          className="bg-blue-500 hover:bg-blue-600 text-white text-sm"
+                        >
+                          <Eye className="w-4 h-4 mr-1" />
+                          View
+                        </Button>
+                        
+                        {contact.status === 'NEW' && (
+                          <Button
+                            onClick={() => updateContactStatus(contact.id, 'READ')}
+                            className="bg-yellow-500 hover:bg-yellow-600 text-white text-sm"
+                          >
+                            Mark as Read
+                          </Button>
+                        )}
+                        
+                        {contact.status === 'READ' && (
+                          <Button
+                            onClick={() => setSelectedContact(contact)}
+                            className="bg-green-500 hover:bg-green-600 text-white text-sm"
+                          >
+                            Reply
+                          </Button>
+                        )}
+                        
+                        {contact.status === 'REPLIED' && (
+                          <Button
+                            onClick={() => updateContactStatus(contact.id, 'CLOSED')}
+                            className="bg-red-500 hover:bg-red-600 text-white text-sm"
+                          >
+                            Close
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      
+      {/* Contact Detail Modal */}
+      {selectedContact && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold text-white">Contact Details</h3>
+              <Button
+                onClick={() => setSelectedContact(null)}
+                className="bg-gray-500 hover:bg-gray-600 text-white"
+              >
+                Close
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Name</p>
+                <p className="text-white">{selectedContact.name}</p>
+              </div>
+              
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Email</p>
+                <p className="text-white">{selectedContact.email}</p>
+              </div>
+              
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Subject</p>
+                <p className="text-white">{selectedContact.subject}</p>
+              </div>
+              
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Message</p>
+                <p className="text-white whitespace-pre-wrap">{selectedContact.message}</p>
+              </div>
+              
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Date</p>
+                <p className="text-white">{new Date(selectedContact.createdAt).toLocaleString()}</p>
+              </div>
+            </div>
+            
+            {selectedContact.status !== 'CLOSED' && (
+              <div className="mt-6">
+                <p className="text-sm text-gray-400 mb-2">Reply Message</p>
+                <textarea
+                  value={replyMessage}
+                  onChange={(e) => setReplyMessage(e.target.value)}
+                  placeholder="Type your reply here..."
+                  className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
+                  rows={4}
+                />
+                <div className="flex gap-2 mt-3">
+                  <Button
+                    onClick={() => sendReply(selectedContact.id)}
+                    className="bg-green-500 hover:bg-green-600 text-white"
+                  >
+                    <Send className="w-4 h-4 mr-1" />
+                    Send Reply
+                  </Button>
+                  <Button
+                    onClick={() => setReplyMessage('')}
+                    className="bg-gray-500 hover:bg-gray-600 text-white"
+                  >
+                    Clear
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      
       <Footer />
     </div>
   )
