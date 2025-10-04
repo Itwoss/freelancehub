@@ -182,12 +182,11 @@ export default function SignInPage() {
             </div>
           </form>
 
-          {/* Demo Credentials */}
+          {/* Quick Access */}
           <div className="mt-8 p-4 bg-white/10 rounded-lg border border-white/20">
-            <h3 className="text-sm font-medium text-white mb-2">Demo Credentials</h3>
-            <div className="text-xs text-gray-300 space-y-1">
-              <div><strong>Admin:</strong> admin@freelancehub.com / admin123</div>
-              <div><strong>User:</strong> user@freelancehub.com / user123</div>
+            <h3 className="text-sm font-medium text-white mb-2">New to FreelanceHub?</h3>
+            <div className="text-xs text-gray-300">
+              Create your account to access premium digital products, connect with freelancers, and start your journey today.
             </div>
           </div>
         </div>

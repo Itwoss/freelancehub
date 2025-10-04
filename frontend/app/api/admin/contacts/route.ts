@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
       ]
     }
 
-    let contacts, totalCount
+    let contacts: any[] = [], totalCount = 0
     try {
       [contacts, totalCount] = await Promise.all([
         prisma.contactSubmission.findMany({

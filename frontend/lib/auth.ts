@@ -19,36 +19,33 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        // Mock users for development
-        const mockUsers = [
-          {
-            id: '1',
-            email: 'admin@freelancehub.com',
-            password: 'admin123',
-            name: 'Admin User',
-            role: 'ADMIN'
-          },
-          {
-            id: '2',
-            email: 'user@freelancehub.com',
-            password: 'user123',
-            name: 'Regular User',
-            role: 'USER'
+        try {
+          // Find user in database
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email }
+          })
+
+          if (!user || !user.hashedPassword) {
+            return null
           }
-        ]
 
-        const user = mockUsers.find(u => u.email === credentials.email)
-        
-        if (!user || user.password !== credentials.password) {
+          // Verify password
+          const isValidPassword = await bcrypt.compare(credentials.password, user.hashedPassword)
+          
+          if (!isValidPassword) {
+            return null
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            image: user.image,
+          }
+        } catch (error) {
+          console.error('Auth error:', error)
           return null
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          image: null,
         }
       }
     })

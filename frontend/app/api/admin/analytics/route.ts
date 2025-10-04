@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
     // Recent orders
     const recentOrders = await prisma.order.findMany({
       include: {
-        buyer: {
+        user: {
           select: {
             name: true,
             email: true

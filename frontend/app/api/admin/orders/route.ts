@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
       prisma.order.findMany({
         where,
         include: {
-          buyer: {
+          user: {
             select: {
               name: true,
               email: true

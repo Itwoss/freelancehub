@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
       where.read = read === 'true'
     }
 
-    let notifications, totalCount
+    let notifications: any[] = [], totalCount = 0
     try {
       [notifications, totalCount] = await Promise.all([
         prisma.notification.findMany({

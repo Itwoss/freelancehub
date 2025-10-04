@@ -9,15 +9,16 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String?
-  email     String   @unique
-  image     String?
-  role      String   @default("USER") // USER or ADMIN
-  bio       String?
-  rating    Float    @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String   @unique
+  image         String?
+  hashedPassword String?
+  role          String   @default("USER") // USER or ADMIN
+  bio           String?
+  rating        Float    @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   // Relations
   accounts      Account[]
