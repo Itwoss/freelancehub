@@ -4,12 +4,17 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
 
-// Create Prisma client with error handling for build time
+// Create Prisma client with error handling
 let prisma: PrismaClient
 
 try {
   prisma = globalForPrisma.prisma ?? new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    datasources: {
+      db: {
+        url: process.env.MONGODB_URI || process.env.DATABASE_URL
+      }
+    }
   })
 } catch (error) {
   console.warn('⚠️ Prisma client initialization failed:', error)

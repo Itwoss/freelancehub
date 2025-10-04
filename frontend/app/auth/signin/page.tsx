@@ -35,7 +35,18 @@ export default function SignInPage() {
 
       if (result?.error) {
         console.error('Login error:', result.error)
-        toast.error(`Login failed: ${result.error}`)
+        
+        // Provide more specific error messages
+        let errorMessage = 'Login failed. Please try again.'
+        if (result.error === 'CredentialsSignin') {
+          errorMessage = 'Invalid email or password. Please check your credentials.'
+        } else if (result.error === 'CallbackRouteError') {
+          errorMessage = 'Database connection error. Please try again later.'
+        } else {
+          errorMessage = `Login failed: ${result.error}`
+        }
+        
+        toast.error(errorMessage)
       } else if (result?.ok) {
         toast.success('Welcome back!')
         const session = await getSession()

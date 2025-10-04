@@ -16,26 +16,48 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
+          console.log('❌ Missing credentials')
           return null
         }
 
         try {
+          console.log('🔍 Attempting to find user:', credentials.email)
+          
+          // Check if database is available
+          if (!process.env.MONGODB_URI && !process.env.DATABASE_URL) {
+            console.error('❌ No database URL found')
+            return null
+          }
+
           // Find user in database
           const user = await prisma.user.findUnique({
             where: { email: credentials.email }
           })
 
-          if (!user || !user.hashedPassword) {
+          console.log('👤 User found:', user ? 'Yes' : 'No')
+
+          if (!user) {
+            console.log('❌ User not found')
+            return null
+          }
+
+          if (!user.hashedPassword) {
+            console.log('❌ No password hash found')
             return null
           }
 
           // Verify password
+          console.log('🔐 Verifying password...')
           const isValidPassword = await bcrypt.compare(credentials.password, user.hashedPassword)
           
+          console.log('🔐 Password valid:', isValidPassword)
+
           if (!isValidPassword) {
+            console.log('❌ Invalid password')
             return null
           }
 
+          console.log('✅ Authentication successful for:', user.email)
           return {
             id: user.id,
             email: user.email,
@@ -44,7 +66,7 @@ export const authOptions: NextAuthOptions = {
             image: user.image,
           }
         } catch (error) {
-          console.error('Auth error:', error)
+          console.error('❌ Auth error:', error)
           return null
         }
       }
