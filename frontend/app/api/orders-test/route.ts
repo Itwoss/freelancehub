@@ -19,8 +19,7 @@ export async function GET(request: NextRequest) {
           user: {
             select: {
               name: true,
-              email: true,
-              phone: true
+              email: true
             }
           },
           project: {
@@ -28,8 +27,7 @@ export async function GET(request: NextRequest) {
               id: true,
               title: true,
               price: true,
-              category: true,
-              image: true
+              category: true
             }
           }
         },

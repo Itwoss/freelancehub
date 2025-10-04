@@ -31,16 +31,12 @@ export async function GET(
         id: true,
         name: true,
         email: true,
-        phone: true,
         image: true,
         role: true,
         bio: true,
         rating: true,
         createdAt: true,
         updatedAt: true,
-        address: true,
-        totalOrders: true,
-        totalSpent: true
       }
     })
 

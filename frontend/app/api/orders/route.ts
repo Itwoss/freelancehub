@@ -26,7 +26,6 @@ export async function GET(request: NextRequest) {
             select: {
               name: true,
               email: true,
-              phone: true
             }
           },
           project: {
@@ -35,7 +34,6 @@ export async function GET(request: NextRequest) {
               title: true,
               price: true,
               category: true,
-              image: true
             }
           }
         },
@@ -101,28 +99,12 @@ export async function POST(request: NextRequest) {
         projectId: productId,
         totalAmount: amount,
         status: 'PENDING',
-        paymentMethod: paymentMethod || 'razorpay',
-        shippingAddress: {
-          street: 'Sample Street',
-          city: 'Sample City',
-          state: 'Sample State',
-          zipCode: '123456',
-          country: 'India'
-        },
-        billingAddress: {
-          street: 'Sample Street',
-          city: 'Sample City',
-          state: 'Sample State',
-          zipCode: '123456',
-          country: 'India'
-        }
       },
       include: {
         user: {
           select: {
             name: true,
             email: true,
-            phone: true
           }
         },
         project: {
@@ -131,7 +113,6 @@ export async function POST(request: NextRequest) {
             title: true,
             price: true,
             category: true,
-            image: true
           }
         }
       }

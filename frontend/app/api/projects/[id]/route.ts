@@ -29,9 +29,7 @@ export async function GET(
             name: true,
             image: true,
             rating: true,
-            totalReviews: true,
             bio: true,
-            skills: true
           }
         },
         reviews: {

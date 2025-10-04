@@ -199,7 +199,7 @@ export default function UserProductsPage() {
         return b.rating - a.rating
       case 'newest':
       default:
-        return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+        return 0 // No sorting by date since createdAt doesn't exist
     }
   })
 
@@ -310,14 +310,14 @@ export default function UserProductsPage() {
             </div>
             <div className="flex border border-gray-300 rounded-lg">
               <Button
-                variant={viewMode === 'grid' ? 'default' : 'outline'}
+                variant={viewMode === 'grid' ? 'primary' : 'outline'}
                 onClick={() => setViewMode('grid')}
                 className={`${viewMode === 'grid' ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-white hover:bg-gray-50'} rounded-r-none border-r-0`}
               >
                 <Grid className="w-4 h-4" />
               </Button>
               <Button
-                variant={viewMode === 'list' ? 'default' : 'outline'}
+                variant={viewMode === 'list' ? 'primary' : 'outline'}
                 onClick={() => setViewMode('list')}
                 className={`${viewMode === 'list' ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-white hover:bg-gray-50'} rounded-l-none`}
               >

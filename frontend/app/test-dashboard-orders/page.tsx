@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ShoppingCart, Download, Eye, CheckCircle, Clock, XCircle, Package } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 interface Order {
   id: string
@@ -50,7 +51,7 @@ export default function TestDashboardOrders() {
       }
     } catch (error) {
       console.error('Error fetching orders:', error)
-      setError(error.message)
+      setError(error instanceof Error ? error.message : 'Unknown error')
       
       // Fallback to sample orders
       setOrders([

@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
-    let notifications
+    let notifications: any[] = []
     try {
       notifications = await prisma.notification.findMany({
         orderBy: { createdAt: 'desc' },
@@ -43,7 +43,12 @@ export async function POST(request: NextRequest) {
           title,
           message,
           type,
-          read: false
+          read: false,
+          user: {
+            connect: {
+              id: 'admin' // Default admin user
+            }
+          }
         }
       })
     } catch (dbError) {

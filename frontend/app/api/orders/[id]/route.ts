@@ -26,8 +26,7 @@ export async function GET(
         user: {
           select: {
             name: true,
-            email: true,
-            phone: true
+            email: true
           }
         },
         project: {
@@ -35,8 +34,7 @@ export async function GET(
             id: true,
             title: true,
             price: true,
-            category: true,
-            image: true
+            category: true
           }
         }
       }

@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (order.buyerId !== session.user.id) {
+    if (order.userId !== session.user.id) {
       return NextResponse.json(
         { error: 'Forbidden' },
         { status: 403 }
@@ -168,8 +168,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if review already exists
-    const existingReview = await prisma.review.findUnique({
-      where: { orderId }
+    const existingReview = await prisma.review.findFirst({
+      where: { 
+        projectId: order.projectId
+      }
     })
 
     if (existingReview) {
@@ -184,7 +186,6 @@ export async function POST(request: NextRequest) {
       data: {
         reviewerId: session.user.id,
         projectId: order.projectId,
-        orderId,
         rating,
         comment
       },
@@ -221,7 +222,6 @@ export async function POST(request: NextRequest) {
         where: { id: order.project.authorId },
         data: {
           rating: averageRating,
-          totalReviews
         }
       })
     }

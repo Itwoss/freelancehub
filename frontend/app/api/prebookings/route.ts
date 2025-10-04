@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
       data: {
         productId: validatedData.productId,
         productTitle: validatedData.productTitle,
-        userDetails: validatedData.userDetails,
+        userDetails: JSON.stringify(validatedData.userDetails),
         amount: validatedData.amount,
         currency: validatedData.currency,
         userId: session.user.id
