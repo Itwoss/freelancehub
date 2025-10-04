@@ -149,47 +149,54 @@ export async function GET(request: NextRequest) {
       where.authorId = authorId
     }
 
-    const [posts, totalCount] = await Promise.all([
-      prisma.post.findMany({
-        where,
-        include: {
-          author: {
-            select: {
-              id: true,
-              name: true,
-              image: true
-            }
-          },
-          likes: {
-            include: {
-              user: {
-                select: {
-                  id: true,
-                  name: true
-                }
+    let posts, totalCount
+    try {
+      [posts, totalCount] = await Promise.all([
+        prisma.post.findMany({
+          where,
+          include: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+                image: true
               }
-            }
-          },
-          comments: {
-            include: {
-              author: {
-                select: {
-                  id: true,
-                  name: true,
-                  image: true
+            },
+            likes: {
+              include: {
+                user: {
+                  select: {
+                    id: true,
+                    name: true
+                  }
                 }
               }
             },
-            orderBy: { createdAt: 'desc' },
-            take: 5
-          }
-        },
-        orderBy: { createdAt: 'desc' },
-        skip: (page - 1) * limit,
-        take: limit
-      }),
-      prisma.post.count({ where })
-    ])
+            comments: {
+              include: {
+                author: {
+                  select: {
+                    id: true,
+                    name: true,
+                    image: true
+                  }
+                }
+              },
+              orderBy: { createdAt: 'desc' },
+              take: 5
+            }
+          },
+          orderBy: { createdAt: 'desc' },
+          skip: (page - 1) * limit,
+          take: limit
+        }),
+        prisma.post.count({ where })
+      ])
+    } catch (dbError) {
+      console.warn('⚠️ Database not available for posts, returning empty data:', dbError)
+      posts = []
+      totalCount = 0
+    }
 
     return NextResponse.json({
       posts,

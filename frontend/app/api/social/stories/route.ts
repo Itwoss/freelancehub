@@ -138,24 +138,31 @@ export async function GET(request: NextRequest) {
       where.authorId = authorId
     }
 
-    const [stories, totalCount] = await Promise.all([
-      prisma.story.findMany({
-        where,
-        include: {
-          author: {
-            select: {
-              id: true,
-              name: true,
-              image: true
+    let stories, totalCount
+    try {
+      [stories, totalCount] = await Promise.all([
+        prisma.story.findMany({
+          where,
+          include: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+                image: true
+              }
             }
-          }
-        },
-        orderBy: { createdAt: 'desc' },
-        skip: (page - 1) * limit,
-        take: limit
-      }),
-      prisma.story.count({ where })
-    ])
+          },
+          orderBy: { createdAt: 'desc' },
+          skip: (page - 1) * limit,
+          take: limit
+        }),
+        prisma.story.count({ where })
+      ])
+    } catch (dbError) {
+      console.warn('⚠️ Database not available for stories, returning empty data:', dbError)
+      stories = []
+      totalCount = 0
+    }
 
     return NextResponse.json({
       stories,
