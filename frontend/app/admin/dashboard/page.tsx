@@ -142,8 +142,8 @@ export default function AdminDashboard() {
       const [statsRes, usersRes, contactsRes, notificationsRes, projectsRes, ordersRes, analyticsRes] = await Promise.all([
         fetch('/api/admin/stats'),
         fetch('/api/admin/users'),
-        fetch('/api/admin/contacts'),
-        fetch('/api/admin/notifications'),
+        fetch('/api/contact'),
+        fetch('/api/notifications'),
         fetch('/api/admin/projects'),
         fetch('/api/admin/orders'),
         fetch('/api/admin/analytics')
@@ -162,11 +162,17 @@ export default function AdminDashboard() {
       if (contactsRes.ok) {
         const contactsData = await contactsRes.json()
         setContacts(contactsData.contacts || [])
+      } else {
+        console.warn('Failed to fetch contacts:', contactsRes.status)
+        setContacts([])
       }
 
       if (notificationsRes.ok) {
         const notificationsData = await notificationsRes.json()
         setNotifications(notificationsData.notifications || [])
+      } else {
+        console.warn('Failed to fetch notifications:', notificationsRes.status)
+        setNotifications([])
       }
 
       if (projectsRes.ok) {

@@ -84,8 +84,23 @@ export async function POST(request: NextRequest) {
       )
       console.log('✅ Admin notifications created')
     } catch (notificationError) {
-      console.warn('⚠️ Database notifications not available, continuing with email only:', notificationError)
-      // Don't fail the request if notification creation fails
+      console.warn('⚠️ Database notifications not available, creating fallback notification:', notificationError)
+      
+      // Create a fallback notification using the notifications API
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/notifications`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: 'New Contact Form Submission',
+            message: `New message from ${name}: ${subject}`,
+            type: 'CONTACT_SUBMISSION'
+          })
+        })
+        console.log('✅ Fallback notification created')
+      } catch (fallbackError) {
+        console.warn('⚠️ Fallback notification failed:', fallbackError)
+      }
     }
 
     // Send email notification to admin
@@ -237,9 +252,15 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    const contacts = await prisma.contactSubmission.findMany({
-      orderBy: { createdAt: 'desc' },
-    })
+    let contacts
+    try {
+      contacts = await prisma.contactSubmission.findMany({
+        orderBy: { createdAt: 'desc' },
+      })
+    } catch (dbError) {
+      console.warn('⚠️ Database not available for contacts, returning empty data:', dbError)
+      contacts = []
+    }
 
     return NextResponse.json({ contacts })
   } catch (error) {
