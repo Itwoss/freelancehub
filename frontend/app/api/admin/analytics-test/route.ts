@@ -53,15 +53,15 @@ export async function GET(request: NextRequest) {
         totalProjects,
         totalOrders,
         totalRevenue: totalRevenue._sum.totalAmount || 0,
-        usersByRole: usersByRole.map(item => ({
+        usersByRole: usersByRole.map((item: any) => ({
           role: item.role,
           count: item._count.role
         })),
-        projectsByCategory: projectsByCategory.map(item => ({
+        projectsByCategory: projectsByCategory.map((item: any) => ({
           category: item.category,
           count: item._count.category
         })),
-        ordersByStatus: ordersByStatus.map(item => ({
+        ordersByStatus: ordersByStatus.map((item: any) => ({
           status: item.status,
           count: item._count.status
         })),
