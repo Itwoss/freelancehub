@@ -33,21 +33,36 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Save contact form submission to database
+    // Save contact form submission to database (with fallback)
     console.log('💾 Saving contact submission to database...')
-    const contactSubmission = await prisma.contactSubmission.create({
-      data: {
+    let contactSubmission
+    try {
+      contactSubmission = await prisma.contactSubmission.create({
+        data: {
+          name,
+          email,
+          subject,
+          message,
+          status: 'NEW',
+          createdAt: new Date(),
+        },
+      })
+      console.log('✅ Contact submission saved:', contactSubmission.id)
+    } catch (dbError) {
+      console.warn('⚠️ Database not available, continuing with email notifications only:', dbError)
+      // Create a mock contact submission for email purposes
+      contactSubmission = {
+        id: 'temp_' + Date.now(),
         name,
         email,
         subject,
         message,
         status: 'NEW',
         createdAt: new Date(),
-      },
-    })
-    console.log('✅ Contact submission saved:', contactSubmission.id)
+      }
+    }
 
-    // Create notification for admin users
+    // Create notification for admin users (with fallback)
     try {
       console.log('🔔 Creating admin notifications...')
       const adminUsers = await prisma.user.findMany({
@@ -69,12 +84,13 @@ export async function POST(request: NextRequest) {
       )
       console.log('✅ Admin notifications created')
     } catch (notificationError) {
-      console.error('❌ Error creating admin notifications:', notificationError)
+      console.warn('⚠️ Database notifications not available, continuing with email only:', notificationError)
       // Don't fail the request if notification creation fails
     }
 
     // Send email notification to admin
     try {
+      console.log('📧 Attempting to send admin notification email...')
       const transporter = createTransporter()
       
       const adminEmailOptions = {
@@ -134,12 +150,13 @@ export async function POST(request: NextRequest) {
       await transporter.sendMail(adminEmailOptions)
       console.log('✅ Admin notification email sent successfully')
     } catch (emailError) {
-      console.error('❌ Error sending admin notification email:', emailError)
+      console.warn('⚠️ Email not configured or failed, continuing without email:', emailError)
       // Don't fail the request if email fails
     }
 
     // Send confirmation email to user
     try {
+      console.log('📧 Attempting to send user confirmation email...')
       const transporter = createTransporter()
       
       const userEmailOptions = {
@@ -187,7 +204,7 @@ export async function POST(request: NextRequest) {
       await transporter.sendMail(userEmailOptions)
       console.log('✅ User confirmation email sent successfully')
     } catch (emailError) {
-      console.error('❌ Error sending user confirmation email:', emailError)
+      console.warn('⚠️ User confirmation email not configured or failed, continuing without email:', emailError)
       // Don't fail the request if email fails
     }
 
