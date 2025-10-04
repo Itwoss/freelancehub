@@ -1,0 +1,250 @@
+// MongoDB Prisma schema for FreelanceHub
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String?
+  email     String   @unique
+  image     String?
+  role      String   @default("USER") // USER or ADMIN
+  bio       String?
+  rating    Float    @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+  projects      Project[]
+  orders        Order[]
+  reviews       Review[]
+  posts         Post[]
+  stories       Story[]
+  likes         Like[]
+  comments      Comment[]
+  sentMessages      Message[] @relation("MessageSender")
+  receivedMessages  Message[] @relation("MessageReceiver")
+  notifications Notification[]
+  transactions  Transaction[]
+  prebookings   Prebooking[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String   @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Project {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  price       Float
+  category    String
+  status      String   @default("ACTIVE") // ACTIVE, INACTIVE, COMPLETED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  authorId String   @db.ObjectId
+  author   User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  orders   Order[]
+  reviews  Review[]
+
+  @@map("projects")
+}
+
+model Order {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  totalAmount  Float
+  status     String   @default("PENDING") // PENDING, PAID, COMPLETED, CANCELLED
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String   @db.ObjectId
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("orders")
+}
+
+model Review {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reviewerId String   @db.ObjectId
+  reviewer   User    @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  projectId  String   @db.ObjectId
+  project    Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+model Post {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  title      String?
+  caption    String
+  isApproved Boolean  @default(false)
+  isPublic   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  authorId String   @db.ObjectId
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes    Like[]
+  comments Comment[]
+
+  @@map("posts")
+}
+
+model Story {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  type      String   @default("IMAGE") // IMAGE or VIDEO
+  isApproved Boolean @default(false)
+  isPublic  Boolean  @default(true)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  authorId String   @db.ObjectId
+  author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("stories")
+}
+
+model Like {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId String @db.ObjectId
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@map("likes")
+}
+
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  authorId String   @db.ObjectId
+  author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  postId   String   @db.ObjectId
+  post     Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+model Message {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  type      String   @default("TEXT") // TEXT, IMAGE, VIDEO, AUDIO
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  senderId   String   @db.ObjectId
+  sender     User     @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String?  @db.ObjectId
+  receiver   User?    @relation("MessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@map("messages")
+}
+
+model Notification {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  message   String
+  type      String   @default("GENERAL")
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  userId String   @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model ContactSubmission {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String
+  subject   String
+  message   String
+  status    String   @default("NEW") // NEW, READ, REPLIED, CLOSED
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("contact_submissions")
+}
+
+model Transaction {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  amount      Float
+  type        String   @default("COIN_PURCHASE") // COIN_PURCHASE, MESSAGE_PURCHASE, REFUND
+  status      String   @default("PENDING") // PENDING, COMPLETED, FAILED, CANCELLED
+  description String?
+  createdAt   DateTime @default(now())
+
+  userId String   @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("transactions")
+}
+
+model Prebooking {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId   String
+  productTitle String
+  userDetails String   // JSON string for user details
+  amount      Float
+  currency    String   @default("INR")
+  status      String   @default("PENDING") // PENDING, PAID, COMPLETED, CANCELLED, REFUNDED
+  paymentId   String?
+  orderId     String?
+  receipt     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId String   @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("prebookings")
+}
