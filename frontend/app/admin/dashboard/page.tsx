@@ -116,6 +116,8 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview')
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [users, setUsers] = useState<UserData[]>([])
+  const [contacts, setContacts] = useState<any[]>([])
+  const [notifications, setNotifications] = useState<any[]>([])
   const [projects, setProjects] = useState<ProjectData[]>([])
   const [orders, setOrders] = useState<OrderData[]>([])
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null)
@@ -137,9 +139,11 @@ export default function AdminDashboard() {
   const fetchDashboardData = async () => {
     try {
       setLoading(true)
-      const [statsRes, usersRes, projectsRes, ordersRes, analyticsRes] = await Promise.all([
+      const [statsRes, usersRes, contactsRes, notificationsRes, projectsRes, ordersRes, analyticsRes] = await Promise.all([
         fetch('/api/admin/stats'),
         fetch('/api/admin/users'),
+        fetch('/api/admin/contacts'),
+        fetch('/api/admin/notifications'),
         fetch('/api/admin/projects'),
         fetch('/api/admin/orders'),
         fetch('/api/admin/analytics')
@@ -153,6 +157,16 @@ export default function AdminDashboard() {
       if (usersRes.ok) {
         const usersData = await usersRes.json()
         setUsers(usersData.users || [])
+      }
+
+      if (contactsRes.ok) {
+        const contactsData = await contactsRes.json()
+        setContacts(contactsData.contacts || [])
+      }
+
+      if (notificationsRes.ok) {
+        const notificationsData = await notificationsRes.json()
+        setNotifications(notificationsData.notifications || [])
       }
 
       if (projectsRes.ok) {
@@ -200,6 +214,8 @@ export default function AdminDashboard() {
   const tabs = [
     { id: 'overview', label: 'Overview', icon: BarChart3 },
     { id: 'users', label: 'Users', icon: Users },
+    { id: 'contacts', label: 'Contacts', icon: Mail },
+    { id: 'notifications', label: 'Notifications', icon: Bell },
     { id: 'projects', label: 'Projects', icon: Briefcase },
     { id: 'orders', label: 'Orders', icon: ShoppingCart },
     { id: 'analytics', label: 'Analytics', icon: TrendingUp },
@@ -610,6 +626,8 @@ export default function AdminDashboard() {
                       <tr>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Signup Date</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Login</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Projects</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orders</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Spent</th>
@@ -619,11 +637,20 @@ export default function AdminDashboard() {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {users.map((user) => (
-                        <tr key={user.id}>
+                        <tr key={user.id} className="hover:bg-gray-50">
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                              <div className="text-sm text-gray-500">{user.email}</div>
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0 h-10 w-10">
+                                <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
+                                  <span className="text-sm font-medium text-gray-700">
+                                    {user.name?.charAt(0)?.toUpperCase() || 'U'}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="ml-4">
+                                <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                                <div className="text-sm text-gray-500">{user.email}</div>
+                              </div>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
@@ -632,6 +659,12 @@ export default function AdminDashboard() {
                             }`}>
                               {user.role}
                             </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {formatDate(user.createdAt)}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {user.lastLoginAt ? formatDate(user.lastLoginAt) : 'Never'}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.projectCount}</td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.orderCount}</td>
@@ -644,12 +677,174 @@ export default function AdminDashboard() {
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <Button variant="ghost" size="sm">View</Button>
+                            <div className="flex space-x-2">
+                              <Button variant="ghost" size="sm">
+                                <Eye className="w-4 h-4" />
+                              </Button>
+                              <Button variant="ghost" size="sm">
+                                <Settings className="w-4 h-4" />
+                              </Button>
+                            </div>
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Contacts Tab */}
+          {activeTab === 'contacts' && (
+            <div className="card">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-lg font-semibold text-gray-900">Contact Submissions</h3>
+                  <div className="flex space-x-3">
+                    <Button variant="outline" size="sm">
+                      <Download className="w-4 h-4 mr-2" />
+                      Export
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      <Filter className="w-4 h-4 mr-2" />
+                      Filter
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {contacts.length === 0 ? (
+                        <tr>
+                          <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+                            No contact submissions found
+                          </td>
+                        </tr>
+                      ) : (
+                        contacts.map((contact: any) => (
+                          <tr key={contact.id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <div className="flex-shrink-0 h-10 w-10">
+                                  <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
+                                    <span className="text-sm font-medium text-gray-700">
+                                      {contact.name?.charAt(0)?.toUpperCase() || 'U'}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="ml-4">
+                                  <div className="text-sm font-medium text-gray-900">{contact.name}</div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{contact.email}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{contact.subject}</td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                contact.status === 'NEW' ? 'bg-yellow-100 text-yellow-800' :
+                                contact.status === 'READ' ? 'bg-blue-100 text-blue-800' :
+                                contact.status === 'REPLIED' ? 'bg-green-100 text-green-800' :
+                                'bg-gray-100 text-gray-800'
+                              }`}>
+                                {contact.status}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {formatDate(contact.createdAt)}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                              <div className="flex space-x-2">
+                                <Button size="sm" variant="outline">
+                                  <Eye className="w-4 h-4" />
+                                </Button>
+                                <Button size="sm" variant="outline">
+                                  <Mail className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Notifications Tab */}
+          {activeTab === 'notifications' && (
+            <div className="card">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-lg font-semibold text-gray-900">System Notifications</h3>
+                  <div className="flex space-x-3">
+                    <Button variant="outline" size="sm">
+                      <Bell className="w-4 h-4 mr-2" />
+                      Mark All Read
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Settings
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  {notifications.length === 0 ? (
+                    <div className="text-center py-8">
+                      <Bell className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                      <h4 className="text-lg font-medium text-gray-900 mb-2">No notifications</h4>
+                      <p className="text-gray-500">You're all caught up!</p>
+                    </div>
+                  ) : (
+                    notifications.map((notification: any) => (
+                      <div key={notification.id} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2">
+                              <div className={`w-2 h-2 rounded-full ${
+                                notification.read ? 'bg-gray-300' : 'bg-blue-500'
+                              }`}></div>
+                              <h4 className="text-sm font-medium text-gray-900">{notification.title}</h4>
+                              <span className="text-xs text-gray-500">{formatDate(notification.createdAt)}</span>
+                            </div>
+                            <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
+                            <div className="flex items-center space-x-2 mt-2">
+                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                notification.type === 'CONTACT_SUBMISSION' ? 'bg-blue-100 text-blue-800' :
+                                notification.type === 'ORDER' ? 'bg-green-100 text-green-800' :
+                                notification.type === 'USER_SIGNUP' ? 'bg-purple-100 text-purple-800' :
+                                'bg-gray-100 text-gray-800'
+                              }`}>
+                                {notification.type?.replace('_', ' ')}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex space-x-2">
+                            <Button size="sm" variant="outline">
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                            <Button size="sm" variant="outline">
+                              <XCircle className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>
