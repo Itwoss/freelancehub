@@ -1,0 +1,39 @@
+name: freelancehub
+services:
+- name: frontend
+  source_dir: /
+  github:
+    repo: Itwoss/freelancehub
+    branch: main
+  run_command: cd frontend && npm start
+  build_command: ./build-digitalocean.sh
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  routes:
+  - path: /
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: NEXTAUTH_URL
+    value: https://your-app.ondigitalocean.app
+  - key: NEXTAUTH_SECRET
+    value: your-secret-here
+  - key: MONGODB_URI
+    value: mongodb+srv://username:password@cluster.mongodb.net/freelancehub
+  - key: NEXT_PUBLIC_RAZORPAY_KEY_ID
+    value: rzp_test_...
+  - key: RAZORPAY_KEY_SECRET
+    value: your-razorpay-secret
+  - key: RAZORPAY_WEBHOOK_SECRET
+    value: your-webhook-secret
+  - key: EMAIL_USER
+    value: your-email@gmail.com
+  - key: EMAIL_PASS
+    value: your-app-password
+  - key: EMAIL_FROM
+    value: noreply@yourdomain.com
+  - key: ADMIN_EMAIL
+    value: admin@yourdomain.com
+  - key: NEXT_PUBLIC_BASE_URL
+    value: https://your-app.ondigitalocean.app
