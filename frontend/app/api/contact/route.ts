@@ -250,7 +250,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    let contacts
+    let contacts: any[] = []
     try {
       contacts = await prisma.contactSubmission.findMany({
         orderBy: { createdAt: 'desc' },
