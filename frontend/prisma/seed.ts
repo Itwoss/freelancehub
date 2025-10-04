@@ -1,260 +1,341 @@
-import { PrismaClient, OrderStatus, NotificationType } from '@prisma/client'
-import bcrypt from 'bcryptjs'
+import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 async function main() {
-  console.log('🌱 Starting database seed...')
+  console.log('🌱 Starting database seeding...')
 
   // Create admin user
-  const adminPassword = await bcrypt.hash('admin123', 12)
-  const admin = await prisma.user.upsert({
+  const adminUser = await prisma.user.upsert({
     where: { email: 'admin@freelancehub.com' },
     update: {},
     create: {
+      id: 'admin-1',
       name: 'Admin User',
       email: 'admin@freelancehub.com',
-      password: adminPassword,
       role: 'ADMIN',
-      bio: 'Platform administrator',
-      skills: ['Management', 'Administration', 'Platform Operations'],
+      bio: 'FreelanceHub Administrator',
       rating: 5.0,
-      totalReviews: 1
-    }
+    },
   })
+  console.log('✅ Admin user created:', adminUser.email)
 
-  // Create demo user
-  const userPassword = await bcrypt.hash('user123', 12)
-  const user = await prisma.user.upsert({
-    where: { email: 'user@freelancehub.com' },
-    update: {},
-    create: {
-      name: 'Demo User',
-      email: 'user@freelancehub.com',
-      password: userPassword,
-      role: 'USER',
-      bio: 'Experienced freelancer specializing in web development and design',
-      skills: ['React', 'Node.js', 'TypeScript', 'UI/UX Design', 'PostgreSQL'],
-      rating: 4.8,
-      totalReviews: 15
-    }
-  })
-
-  // Create additional users
-  const freelancers = [
-    {
-      name: 'Sarah Johnson',
-      email: 'sarah@example.com',
-      bio: 'Full-stack developer with 5+ years of experience',
-      skills: ['React', 'Node.js', 'Python', 'AWS', 'Docker'],
-      rating: 4.9,
-      totalReviews: 23
-    },
-    {
-      name: 'Michael Chen',
-      email: 'michael@example.com',
-      bio: 'UI/UX designer passionate about creating beautiful user experiences',
-      skills: ['Figma', 'Adobe Creative Suite', 'Sketch', 'Prototyping', 'User Research'],
-      rating: 4.7,
-      totalReviews: 18
-    },
-    {
-      name: 'Emily Rodriguez',
-      email: 'emily@example.com',
-      bio: 'Digital marketing specialist helping businesses grow online',
-      skills: ['SEO', 'Google Ads', 'Social Media', 'Content Marketing', 'Analytics'],
-      rating: 4.6,
-      totalReviews: 12
-    },
-    {
-      name: 'David Wilson',
-      email: 'david@example.com',
-      bio: 'Mobile app developer creating innovative solutions',
-      skills: ['React Native', 'Flutter', 'iOS', 'Android', 'Firebase'],
-      rating: 4.8,
-      totalReviews: 20
-    }
-  ]
-
-  const createdFreelancers = []
-  for (const freelancer of freelancers) {
-    const password = await bcrypt.hash('password123', 12)
-    const created = await prisma.user.create({
-      data: {
-        ...freelancer,
-        password,
-        role: 'USER'
-      }
-    })
-    createdFreelancers.push(created)
-  }
+  // Create regular users
+  const users = await Promise.all([
+    prisma.user.upsert({
+      where: { email: 'john@example.com' },
+      update: {},
+      create: {
+        id: 'user-1',
+        name: 'John Smith',
+        email: 'john@example.com',
+        role: 'USER',
+        bio: 'Full-stack developer with 5+ years experience',
+        rating: 4.8,
+      },
+    }),
+    prisma.user.upsert({
+      where: { email: 'sarah@example.com' },
+      update: {},
+      create: {
+        id: 'user-2',
+        name: 'Sarah Johnson',
+        email: 'sarah@example.com',
+        role: 'USER',
+        bio: 'UI/UX Designer specializing in modern web design',
+        rating: 4.9,
+      },
+    }),
+    prisma.user.upsert({
+      where: { email: 'mike@example.com' },
+      update: {},
+      create: {
+        id: 'user-3',
+        name: 'Mike Davis',
+        email: 'mike@example.com',
+        role: 'USER',
+        bio: 'Digital marketing expert and content creator',
+        rating: 4.7,
+      },
+    }),
+  ])
+  console.log('✅ Users created:', users.length)
 
   // Create sample projects
-  const projects = [
-    {
-      title: 'E-commerce Website Development',
-      description: 'I need a complete e-commerce website built with modern technologies. The site should include user authentication, product catalog, shopping cart, payment integration, and admin dashboard. Looking for a clean, responsive design with excellent user experience.',
-      price: 2500,
-      category: 'Web Development',
-      tags: ['React', 'Node.js', 'PostgreSQL', 'Stripe', 'E-commerce'],
-      images: ['https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800'],
-      authorId: user.id,
-      featured: true
-    },
-    {
-      title: 'Mobile App UI/UX Design',
-      description: 'Design a modern, intuitive mobile app interface for a fitness tracking application. Need wireframes, mockups, and interactive prototypes. The design should be user-friendly and follow current design trends.',
-      price: 1200,
-      category: 'Design',
-      tags: ['UI/UX', 'Figma', 'Mobile Design', 'Prototyping', 'User Experience'],
-      images: ['https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800'],
-      authorId: createdFreelancers[1].id,
-      featured: true
-    },
-    {
-      title: 'Digital Marketing Campaign',
-      description: 'Develop and execute a comprehensive digital marketing strategy for a SaaS startup. Include SEO optimization, social media marketing, content creation, and paid advertising campaigns. Goal is to increase brand awareness and drive qualified leads.',
-      price: 1800,
-      category: 'Marketing',
-      tags: ['Digital Marketing', 'SEO', 'Social Media', 'Content Marketing', 'Google Ads'],
-      images: ['https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800'],
-      authorId: createdFreelancers[2].id,
-      featured: false
-    },
-    {
-      title: 'React Native Mobile App',
-      description: 'Build a cross-platform mobile application using React Native. The app should include user authentication, real-time chat, push notifications, and offline functionality. Looking for clean, maintainable code with proper documentation.',
-      price: 3200,
-      category: 'Mobile Development',
-      tags: ['React Native', 'JavaScript', 'Firebase', 'Push Notifications', 'Offline Support'],
-      images: ['https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800'],
-      authorId: createdFreelancers[3].id,
-      featured: true
-    },
-    {
-      title: 'WordPress Website Redesign',
-      description: 'Redesign an existing WordPress website with a modern, professional look. Need to improve user experience, optimize for mobile devices, and enhance site performance. Should maintain SEO rankings while improving visual appeal.',
-      price: 800,
-      category: 'Web Development',
-      tags: ['WordPress', 'PHP', 'CSS', 'JavaScript', 'SEO'],
-      images: ['https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=800'],
-      authorId: createdFreelancers[0].id,
-      featured: false
-    },
-    {
-      title: 'Logo Design & Brand Identity',
-      description: 'Create a complete brand identity package including logo design, color palette, typography, and brand guidelines. The brand should be modern, memorable, and suitable for a tech startup. Need multiple logo variations and usage guidelines.',
-      price: 600,
-      category: 'Design',
-      tags: ['Logo Design', 'Brand Identity', 'Adobe Illustrator', 'Typography', 'Color Theory'],
-      images: ['https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800'],
-      authorId: createdFreelancers[1].id,
-      featured: false
-    }
-  ]
-
-  const createdProjects = []
-  for (const project of projects) {
-    const created = await prisma.project.create({
-      data: project
-    })
-    createdProjects.push(created)
-  }
+  const projects = await Promise.all([
+    prisma.project.create({
+      data: {
+        title: 'E-commerce Platform Development',
+        description: 'Build a modern e-commerce platform with React, Node.js, and Stripe integration. Looking for a full-stack developer with e-commerce experience.',
+        price: 2500,
+        category: 'Web Development',
+        status: 'ACTIVE',
+        authorId: users[0].id,
+      },
+    }),
+    prisma.project.create({
+      data: {
+        title: 'Mobile App Design',
+        description: 'Design a sleek mobile app interface for a fitness tracking application. Need modern, intuitive design with excellent user experience.',
+        price: 1200,
+        category: 'UI/UX Design',
+        status: 'ACTIVE',
+        authorId: users[1].id,
+      },
+    }),
+    prisma.project.create({
+      data: {
+        title: 'Content Marketing Strategy',
+        description: 'Create engaging content strategy and social media campaigns for a tech startup. Looking for creative marketer with startup experience.',
+        price: 800,
+        category: 'Marketing',
+        status: 'ACTIVE',
+        authorId: users[2].id,
+      },
+    }),
+    prisma.project.create({
+      data: {
+        title: 'WordPress Website Development',
+        description: 'Create a professional WordPress website for a local business. Need custom theme development and SEO optimization.',
+        price: 1500,
+        category: 'Web Development',
+        status: 'ACTIVE',
+        authorId: users[0].id,
+      },
+    }),
+    prisma.project.create({
+      data: {
+        title: 'Logo Design Package',
+        description: 'Design a complete brand identity including logo, business cards, and letterhead for a new restaurant.',
+        price: 500,
+        category: 'Graphic Design',
+        status: 'ACTIVE',
+        authorId: users[1].id,
+      },
+    }),
+  ])
+  console.log('✅ Projects created:', projects.length)
 
   // Create sample orders
-  const orders = [
-    {
-      buyerId: createdFreelancers[0].id,
-      projectId: createdProjects[1].id,
-      totalAmount: 1200,
-      status: OrderStatus.COMPLETED,
-      paymentId: 'pi_completed_1'
-    },
-    {
-      buyerId: createdFreelancers[1].id,
-      projectId: createdProjects[0].id,
-      totalAmount: 2500,
-      status: OrderStatus.PAID,
-      paymentId: 'pi_paid_1'
-    },
-    {
-      buyerId: createdFreelancers[2].id,
-      projectId: createdProjects[3].id,
-      totalAmount: 3200,
-      status: OrderStatus.PENDING,
-      paymentId: 'pi_pending_1'
-    }
-  ]
-
-  const createdOrders = []
-  for (const order of orders) {
-    const created = await prisma.order.create({
-      data: order
-    })
-    createdOrders.push(created)
-  }
+  const orders = await Promise.all([
+    prisma.order.create({
+      data: {
+        totalAmount: 2500,
+        status: 'COMPLETED',
+        userId: adminUser.id,
+        projectId: projects[0].id,
+      },
+    }),
+    prisma.order.create({
+      data: {
+        totalAmount: 1200,
+        status: 'PAID',
+        userId: adminUser.id,
+        projectId: projects[1].id,
+      },
+    }),
+  ])
+  console.log('✅ Orders created:', orders.length)
 
   // Create sample reviews
-  const reviews = [
-    {
-      reviewerId: createdFreelancers[0].id,
-      projectId: createdProjects[1].id,
-      orderId: createdOrders[0].id,
-      rating: 5,
-      comment: 'Excellent work! The design exceeded my expectations. Very professional and delivered on time. Highly recommended!'
-    },
-    {
-      reviewerId: createdFreelancers[1].id,
-      projectId: createdProjects[0].id,
-      orderId: createdOrders[1].id,
-      rating: 4,
-      comment: 'Great developer with excellent communication skills. The project was completed successfully with minor revisions needed.'
-    }
-  ]
+  const reviews = await Promise.all([
+    prisma.review.create({
+      data: {
+        rating: 5,
+        comment: 'Excellent work! Very professional and delivered on time.',
+        reviewerId: adminUser.id,
+        projectId: projects[0].id,
+      },
+    }),
+    prisma.review.create({
+      data: {
+        rating: 4,
+        comment: 'Good design, but took longer than expected.',
+        reviewerId: adminUser.id,
+        projectId: projects[1].id,
+      },
+    }),
+  ])
+  console.log('✅ Reviews created:', reviews.length)
 
-  for (const review of reviews) {
-    await prisma.review.create({
-      data: review
-    })
-  }
+  // Create sample posts
+  const posts = await Promise.all([
+    prisma.post.create({
+      data: {
+        title: 'New Project Launch',
+        caption: 'Just launched my latest e-commerce project! Check it out and let me know what you think.',
+        isApproved: true,
+        isPublic: true,
+        authorId: users[0].id,
+      },
+    }),
+    prisma.post.create({
+      data: {
+        title: 'Design Inspiration',
+        caption: 'Working on some new UI designs. Here are some concepts I\'m exploring for mobile apps.',
+        isApproved: true,
+        isPublic: true,
+        authorId: users[1].id,
+      },
+    }),
+  ])
+  console.log('✅ Posts created:', posts.length)
+
+  // Create sample stories
+  const stories = await Promise.all([
+    prisma.story.create({
+      data: {
+        content: 'Behind the scenes of my latest project',
+        type: 'IMAGE',
+        isApproved: true,
+        isPublic: true,
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours from now
+        authorId: users[0].id,
+      },
+    }),
+    prisma.story.create({
+      data: {
+        content: 'Quick design tip for better user experience',
+        type: 'VIDEO',
+        isApproved: true,
+        isPublic: true,
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours from now
+        authorId: users[1].id,
+      },
+    }),
+  ])
+  console.log('✅ Stories created:', stories.length)
 
   // Create sample notifications
-  const notifications = [
-    {
-      userId: user.id,
-      title: 'New Order Received',
-      message: 'You have received a new order for "E-commerce Website Development"',
-      type: NotificationType.ORDER_CREATED
-    },
-    {
-      userId: createdFreelancers[0].id,
-      title: 'Payment Received',
-      message: 'Payment of $1,200 has been received for your project',
-      type: NotificationType.PAYMENT_RECEIVED
-    },
-    {
-      userId: createdFreelancers[1].id,
-      title: 'New Review',
-      message: 'You received a 5-star review for "Mobile App UI/UX Design"',
-      type: NotificationType.REVIEW_RECEIVED
-    }
-  ]
+  const notifications = await Promise.all([
+    prisma.notification.create({
+      data: {
+        title: 'Welcome to FreelanceHub!',
+        message: 'Thank you for joining our platform. Start by creating your first project or browsing available opportunities.',
+        type: 'GENERAL',
+        read: false,
+        userId: adminUser.id,
+      },
+    }),
+    prisma.notification.create({
+      data: {
+        title: 'New Project Available',
+        message: 'A new project matching your skills has been posted: E-commerce Platform Development',
+        type: 'PROJECT_APPROVED',
+        read: false,
+        userId: users[0].id,
+      },
+    }),
+  ])
+  console.log('✅ Notifications created:', notifications.length)
 
-  for (const notification of notifications) {
-    await prisma.notification.create({
-      data: notification
-    })
-  }
+  // Create sample contact submissions
+  const contacts = await Promise.all([
+    prisma.contactSubmission.create({
+      data: {
+        name: 'Alice Johnson',
+        email: 'alice@example.com',
+        subject: 'Website Development Inquiry',
+        message: 'I am interested in your web development services. Could you please provide more information about your packages?',
+        status: 'NEW',
+      },
+    }),
+    prisma.contactSubmission.create({
+      data: {
+        name: 'Bob Wilson',
+        email: 'bob@example.com',
+        subject: 'Design Consultation',
+        message: 'I need help with my brand identity design. Are you available for a consultation?',
+        status: 'READ',
+      },
+    }),
+    prisma.contactSubmission.create({
+      data: {
+        name: 'Carol Brown',
+        email: 'carol@example.com',
+        subject: 'Marketing Services',
+        message: 'Looking for digital marketing services for my startup. Please contact me to discuss.',
+        status: 'REPLIED',
+      },
+    }),
+  ])
+  console.log('✅ Contact submissions created:', contacts.length)
 
-  console.log('✅ Database seeded successfully!')
-  console.log('\n📋 Demo Credentials:')
-  console.log('Admin: admin@freelancehub.com / admin123')
-  console.log('User: user@freelancehub.com / user123')
-  console.log('\n👥 Additional Users:')
-  console.log('Sarah: sarah@example.com / password123')
-  console.log('Michael: michael@example.com / password123')
-  console.log('Emily: emily@example.com / password123')
-  console.log('David: david@example.com / password123')
+  // Create sample transactions
+  const transactions = await Promise.all([
+    prisma.transaction.create({
+      data: {
+        amount: 100,
+        type: 'COIN_PURCHASE',
+        status: 'COMPLETED',
+        description: 'Purchased 100 coins',
+        userId: adminUser.id,
+      },
+    }),
+    prisma.transaction.create({
+      data: {
+        amount: 50,
+        type: 'MESSAGE_PURCHASE',
+        status: 'COMPLETED',
+        description: 'Purchased premium messaging',
+        userId: users[0].id,
+      },
+    }),
+  ])
+  console.log('✅ Transactions created:', transactions.length)
+
+  // Create sample prebookings
+  const prebookings = await Promise.all([
+    prisma.prebooking.create({
+      data: {
+        productId: 'website-package-1',
+        productTitle: 'Website Development Package',
+        userDetails: JSON.stringify({
+          name: 'David Lee',
+          email: 'david@example.com',
+          phone: '+1234567890',
+          message: 'Interested in the basic website package'
+        }),
+        amount: 1,
+        currency: 'INR',
+        status: 'PAID',
+        paymentId: 'pay_123456789',
+        orderId: 'order_123456789',
+        receipt: 'receipt_123456789',
+        userId: adminUser.id,
+      },
+    }),
+    prisma.prebooking.create({
+      data: {
+        productId: 'design-package-1',
+        productTitle: 'Logo Design Package',
+        userDetails: JSON.stringify({
+          name: 'Emma Wilson',
+          email: 'emma@example.com',
+          phone: '+0987654321',
+          message: 'Need logo design for my new business'
+        }),
+        amount: 1,
+        currency: 'INR',
+        status: 'PENDING',
+        userId: users[1].id,
+      },
+    }),
+  ])
+  console.log('✅ Prebookings created:', prebookings.length)
+
+  console.log('🎉 Database seeding completed successfully!')
+  console.log('\n📊 Summary:')
+  console.log(`- Users: ${users.length + 1} (including admin)`)
+  console.log(`- Projects: ${projects.length}`)
+  console.log(`- Orders: ${orders.length}`)
+  console.log(`- Reviews: ${reviews.length}`)
+  console.log(`- Posts: ${posts.length}`)
+  console.log(`- Stories: ${stories.length}`)
+  console.log(`- Notifications: ${notifications.length}`)
+  console.log(`- Contact Submissions: ${contacts.length}`)
+  console.log(`- Transactions: ${transactions.length}`)
+  console.log(`- Prebookings: ${prebookings.length}`)
 }
 
 main()
