@@ -63,11 +63,15 @@ export default function SignUpPage() {
         toast.success('Account created successfully! Please sign in.')
         router.push('/auth/signin')
       } else {
+        console.error('Registration failed:', data)
         toast.error(data.error || 'Registration failed')
+        if (data.details) {
+          console.error('Error details:', data.details)
+        }
       }
     } catch (error) {
       console.error('Registration error:', error)
-      toast.error('Something went wrong. Please try again.')
+      toast.error('Network error. Please check your connection and try again.')
     } finally {
       setLoading(false)
     }
