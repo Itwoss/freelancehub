@@ -29,8 +29,7 @@ model User {
   stories       Story[]
   likes         Like[]
   comments      Comment[]
-  sentMessages      Message[] @relation("MessageSender")
-  receivedMessages  Message[] @relation("MessageReceiver")
+  messages      Message[]
   notifications Notification[]
   transactions  Transaction[]
   prebookings   Prebooking[]
