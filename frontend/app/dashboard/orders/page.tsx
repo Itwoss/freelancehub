@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@/lib/session-provider'
 import { useRouter } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -60,56 +60,60 @@ export default function UserOrdersPage() {
     try {
       setLoading(true)
       
-      // Try the test API first
-      const response = await fetch('/api/orders-test', {
-        credentials: 'include'
-      })
-      if (response.ok) {
-        const data = await response.json()
-        setOrders(data.orders || [])
-        console.log('✅ Orders fetched:', data.orders?.length || 0)
-      } else {
-        console.warn('⚠️ Failed to fetch orders, using sample data')
-        // Fallback to sample orders
-        setOrders([
-          {
-            id: '1',
-            totalAmount: 1999,
-            status: 'COMPLETED',
-            createdAt: new Date().toISOString(),
+      // Fetch both orders and prebookings
+      const [ordersResponse, prebookingsResponse] = await Promise.all([
+        fetch('/api/orders', { credentials: 'include' }),
+        fetch('/api/prebookings', { credentials: 'include' })
+      ])
+      
+      const allOrders: Order[] = []
+      
+      // Process regular orders
+      if (ordersResponse.ok) {
+        const ordersData = await ordersResponse.json()
+        if (ordersData.orders) {
+          allOrders.push(...ordersData.orders.map((order: any) => ({
+            id: order.id,
+            totalAmount: order.totalAmount,
+            status: order.status,
+            createdAt: order.createdAt,
             project: {
-              id: '1',
-              title: 'Premium Web Template',
-              price: 1999,
-              category: 'Web Development',
-              image: '/placeholder-image.jpg'
-            },
-            user: {
-              name: 'Demo User',
-              email: 'demo@example.com',
-              phone: '+1234567890'
+              id: order.project?.id || order.projectId,
+              title: order.project?.title || 'Unknown Product',
+              price: order.project?.price || order.totalAmount,
+              category: order.project?.category || 'General',
+              image: order.project?.image || '/placeholder-image.jpg'
             }
-          },
-          {
-            id: '2',
-            totalAmount: 2999,
-            status: 'PENDING',
-            createdAt: new Date(Date.now() - 86400000).toISOString(),
-            project: {
-              id: '2',
-              title: 'Mobile App Design',
-              price: 2999,
-              category: 'Mobile App',
-              image: '/placeholder-image.jpg'
-            },
-            user: {
-              name: 'Demo User',
-              email: 'demo@example.com',
-              phone: '+1234567890'
-            }
-          }
-        ])
+          })))
+        }
       }
+      
+      // Process prebookings
+      if (prebookingsResponse.ok) {
+        const prebookingsData = await prebookingsResponse.json()
+        if (prebookingsData.prebookings) {
+          allOrders.push(...prebookingsData.prebookings.map((prebooking: any) => ({
+            id: prebooking.id,
+            totalAmount: prebooking.amount,
+            status: prebooking.status,
+            createdAt: prebooking.createdAt,
+            project: {
+              id: prebooking.productId,
+              title: prebooking.productTitle,
+              price: prebooking.amount,
+              category: 'PREBOOK',
+              image: '/placeholder-image.jpg'
+            }
+          })))
+        }
+      }
+      
+      // Sort by creation date (newest first)
+      allOrders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      
+      setOrders(allOrders)
+      console.log('✅ Orders and prebookings fetched:', allOrders.length)
+      
     } catch (error) {
       console.error('Error fetching orders:', error)
       toast.error('Failed to load orders')
@@ -127,6 +131,13 @@ export default function UserOrdersPage() {
             Completed
           </span>
         )
+      case 'PAID':
+        return (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            <CheckCircle className="w-3 h-3 mr-1" />
+            Paid
+          </span>
+        )
       case 'PENDING':
         return (
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
@@ -139,6 +150,13 @@ export default function UserOrdersPage() {
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
             <XCircle className="w-3 h-3 mr-1" />
             Cancelled
+          </span>
+        )
+      case 'REFUNDED':
+        return (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+            <Package className="w-3 h-3 mr-1" />
+            Refunded
           </span>
         )
       default:

@@ -1,15 +1,15 @@
-// MongoDB Prisma schema for FreelanceHub
+// Simplified Prisma schema for development with SQLite
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("MONGODB_URI")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            String   @id @default(cuid())
   name          String?
   email         String   @unique
   image         String?
@@ -35,13 +35,11 @@ model User {
   notifications Notification[]
   transactions  Transaction[]
   prebookings   Prebooking[]
-
-  @@map("users")
 }
 
 model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String   @db.ObjectId
+  id                String  @id @default(cuid())
+  userId            String
   type              String
   provider          String
   providerAccountId String
@@ -56,21 +54,18 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@map("accounts")
 }
 
 model Session {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String   @db.ObjectId
+  userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("sessions")
 }
 
 model Project {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(cuid())
   title       String
   description String
   price       Float
@@ -79,46 +74,40 @@ model Project {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  authorId String   @db.ObjectId
+  authorId String
   author   User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   orders   Order[]
   reviews  Review[]
-
-  @@map("projects")
 }
 
 model Order {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(cuid())
   totalAmount  Float
   status     String   @default("PENDING") // PENDING, PAID, COMPLETED, CANCELLED
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  userId    String   @db.ObjectId
+  userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  projectId String   @db.ObjectId
+  projectId String
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  @@map("orders")
 }
 
 model Review {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid())
   rating    Int
   comment   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  reviewerId String   @db.ObjectId
+  reviewerId String
   reviewer   User    @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
-  projectId  String   @db.ObjectId
+  projectId  String
   project    Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  @@map("reviews")
 }
 
 model Post {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(cuid())
   title      String?
   caption    String
   isApproved Boolean  @default(false)
@@ -126,16 +115,14 @@ model Post {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  authorId String   @db.ObjectId
+  authorId String
   author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   likes    Like[]
   comments Comment[]
-
-  @@map("posts")
 }
 
 model Story {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid())
   content   String
   type      String   @default("IMAGE") // IMAGE or VIDEO
   isApproved Boolean @default(false)
@@ -143,68 +130,59 @@ model Story {
   expiresAt DateTime
   createdAt DateTime @default(now())
 
-  authorId String   @db.ObjectId
+  authorId String
   author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
-
-  @@map("stories")
 }
 
 model Like {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
+  id     String @id @default(cuid())
+  userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  postId String @db.ObjectId
+  postId String
   post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([userId, postId])
-  @@map("likes")
 }
 
 model Comment {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid())
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  authorId String   @db.ObjectId
+  authorId String
   author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  postId   String   @db.ObjectId
+  postId   String
   post     Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-
-  @@map("comments")
 }
 
 model Message {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid())
   content   String
   type      String   @default("TEXT") // TEXT, IMAGE, VIDEO, AUDIO
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 
-  senderId   String   @db.ObjectId
+  senderId   String
   sender     User     @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
-  receiverId String?  @db.ObjectId
+  receiverId String?
   receiver   User?    @relation("MessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
-
-  @@map("messages")
 }
 
 model Notification {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid())
   title     String
   message   String
   type      String   @default("GENERAL")
   read      Boolean  @default(false)
   createdAt DateTime @default(now())
 
-  userId String   @db.ObjectId
+  userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("notifications")
 }
 
 model ContactSubmission {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid())
   name      String
   email     String
   subject   String
@@ -212,26 +190,22 @@ model ContactSubmission {
   status    String   @default("NEW") // NEW, READ, REPLIED, CLOSED
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@map("contact_submissions")
 }
 
 model Transaction {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(cuid())
   amount      Float
   type        String   @default("COIN_PURCHASE") // COIN_PURCHASE, MESSAGE_PURCHASE, REFUND
   status      String   @default("PENDING") // PENDING, COMPLETED, FAILED, CANCELLED
   description String?
   createdAt   DateTime @default(now())
 
-  userId String   @db.ObjectId
+  userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("transactions")
 }
 
 model Prebooking {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(cuid())
   productId   String
   productTitle String
   userDetails String   // JSON string for user details
@@ -244,8 +218,6 @@ model Prebooking {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  userId String   @db.ObjectId
+  userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("prebookings")
 }

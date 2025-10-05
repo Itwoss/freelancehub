@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Bell, X, Check, AlertCircle, Info, MessageSquare } from 'lucide-react'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@/lib/session-provider'
 
 interface Notification {
   id: string

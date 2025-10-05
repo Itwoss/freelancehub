@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@/lib/session-provider'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Button } from '@/components/ui/Button'
@@ -91,8 +91,8 @@ export default function CheckoutPage() {
     try {
       setProcessing(true)
       
-      // Create Razorpay order
-      const response = await fetch('/api/payment/razorpay/create-order', {
+      // Create Razorpay order (using test endpoint for development)
+      const response = await fetch('/api/payment/razorpay/test-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

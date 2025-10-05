@@ -1,4 +1,5 @@
-import { getSession } from 'next-auth/react'
+// Note: This file needs to be updated to work with custom session provider
+// For now, we'll use a simpler approach without session-based auth headers
 
 class ApiClient {
   private baseUrl: string
@@ -8,11 +9,8 @@ class ApiClient {
   }
 
   private async getHeaders(): Promise<HeadersInit> {
-    const session = await getSession()
-    
     return {
-      'Content-Type': 'application/json',
-      ...(session?.user && { 'Authorization': `Bearer ${session.user.id}` })
+      'Content-Type': 'application/json'
     }
   }
 

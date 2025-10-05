@@ -53,11 +53,73 @@ export default function AdminOrders() {
   const fetchOrders = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/admin/orders-test')
-      if (response.ok) {
-        const data = await response.json()
-        setOrders(data.orders || [])
+      
+      // Fetch both orders and prebookings from admin APIs
+      const [ordersResponse, prebookingsResponse] = await Promise.all([
+        fetch('/api/admin/orders', { credentials: 'include' }),
+        fetch('/api/admin/prebookings', { credentials: 'include' })
+      ])
+      
+      const allOrders: OrderData[] = []
+      
+      // Process regular orders
+      if (ordersResponse.ok) {
+        const ordersData = await ordersResponse.json()
+        if (ordersData.orders) {
+          allOrders.push(...ordersData.orders.map((order: any) => ({
+            id: order.id,
+            totalAmount: order.totalAmount,
+            status: order.status,
+            createdAt: order.createdAt,
+            updatedAt: order.updatedAt,
+            user: {
+              id: order.user?.id || order.userId,
+              name: order.user?.name || 'Unknown User',
+              email: order.user?.email || 'unknown@example.com',
+              image: order.user?.image || '/placeholder-avatar.jpg'
+            },
+            project: {
+              id: order.project?.id || order.projectId,
+              title: order.project?.title || 'Unknown Product',
+              price: order.project?.price || order.totalAmount,
+              category: order.project?.category || 'General'
+            }
+          })))
+        }
       }
+      
+      // Process prebookings
+      if (prebookingsResponse.ok) {
+        const prebookingsData = await prebookingsResponse.json()
+        if (prebookingsData.prebookings) {
+          allOrders.push(...prebookingsData.prebookings.map((prebooking: any) => ({
+            id: prebooking.id,
+            totalAmount: prebooking.amount,
+            status: prebooking.status,
+            createdAt: prebooking.createdAt,
+            updatedAt: prebooking.updatedAt,
+            user: {
+              id: prebooking.user?.id || prebooking.userId,
+              name: prebooking.user?.name || 'Unknown User',
+              email: prebooking.user?.email || 'unknown@example.com',
+              image: prebooking.user?.image || '/placeholder-avatar.jpg'
+            },
+            project: {
+              id: prebooking.productId,
+              title: prebooking.productTitle,
+              price: prebooking.amount,
+              category: 'PREBOOK'
+            }
+          })))
+        }
+      }
+      
+      // Sort by creation date (newest first)
+      allOrders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      
+      setOrders(allOrders)
+      console.log('✅ Admin orders and prebookings fetched:', allOrders.length)
+      
     } catch (error) {
       console.error('Error fetching orders:', error)
       toast.error('Failed to load orders')
@@ -94,10 +156,14 @@ export default function AdminOrders() {
     switch (status) {
       case 'COMPLETED':
         return 'success'
+      case 'PAID':
+        return 'info'
       case 'PENDING':
         return 'warning'
       case 'CANCELLED':
         return 'error'
+      case 'REFUNDED':
+        return 'secondary'
       default:
         return 'default'
     }

@@ -83,6 +83,23 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const validatedData = createPrebookingSchema.parse(body)
 
+    // Create a virtual project for the prebook product
+    const virtualProject = await prisma.project.upsert({
+      where: { 
+        id: `prebook_${validatedData.productId}` 
+      },
+      update: {},
+      create: {
+        id: `prebook_${validatedData.productId}`,
+        title: validatedData.productTitle,
+        description: `Prebook order for ${validatedData.productTitle}`,
+        price: validatedData.amount,
+        category: 'PREBOOK',
+        status: 'ACTIVE',
+        authorId: session.user.id
+      }
+    })
+
     // Create prebooking record
     const prebooking = await prisma.prebooking.create({
       data: {
@@ -95,9 +112,20 @@ export async function POST(request: NextRequest) {
       }
     })
 
+    // Create order record
+    const order = await prisma.order.create({
+      data: {
+        totalAmount: validatedData.amount,
+        status: 'PENDING',
+        userId: session.user.id,
+        projectId: virtualProject.id
+      }
+    })
+
     return NextResponse.json({
       success: true,
-      prebooking
+      prebooking,
+      order
     })
   } catch (error) {
     if (error instanceof z.ZodError) {

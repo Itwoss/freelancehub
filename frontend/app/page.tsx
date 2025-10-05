@@ -3,9 +3,11 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { Header } from "@/components/layout/Header"          // <-- your header preserved
 import { Footer } from "@/components/layout/Footer"
 import { Button } from "@/components/ui/Button"
+import { useSession } from "@/lib/session-provider"
 import {
   ArrowRight,
   Star,
@@ -31,6 +33,24 @@ import {
  */
 
 export default function HomePage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+
+  const handlePrebookClick = (productSlug: string) => {
+    if (status === 'loading') {
+      return // Wait for session to load
+    }
+    
+    if (!session?.user) {
+      // User not logged in, redirect to signin
+      router.push('/auth/signin')
+      return
+    }
+    
+    // User is logged in, redirect to product preview page
+    router.push(`/products/${productSlug}`)
+  }
+
   const features = [
     {
       icon: Users,
@@ -490,12 +510,13 @@ export default function HomePage() {
                   </div>
                   
                   <div className="flex gap-3">
-                    <Link href="/products/youtube" className="flex-1">
-                      <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200">
-                        <Calendar className="w-5 h-5 mr-2" />
-                        PREBOOK - ₹1
-                      </Button>
-                    </Link>
+                    <Button 
+                      onClick={() => handlePrebookClick('youtube')}
+                      className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+                    >
+                      <Calendar className="w-5 h-5 mr-2" />
+                      PREBOOK - ₹1
+                    </Button>
                     <Button 
                       variant="outline" 
                       size="sm" 
@@ -555,12 +576,13 @@ export default function HomePage() {
                   </div>
                   
                   <div className="flex gap-3">
-                    <Link href="/products/spotify" className="flex-1">
-                      <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200">
-                        <Calendar className="w-5 h-5 mr-2" />
-                        PREBOOK - ₹1
+                    <Button 
+                      onClick={() => handlePrebookClick('spotify')}
+                      className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+                    >
+                      <Calendar className="w-5 h-5 mr-2" />
+                      PREBOOK - ₹1
                     </Button>
-                  </Link>
                   <Button 
                     variant="outline" 
                     size="sm" 
@@ -616,12 +638,13 @@ export default function HomePage() {
                   </div>
                   
                   <div className="flex gap-3">
-                    <Link href="/products/netflix" className="flex-1">
-                      <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200">
-                        <Calendar className="w-5 h-5 mr-2" />
-                        PREBOOK - ₹1
-                      </Button>
-                    </Link>
+                    <Button 
+                      onClick={() => handlePrebookClick('netflix')}
+                      className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+                    >
+                      <Calendar className="w-5 h-5 mr-2" />
+                      PREBOOK - ₹1
+                    </Button>
                     <Button 
                       variant="outline" 
                       size="sm" 
@@ -681,12 +704,13 @@ export default function HomePage() {
                   </div>
                   
                   <div className="flex gap-3">
-                    <Link href="/products/github" className="flex-1">
-                      <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200">
-                        <Calendar className="w-5 h-5 mr-2" />
-                        PREBOOK - ₹1
+                    <Button 
+                      onClick={() => handlePrebookClick('github')}
+                      className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+                    >
+                      <Calendar className="w-5 h-5 mr-2" />
+                      PREBOOK - ₹1
                     </Button>
-                  </Link>
                   <Button 
                     variant="outline" 
                     size="sm" 
@@ -746,12 +770,13 @@ export default function HomePage() {
                   </div>
                   
                   <div className="flex gap-3">
-                    <Link href="/products/instagram" className="flex-1">
-                      <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200">
-                        <Calendar className="w-5 h-5 mr-2" />
-                        PREBOOK - ₹1
-                      </Button>
-                    </Link>
+                    <Button 
+                      onClick={() => handlePrebookClick('instagram')}
+                      className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+                    >
+                      <Calendar className="w-5 h-5 mr-2" />
+                      PREBOOK - ₹1
+                    </Button>
                     <Button 
                       variant="outline" 
                       size="sm" 
@@ -807,12 +832,13 @@ export default function HomePage() {
                   </div>
                   
                   <div className="flex gap-3">
-                    <Link href="/products/discord" className="flex-1">
-                      <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200">
-                        <Calendar className="w-5 h-5 mr-2" />
-                        PREBOOK - ₹1
+                    <Button 
+                      onClick={() => handlePrebookClick('discord')}
+                      className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+                    >
+                      <Calendar className="w-5 h-5 mr-2" />
+                      PREBOOK - ₹1
                     </Button>
-                  </Link>
                   <Button 
                     variant="outline" 
                     size="sm" 

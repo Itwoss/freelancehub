@@ -16,7 +16,7 @@ export default function DebugSystemPage() {
     try {
       const response = await fetch('/api/test-db')
       const data = await response.json()
-      setResults(prev => ({ ...prev, database: data }))
+      setResults((prev: any) => ({ ...prev, database: data }))
       
       if (data.success) {
         toast.success('Database test successful!')
@@ -26,7 +26,7 @@ export default function DebugSystemPage() {
     } catch (error) {
       console.error('Database test failed:', error)
       toast.error('Database test failed!')
-      setResults(prev => ({ ...prev, database: { success: false, error: 'Network error' } }))
+      setResults((prev: any) => ({ ...prev, database: { success: false, error: 'Network error' } }))
     } finally {
       setLoading(false)
     }
@@ -37,7 +37,7 @@ export default function DebugSystemPage() {
     try {
       const response = await fetch('/api/debug-register')
       const data = await response.json()
-      setResults(prev => ({ ...prev, register: data }))
+      setResults((prev: any) => ({ ...prev, register: data }))
       
       if (data.success) {
         toast.success('Registration system test successful!')
@@ -47,7 +47,7 @@ export default function DebugSystemPage() {
     } catch (error) {
       console.error('Registration test failed:', error)
       toast.error('Registration test failed!')
-      setResults(prev => ({ ...prev, register: { success: false, error: 'Network error' } }))
+      setResults((prev: any) => ({ ...prev, register: { success: false, error: 'Network error' } }))
     } finally {
       setLoading(false)
     }
@@ -57,7 +57,7 @@ export default function DebugSystemPage() {
     setLoading(true)
     try {
       const response = await fetch('/mini-office')
-      setResults(prev => ({ 
+      setResults((prev: any) => ({ 
         ...prev, 
         miniOffice: { 
           success: response.ok, 
@@ -74,7 +74,7 @@ export default function DebugSystemPage() {
     } catch (error) {
       console.error('Mini-office test failed:', error)
       toast.error('Mini-office test failed!')
-      setResults(prev => ({ ...prev, miniOffice: { success: false, error: 'Network error' } }))
+      setResults((prev: any) => ({ ...prev, miniOffice: { success: false, error: 'Network error' } }))
     } finally {
       setLoading(false)
     }

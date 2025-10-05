@@ -1,13 +1,13 @@
 'use client'
 
 import React, { useState } from 'react'
-import { signIn, getSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 import { Footer } from '@/components/layout/Footer'
 import { Briefcase, Eye, EyeOff } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useSession } from '@/lib/session-provider'
 
 export default function SignInPage() {
   const [formData, setFormData] = useState({
@@ -17,6 +17,7 @@ export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const { update } = useSession()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,40 +26,41 @@ export default function SignInPage() {
     try {
       console.log('Attempting login with:', { email: formData.email })
       
-      const result = await signIn('credentials', {
-        email: formData.email,
-        password: formData.password,
-        redirect: false,
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
       })
 
-      console.log('Login result:', result)
+      const data = await response.json()
+      console.log('Login result:', data)
 
-      if (result?.error) {
-        console.error('Login error:', result.error)
-        
-        // Provide more specific error messages
-        let errorMessage = 'Login failed. Please try again.'
-        if (result.error === 'CredentialsSignin') {
-          errorMessage = 'Invalid email or password. Please check your credentials.'
-        } else if (result.error === 'CallbackRouteError') {
-          errorMessage = 'Database connection error. Please try again later.'
-        } else {
-          errorMessage = `Login failed: ${result.error}`
-        }
-        
-        toast.error(errorMessage)
-      } else if (result?.ok) {
-        toast.success('Welcome back!')
-        const session = await getSession()
-        console.log('Session after login:', session)
-        
-        if (session?.user?.role === 'ADMIN') {
-          router.push('/admin/dashboard')
-        } else {
-          router.push('/dashboard')
-        }
+      if (!response.ok) {
+        console.error('Login error:', data.error)
+        toast.error(data.error || 'Invalid email or password. Please check your credentials.')
       } else {
-        toast.error('Login failed. Please try again.')
+        toast.success('Welcome back!')
+        console.log('User logged in:', data.user)
+        
+        // Update session state
+        console.log('Updating session state...')
+        await update()
+        console.log('Session state updated')
+        
+        // Longer delay to ensure session is updated and cookie is set
+        setTimeout(() => {
+          console.log('Redirecting to dashboard...')
+          if (data.user?.role === 'ADMIN') {
+            router.push('/admin/dashboard')
+          } else {
+            router.push('/dashboard')
+          }
+        }, 500)
       }
     } catch (error) {
       console.error('Login error:', error)

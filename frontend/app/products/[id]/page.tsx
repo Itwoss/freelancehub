@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@/lib/session-provider'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
@@ -108,26 +108,34 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     setIsProcessing(true)
     
     try {
-      // Create prebook order
+      // Create complete order data with user details from form
       const orderData = {
         productId: product?.id,
         productTitle: product?.title,
-        userDetails,
         amount: getPrebookPrice(),
         currency: getCurrency(),
+        userDetails: {
+          name: userDetails.fullName,
+          email: userDetails.email,
+          phone: userDetails.phone,
+          address: userDetails.address,
+          city: userDetails.city,
+          state: userDetails.state,
+          zipCode: userDetails.zipCode,
+          country: userDetails.country
+        },
         status: 'pending'
       }
 
-      console.log('Storing order data:', orderData)
-      console.log('Amount being stored:', orderData.amount)
+      console.log('Storing complete order data:', orderData)
       
-      // Store order data in sessionStorage for payment page
+      // Store complete order data in sessionStorage for payment page
       sessionStorage.setItem('prebookOrder', JSON.stringify(orderData))
       
       // Close modal and redirect to payment page
       setShowPrebookModal(false)
       
-      // Redirect to payment page
+      // Redirect directly to payment page
       router.push('/payment/prebook')
       
     } catch (error) {

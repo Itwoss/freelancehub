@@ -27,8 +27,8 @@ export default function TestPaymentPage() {
 
       console.log('Creating Razorpay order...')
       
-      // Create Razorpay order
-      const response = await fetch('/api/payment/razorpay/create-order', {
+      // Create Razorpay order (using test endpoint for development)
+      const response = await fetch('/api/payment/razorpay/test-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

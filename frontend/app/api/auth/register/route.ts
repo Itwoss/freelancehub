@@ -19,8 +19,13 @@ export async function POST(request: NextRequest) {
     const { name, email, password } = registerSchema.parse(body)
 
     // Check database connection
-    if (!process.env.MONGODB_URI && !process.env.DATABASE_URL) {
+    if (!process.env.DATABASE_URL && !process.env.MONGODB_URI) {
       console.error('❌ No database URL found')
+      console.error('Environment check:', {
+        DATABASE_URL: process.env.DATABASE_URL,
+        MONGODB_URI: process.env.MONGODB_URI,
+        NODE_ENV: process.env.NODE_ENV
+      })
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }

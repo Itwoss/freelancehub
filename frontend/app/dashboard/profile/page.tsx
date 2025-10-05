@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@/lib/session-provider'
 import { useRouter } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -83,7 +83,7 @@ export default function UserProfilePage() {
             email: session.user.email || 'user@example.com',
             phone: '+1234567890',
             address: '123 Main St, City, State',
-            avatar: session.user.image || '/placeholder-avatar.jpg',
+            avatar: '/placeholder-avatar.jpg',
             totalOrders: 5,
             totalSpent: 15000,
             memberSince: new Date().toISOString(),

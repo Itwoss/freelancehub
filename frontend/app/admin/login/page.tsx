@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { signIn, useSession } from 'next-auth/react'
+import { useSession } from '@/lib/session-provider'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
@@ -19,12 +19,12 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   
-  const { data: session, status } = useSession()
+  const { data: session, status, signOut } = useSession()
   const router = useRouter()
 
   useEffect(() => {
-    if (status === 'authenticated') {
-      console.log('User role:', session?.user?.role) // Debug log
+    if (status === 'authenticated' && session?.user) {
+      console.log('User role:', session.user.role) // Debug log
       if (session.user.role === 'ADMIN') {
         // Only redirect to admin dashboard, don't redirect elsewhere
         router.push('/admin/dashboard')
@@ -43,17 +43,9 @@ export default function AdminLoginPage() {
     setError('')
 
     try {
-      // First sign out any existing user
-      if (status === 'authenticated') {
-        console.log('Signing out existing user...')
-        await signIn('signout')
-        // Wait a moment for signout to complete
-        await new Promise(resolve => setTimeout(resolve, 1000))
-      }
-
-      // Now verify admin credentials
-      console.log('Verifying admin credentials...')
-      const response = await fetch('/api/admin/auth', {
+      console.log('Attempting admin login with:', { email })
+      
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,35 +54,23 @@ export default function AdminLoginPage() {
       })
 
       const data = await response.json()
-      console.log('Admin auth response:', data)
+      console.log('Login result:', data)
 
-      if (response.ok && data.success) {
-        // Admin authentication successful
-        console.log('Admin auth successful:', data)
-        toast.success('Admin credentials verified!')
-        
-        // Now use NextAuth to create a session
-        const result = await signIn('credentials', {
-          email,
-          password,
-          redirect: false,
-        })
-
-        console.log('NextAuth result:', result)
-
-        if (result?.ok) {
-          // Admin authentication successful, redirect directly
-          toast.success('Welcome, Admin!')
-          router.push('/admin/dashboard')
-        } else {
-          console.error('NextAuth failed:', result)
-          setError('Session creation failed: ' + (result?.error || 'Unknown error'))
-          toast.error('Login failed')
-        }
+      if (!response.ok) {
+        console.error('Login error:', data.error)
+        setError(data.error || 'Invalid credentials')
+        toast.error(data.error || 'Invalid credentials')
       } else {
-        console.error('Admin auth failed:', data)
-        setError(data.error || 'Admin access denied')
-        toast.error('Admin access denied')
+        // Check if user is admin
+        if (data.user?.role !== 'ADMIN') {
+          setError('Access denied. Admin privileges required.')
+          toast.error('Access denied. Admin privileges required.')
+          return
+        }
+        
+        console.log('Admin login successful:', data.user)
+        toast.success('Welcome, Admin!')
+        router.push('/admin/dashboard')
       }
     } catch (error) {
       console.error('Admin login error:', error)
@@ -213,7 +193,7 @@ export default function AdminLoginPage() {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    onClick={() => signIn('signout')}
+                    onClick={() => signOut()}
                     className="w-full"
                   >
                     Sign Out Current User

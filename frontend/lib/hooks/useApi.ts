@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@/lib/session-provider'
 import { apiClient } from '../api-client'
 
 export function useApi<T>(url: string, options?: { 

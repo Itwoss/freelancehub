@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@/lib/session-provider'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -90,10 +90,21 @@ export default function UserDashboard() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
   useEffect(() => {
-    if (status === 'loading') return
+    console.log('Dashboard useEffect - Status:', status, 'Session:', session)
+    
+    if (status === 'loading') {
+      console.log('Dashboard: Still loading session...')
+      return
+    }
+    
     if (status === 'unauthenticated') {
+      console.log('Dashboard: User not authenticated, redirecting to signin')
       router.push('/auth/signin')
       return
+    }
+    
+    if (status === 'authenticated' && session?.user) {
+      console.log('Dashboard: User authenticated, loading dashboard data for:', session.user.email)
     }
     
     // Check for tab parameter in URL
@@ -103,7 +114,7 @@ export default function UserDashboard() {
     }
     
     fetchDashboardData()
-  }, [status, router, searchParams])
+  }, [status, router, searchParams, session])
 
   const fetchDashboardData = async () => {
     try {

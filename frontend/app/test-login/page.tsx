@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { signIn, getSession, signOut } from 'next-auth/react'
+import { useSession } from '@/lib/session-provider'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
@@ -9,29 +9,30 @@ import { Label } from '@/components/ui/Label'
 export default function TestLoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [session, setSession] = useState<any>(null)
   const [loading, setLoading] = useState(false)
+  const { data: session, status, signOut } = useSession()
 
   const handleLogin = async () => {
     setLoading(true)
     try {
       console.log('Attempting login with:', { email, password })
       
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
       })
 
-      console.log('Login result:', result)
+      const data = await response.json()
+      console.log('Login result:', data)
 
-      if (result?.error) {
-        alert(`Login failed: ${result.error}`)
+      if (!response.ok) {
+        alert(`Login failed: ${data.error}`)
       } else {
         alert('Login successful!')
-        const newSession = await getSession()
-        setSession(newSession)
-        console.log('Session:', newSession)
+        console.log('User logged in:', data.user)
       }
     } catch (error) {
       console.error('Login error:', error)
@@ -43,14 +44,8 @@ export default function TestLoginPage() {
 
   const handleLogout = async () => {
     await signOut()
-    setSession(null)
   }
 
-  const checkSession = async () => {
-    const currentSession = await getSession()
-    setSession(currentSession)
-    console.log('Current session:', currentSession)
-  }
 
   return (
     <div className="min-h-screen bg-black text-white p-8">
@@ -92,13 +87,6 @@ export default function TestLoginPage() {
             {loading ? 'Logging in...' : 'Test Login'}
           </Button>
           
-          <Button 
-            onClick={checkSession}
-            variant="outline"
-            className="w-full border-gray-700 text-gray-300 hover:bg-gray-800"
-          >
-            Check Session
-          </Button>
           
           <Button 
             onClick={handleLogout}

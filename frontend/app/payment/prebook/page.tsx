@@ -82,12 +82,15 @@ export default function PrebookPaymentPage() {
     try {
       // Razorpay Payment Integration
       const razorpayConfig = {
-        amount: 1, // ₹1 (will be converted to 100 paise by razorpay-service)
+        amount: paymentDetails?.amount || 1, // Use the amount from paymentDetails
         currency: paymentDetails?.currency || 'INR',
         receipt: `receipt_${Date.now()}`,
         productTitle: paymentDetails?.productTitle || 'Website Prebook',
         userDetails: paymentDetails?.userDetails || {}
       }
+
+      console.log('Sending to create-order API:', razorpayConfig)
+      console.log('Payment details:', paymentDetails)
 
       // Create Razorpay order
       const response = await fetch('/api/payment/razorpay/create-order', {
@@ -100,13 +103,13 @@ export default function PrebookPaymentPage() {
 
       if (response.ok) {
         const data = await response.json()
-      console.log('Razorpay order created:', data)
-      console.log('Amount being sent to Razorpay:', data.amount)
-      
-      // Initialize Razorpay checkout
-      const options = {
-        key: data.keyId,
-        amount: data.amount,
+        console.log('Razorpay order created:', data)
+        console.log('Amount being sent to Razorpay:', data.amount)
+        
+        // Initialize Razorpay checkout
+        const options = {
+          key: data.keyId,
+          amount: data.amount,
           currency: data.currency,
           name: 'FreelanceHub',
           description: paymentDetails?.productTitle || 'Product Purchase',
@@ -132,7 +135,23 @@ export default function PrebookPaymentPage() {
               })
               
               if (prebookingResponse.ok) {
-                console.log('Prebooking saved successfully')
+                const result = await prebookingResponse.json()
+                console.log('Prebooking and order saved successfully:', result)
+                
+                // Update prebooking with payment details
+                if (result.prebooking?.id) {
+                  await fetch(`/api/prebookings/${result.prebooking.id}`, {
+                    method: 'PATCH',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      status: 'PAID',
+                      paymentId: response.razorpay_payment_id,
+                      orderId: response.razorpay_order_id
+                    })
+                  })
+                }
               }
             } catch (error) {
               console.error('Error saving prebooking:', error)
@@ -158,17 +177,61 @@ export default function PrebookPaymentPage() {
           }
         }
 
-        // Load Razorpay script and open checkout
-        const script = document.createElement('script')
-        script.src = 'https://checkout.razorpay.com/v1/checkout.js'
-        script.onload = () => {
-          const rzp = new (window as any).Razorpay(options)
-          rzp.open()
+        // Check if we have real Razorpay credentials
+        if (data.keyId === 'rzp_test_mock_key_id') {
+          // Development mode - simulate payment success
+          console.log('Development mode: Simulating payment success')
+          setPaymentStatus('success')
+          
+          // Save prebooking data to database
+          try {
+            const prebookingResponse = await fetch('/api/prebookings', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                productId: paymentDetails?.productTitle || 'Unknown Product',
+                productTitle: paymentDetails?.productTitle || 'Product Prebook',
+                userDetails: paymentDetails?.userDetails || {},
+                amount: paymentDetails?.amount || 1,
+                currency: paymentDetails?.currency || 'INR'
+              })
+            })
+            
+            if (prebookingResponse.ok) {
+              console.log('Prebooking saved successfully')
+            }
+          } catch (error) {
+            console.error('Error saving prebooking:', error)
+          }
+          
+          // Handle successful payment
+          toast.success('Payment successful! (Development Mode)')
+          // Redirect to success page
+          setTimeout(() => {
+            router.push(`/payment/success?paymentId=mock_payment_${Date.now()}`)
+          }, 2000)
+        } else {
+          // Production mode - use real Razorpay
+          const script = document.createElement('script')
+          script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+          script.onload = () => {
+            const rzp = new (window as any).Razorpay(options)
+            rzp.open()
+          }
+          script.onerror = () => {
+            console.error('Failed to load Razorpay script')
+            setPaymentStatus('failed')
+            toast.error('Payment gateway failed to load')
+          }
+          document.body.appendChild(script)
         }
-        document.body.appendChild(script)
       } else {
         const errorData = await response.json()
         console.error('Payment API error:', errorData)
+        console.error('Response status:', response.status)
+        console.error('Response headers:', response.headers)
         setPaymentStatus('failed')
         toast.error(`Payment failed: ${errorData.error || 'Please try again.'}`)
       }

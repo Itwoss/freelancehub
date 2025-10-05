@@ -1,12 +1,9 @@
 import { NextAuthOptions } from 'next-auth'
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { prisma } from './prisma'
 import bcrypt from 'bcryptjs'
 
 export const authOptions: NextAuthOptions = {
-  // Remove adapter when using JWT strategy with credentials
-  // adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -15,49 +12,46 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
+        console.log('🔍 AUTH: Authorize called with:', { 
+          email: credentials?.email, 
+          hasPassword: !!credentials?.password 
+        })
+        
         if (!credentials?.email || !credentials?.password) {
-          console.log('❌ Missing credentials')
+          console.log('❌ AUTH: Missing credentials')
           return null
         }
 
         try {
-          console.log('🔍 Attempting to find user:', credentials.email)
+          console.log('🔍 AUTH: Looking for user:', credentials.email)
           
-          // Check if database is available
-          if (!process.env.MONGODB_URI && !process.env.DATABASE_URL) {
-            console.error('❌ No database URL found')
-            return null
-          }
-
-          // Find user in database
           const user = await prisma.user.findUnique({
             where: { email: credentials.email }
           })
 
-          console.log('👤 User found:', user ? 'Yes' : 'No')
+          console.log('👤 AUTH: User found:', user ? 'Yes' : 'No')
 
           if (!user) {
-            console.log('❌ User not found')
+            console.log('❌ AUTH: User not found')
             return null
           }
 
           if (!user.hashedPassword) {
-            console.log('❌ No password hash found')
+            console.log('❌ AUTH: No password hash')
             return null
           }
 
-          // Verify password
-          console.log('🔐 Verifying password...')
+          console.log('🔐 AUTH: Verifying password...')
           const isValidPassword = await bcrypt.compare(credentials.password, user.hashedPassword)
           
-          console.log('🔐 Password valid:', isValidPassword)
+          console.log('🔐 AUTH: Password valid:', isValidPassword)
 
           if (!isValidPassword) {
-            console.log('❌ Invalid password')
+            console.log('❌ AUTH: Invalid password')
             return null
           }
 
-          console.log('✅ Authentication successful for:', user.email)
+          console.log('✅ AUTH: Authentication successful for:', user.email)
           return {
             id: user.id,
             email: user.email,
@@ -66,7 +60,7 @@ export const authOptions: NextAuthOptions = {
             image: user.image,
           }
         } catch (error) {
-          console.error('❌ Auth error:', error)
+          console.error('❌ AUTH: Error:', error)
           return null
         }
       }
@@ -77,7 +71,6 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: '/auth/signin',
-    error: '/auth/signin',
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -93,15 +86,8 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role as string
       }
       return session
-    },
-    async redirect({ url, baseUrl }) {
-      // Allows relative callback URLs
-      if (url.startsWith("/")) return `${baseUrl}${url}`
-      // Allows callback URLs on the same origin
-      else if (new URL(url).origin === baseUrl) return url
-      return `${baseUrl}/dashboard`
     }
   },
-  debug: process.env.NODE_ENV === 'development',
+  debug: true,
   secret: process.env.NEXTAUTH_SECRET
 }

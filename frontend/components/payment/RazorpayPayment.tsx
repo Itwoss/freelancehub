@@ -51,8 +51,8 @@ export default function RazorpayPayment({
     setError(null)
 
     try {
-      // Create order
-      const orderResponse = await fetch('/api/payment/razorpay/create-order', {
+      // Create order (using test endpoint for development)
+      const orderResponse = await fetch('/api/payment/razorpay/test-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

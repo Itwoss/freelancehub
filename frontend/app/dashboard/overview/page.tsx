@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@/lib/session-provider'
 import { useRouter } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -303,7 +303,7 @@ export default function DashboardOverviewPage() {
         {/* Welcome Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {session.user.name || 'User'}!
+            Welcome back, {session?.user?.name || 'User'}!
           </h1>
           <p className="text-gray-600">Here's what's happening with your account today.</p>
         </div>

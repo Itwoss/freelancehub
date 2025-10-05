@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { useSession, signOut } from 'next-auth/react'
+import { useSession } from '@/lib/session-provider'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import {
@@ -28,7 +28,7 @@ import { cn } from '@/lib/utils'
 import { useMenuContrast } from '@/lib/hooks/useDynamicContrast'
 
 export function Header() {
-  const { data: session, status } = useSession()
+  const { data: session, status, signOut } = useSession()
   const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isProfileOpen, setIsProfileOpen] = useState(false)
@@ -50,7 +50,15 @@ export function Header() {
   }, [])
 
   const handleSignOut = async () => {
-    await signOut({ callbackUrl: '/' })
+    try {
+      await signOut()
+      setIsProfileOpen(false)
+      router.push('/')
+    } catch (error) {
+      console.error('Sign out error:', error)
+      // Still redirect even if sign out fails
+      router.push('/')
+    }
   }
 
   const navigation = [
@@ -98,16 +106,7 @@ export function Header() {
                     aria-expanded={isProfileOpen}
                     className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center overflow-hidden ring-2 ring-white/30 hover:ring-white/50 transition-all duration-300"
                   >
-                    {session.user?.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={session.user.image}
-                        alt={session.user.name ?? 'Profile'}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <UserCircle className="w-6 h-6 text-white" />
-                    )}
+                    <UserCircle className="w-6 h-6 text-white" />
                   </button>
 
                   {isProfileOpen && (

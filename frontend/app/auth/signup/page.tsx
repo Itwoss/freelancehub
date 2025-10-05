@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { Footer } from '@/components/layout/Footer'
 import { Briefcase, Eye, EyeOff, CheckCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useSession } from '@/lib/session-provider'
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -20,6 +21,7 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false)
   const [agreedToTerms, setAgreedToTerms] = useState(false)
   const router = useRouter()
+  const { update } = useSession()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -60,8 +62,49 @@ export default function SignUpPage() {
       const data = await response.json()
 
       if (response.ok) {
-        toast.success('Account created successfully! Please sign in.')
-        router.push('/auth/signin')
+        toast.success('Account created successfully! Logging you in...')
+        
+        // Automatically log in the user after successful registration
+        try {
+          const loginResponse = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: formData.email,
+              password: formData.password,
+            }),
+          })
+
+          const loginData = await loginResponse.json()
+
+          if (loginResponse.ok) {
+            toast.success('Welcome! You are now logged in.')
+            console.log('Auto-login successful:', loginData.user)
+            
+            // Update session state
+            await update()
+            
+            // Small delay to ensure session is updated
+            setTimeout(() => {
+              // Redirect to dashboard based on user role
+              if (loginData.user?.role === 'ADMIN') {
+                router.push('/admin/dashboard')
+              } else {
+                router.push('/dashboard')
+              }
+            }, 100)
+          } else {
+            // If auto-login fails, redirect to signin page
+            toast.error('Account created but auto-login failed. Please sign in manually.')
+            router.push('/auth/signin')
+          }
+        } catch (loginError) {
+          console.error('Auto-login error:', loginError)
+          toast.error('Account created but auto-login failed. Please sign in manually.')
+          router.push('/auth/signin')
+        }
       } else {
         console.error('Registration failed:', data)
         toast.error(data.error || 'Registration failed')
