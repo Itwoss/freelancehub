@@ -9,6 +9,7 @@
     "build:vercel": "NODE_OPTIONS='--max-old-space-size=4096' next build",
     "build:digitalocean": "prisma generate && next build",
     "build:mongodb": "prisma generate --schema=prisma/schema-mongodb.prisma && next build",
+    "build:production": "prisma generate --schema=prisma/schema-mongodb.prisma && next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
