@@ -116,3 +116,5 @@ async function setupMongoDBProduction() {
 
 // Run the setup
 setupMongoDBProduction()
+
+
