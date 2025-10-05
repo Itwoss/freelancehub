@@ -102,5 +102,6 @@ export const authOptions: NextAuthOptions = {
       return `${baseUrl}/dashboard`
     }
   },
-  debug: process.env.NODE_ENV === 'development'
+  debug: process.env.NODE_ENV === 'development',
+  secret: process.env.NEXTAUTH_SECRET
 }
