@@ -106,9 +106,18 @@ export async function PUT(
     const body = await request.json()
     const data = updateProjectSchema.parse(body)
 
+    // Convert array fields to JSON strings to match Prisma schema (String?)
+    const updateData: any = { ...data }
+    if (Array.isArray(data.tags)) {
+      updateData.tags = JSON.stringify(data.tags)
+    }
+    if (Array.isArray(data.images)) {
+      updateData.images = JSON.stringify(data.images)
+    }
+
     const updatedProject = await prisma.project.update({
       where: { id: params.id },
-      data,
+      data: updateData,
       include: {
         author: {
           select: {
