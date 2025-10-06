@@ -16,7 +16,6 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "type-check": "tsc --noEmit",
-    "postinstall": "prisma generate",
     "setup:mongodb": "node scripts/setup-mongodb-production.js",
     "db:generate": "prisma generate --schema=prisma/schema-mongodb.prisma",
     "db:push": "prisma db push --schema=prisma/schema-mongodb.prisma"
