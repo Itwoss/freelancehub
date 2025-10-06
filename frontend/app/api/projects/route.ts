@@ -152,11 +152,19 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const data = createProjectSchema.parse(body)
 
+    // Convert arrays to JSON strings to match Prisma schema (String?)
+    const createData: any = {
+      title: data.title,
+      description: data.description,
+      price: data.price,
+      category: data.category,
+      tags: Array.isArray(data.tags) ? JSON.stringify(data.tags) : null,
+      images: Array.isArray(data.images) ? JSON.stringify(data.images) : null,
+      authorId: session.user.id
+    }
+
     const project = await prisma.project.create({
-      data: {
-        ...data,
-        authorId: session.user.id
-      },
+      data: createData,
       include: {
         author: {
           select: {
