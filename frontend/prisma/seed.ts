@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
@@ -13,6 +14,7 @@ async function main() {
       id: 'admin-1',
       name: 'Admin User',
       email: 'admin@freelancehub.com',
+      hashedPassword: await bcrypt.hash('admin123', 12),
       role: 'ADMIN',
       bio: 'FreelanceHub Administrator',
       rating: 5.0,
@@ -29,6 +31,7 @@ async function main() {
         id: 'user-1',
         name: 'John Smith',
         email: 'john@example.com',
+        hashedPassword: await bcrypt.hash('password123', 12),
         role: 'USER',
         bio: 'Full-stack developer with 5+ years experience',
         rating: 4.8,
@@ -41,6 +44,7 @@ async function main() {
         id: 'user-2',
         name: 'Sarah Johnson',
         email: 'sarah@example.com',
+        hashedPassword: await bcrypt.hash('password123', 12),
         role: 'USER',
         bio: 'UI/UX Designer specializing in modern web design',
         rating: 4.9,
@@ -53,6 +57,7 @@ async function main() {
         id: 'user-3',
         name: 'Mike Davis',
         email: 'mike@example.com',
+        hashedPassword: await bcrypt.hash('password123', 12),
         role: 'USER',
         bio: 'Digital marketing expert and content creator',
         rating: 4.7,

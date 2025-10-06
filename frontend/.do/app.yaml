@@ -19,7 +19,7 @@ services:
   - key: NEXTAUTH_URL
     value: https://urchin-app-olxze.ondigitalocean.app
   - key: NEXTAUTH_SECRET
-    value: ${NEXTAUTH_SECRET}
+    value: XrIoyV29xUdH+fEAepl06xFZJuihXyQ0NcXAYZEpa/A=
   - key: NEXT_PUBLIC_RAZORPAY_KEY_ID
     value: rzp_live_RPjP2rRnGLu4yD
   - key: RAZORPAY_KEY_SECRET

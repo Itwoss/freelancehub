@@ -1,138 +1,219 @@
-# Freelance Marketplace
+# 🚀 FreelanceHub - Modern Freelance Marketplace
 
-A full-stack freelance marketplace web application with a clean frontend/backend architecture.
+A comprehensive freelance marketplace platform built with Next.js, featuring user management, project listings, payment integration, and admin dashboard.
 
-## Project Structure
+## ✨ Features
 
-```
-freelancehub/
-├── frontend/          # Next.js frontend application
-│   ├── app/          # Next.js app directory
-│   ├── components/   # React components
-│   ├── lib/          # Frontend utilities
-│   └── ...
-├── backend/          # Backend API and services
-│   ├── api/          # API routes
-│   ├── lib/          # Backend utilities
-│   ├── prisma/       # Database schema and migrations
-│   ├── scripts/      # Database and utility scripts
-│   └── ...
-└── docs/             # Documentation
-```
+- **User Authentication**: Secure login/signup with NextAuth.js
+- **Project Management**: Create, browse, and manage freelance projects
+- **Payment Integration**: Razorpay payment gateway integration
+- **Admin Dashboard**: Complete admin panel for platform management
+- **Real-time Chat**: Built-in messaging system
+- **Responsive Design**: Mobile-first, modern UI with Tailwind CSS
 
-## Getting Started
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes, Prisma ORM
+- **Database**: PostgreSQL (production), SQLite (development)
+- **Authentication**: NextAuth.js
+- **Payments**: Razorpay
+- **Deployment**: DigitalOcean App Platform
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js >= 18.0.0
-- npm >= 8.0.0
-- PostgreSQL database
+- Node.js 18+ 
+- npm or yarn
+- PostgreSQL database (for production)
 
 ### Installation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/Itwoss/freelancehub.git
-cd freelancehub
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd freelancehub
+   ```
+
+2. **Install dependencies**
+   ```bash
+   # Install root dependencies
+   npm install
+   
+   # Install frontend dependencies
+   cd frontend
+   npm install
+   ```
+
+3. **Environment Setup**
+   ```bash
+   # Copy environment template
+   cp env.example .env.local
+   
+   # Edit .env.local with your configuration
+   ```
+
+4. **Database Setup**
+   ```bash
+   cd frontend
+   npx prisma generate
+   npx prisma db push
+   npx prisma db seed
+   ```
+
+5. **Start Development Server**
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+
+## 📁 Project Structure
+
+```
+freelancehub/
+├── frontend/                 # Next.js application
+│   ├── app/                 # App router pages
+│   │   ├── admin/          # Admin dashboard pages
+│   │   ├── api/            # API routes
+│   │   ├── auth/           # Authentication pages
+│   │   ├── dashboard/      # User dashboard
+│   │   └── ...
+│   ├── components/         # Reusable components
+│   ├── lib/               # Utilities and configurations
+│   └── prisma/            # Database schema and migrations
+├── backend/               # Backend services (if needed)
+└── docs/                 # Documentation
 ```
 
-2. Install dependencies for all workspaces:
-```bash
-npm run install:all
+## 🔧 Configuration
+
+### Environment Variables
+
+Create a `.env.local` file in the frontend directory:
+
+```env
+# Database
+DATABASE_URL="postgresql://username:password@localhost:5432/freelancehub"
+
+# NextAuth
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-secret-key"
+
+# Razorpay
+NEXT_PUBLIC_RAZORPAY_KEY_ID="your-razorpay-key"
+RAZORPAY_KEY_SECRET="your-razorpay-secret"
+RAZORPAY_ENVIRONMENT="development"
+
+# App
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+NODE_ENV="development"
 ```
 
-3. Set up environment variables:
-```bash
-cp env.example .env
-# Edit .env with your database and API keys
+### Razorpay Setup
+
+1. Create a Razorpay account
+2. Get your API keys from the dashboard
+3. Add keys to environment variables
+4. Configure webhook URL: `https://yourdomain.com/api/payment/razorpay/webhook`
+
+## 🚀 Deployment
+
+### DigitalOcean App Platform
+
+1. **Connect Repository**: Link your GitHub repository
+2. **Configure Build**: 
+   - Build Command: `cd frontend && npm run build`
+   - Run Command: `cd frontend && npm start`
+3. **Set Environment Variables**: Add all required environment variables
+4. **Deploy**: Click deploy and wait for completion
+
+### Environment Variables for Production
+
+```env
+DATABASE_URL="postgresql://user:pass@host:5432/db"
+NEXTAUTH_URL="https://yourdomain.com"
+NEXTAUTH_SECRET="strong-production-secret"
+NEXT_PUBLIC_RAZORPAY_KEY_ID="rzp_live_..."
+RAZORPAY_KEY_SECRET="your-live-secret"
+RAZORPAY_ENVIRONMENT="production"
+NEXT_PUBLIC_APP_URL="https://yourdomain.com"
+NODE_ENV="production"
 ```
 
-4. Set up the database:
+## 📱 Usage
+
+### For Users
+1. **Sign Up**: Create an account at `/auth/signup`
+2. **Browse Projects**: View available projects at `/projects`
+3. **Create Projects**: Post your own projects
+4. **Dashboard**: Manage your projects and orders
+
+### For Admins
+1. **Admin Login**: Access admin panel at `/admin/login`
+2. **Dashboard**: View platform analytics and manage users
+3. **Orders**: Monitor and manage all orders
+4. **Users**: Manage user accounts and permissions
+
+## 🔒 Security Features
+
+- JWT-based authentication
+- CSRF protection
+- Secure payment processing
+- Input validation and sanitization
+- Environment variable protection
+
+## 🧪 Testing
+
 ```bash
-npm run db:generate
-npm run db:push
-npm run db:seed
+# Run tests (if available)
+npm test
+
+# Type checking
+npm run type-check
+
+# Linting
+npm run lint
 ```
 
-### Development
+## 📝 API Documentation
 
-Start both frontend and backend in development mode:
-```bash
-npm run dev
-```
+The API endpoints are organized under `/api/`:
 
-Or start them separately:
-```bash
-# Frontend only
-npm run dev:frontend
+- **Authentication**: `/api/auth/*`
+- **Projects**: `/api/projects/*`
+- **Orders**: `/api/orders/*`
+- **Payments**: `/api/payment/*`
+- **Admin**: `/api/admin/*`
 
-# Backend only
-npm run dev:backend
-```
-
-### Building for Production
-
-Build both frontend and backend:
-```bash
-npm run build
-```
-
-### Testing
-
-Run all tests:
-```bash
-npm run test
-```
-
-Run tests for specific workspace:
-```bash
-npm run test:frontend
-npm run test:backend
-```
-
-## Workspace Commands
-
-### Frontend Commands
-- `npm run dev:frontend` - Start frontend development server
-- `npm run build:frontend` - Build frontend for production
-- `npm run test:frontend` - Run frontend tests
-
-### Backend Commands
-- `npm run dev:backend` - Start backend development server
-- `npm run build:backend` - Build backend for production
-- `npm run test:backend` - Run backend tests
-- `npm run db:generate` - Generate Prisma client
-- `npm run db:push` - Push database schema
-- `npm run db:migrate` - Run database migrations
-- `npm run db:seed` - Seed database with initial data
-- `npm run db:studio` - Open Prisma Studio
-
-## Technology Stack
-
-### Frontend
-- Next.js 14
-- React 18
-- TypeScript
-- Tailwind CSS
-- React Hook Form
-- React Query
-
-### Backend
-- Express.js
-- Prisma ORM
-- PostgreSQL
-- NextAuth.js
-- Stripe
-- Nodemailer
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Run tests
+4. Add tests if applicable
 5. Submit a pull request
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License.
+
+## 🆘 Support
+
+For support and questions:
+- Check the documentation
+- Review environment variable setup
+- Check deployment logs
+- Open an issue on GitHub
+
+## 🔄 Updates
+
+To update the application:
+1. Pull latest changes
+2. Update dependencies: `npm update`
+3. Run migrations: `npx prisma db push`
+4. Restart the application
+
+---
+
+**Built with ❤️ using Next.js and modern web technologies**

@@ -1,9 +1,0 @@
-{
-  "keyId": "rzp_live_ROrn7ahgdd5X2d",
-  "keySecret": "u8DBqFba66vdYLTLYXr0yDAh",
-  "environment": "live",
-  "webhookSecret": "YOUR_WEBHOOK_SECRET_HERE",
-  "domain": "https://www.itwos.store/",
-  "adminEmail": "sjay9327@gmail.com",
-  "databaseUrl": ""
-}

@@ -70,7 +70,10 @@ model Project {
   description String
   price       Float
   category    String
+  tags        String?  // JSON string for tags array
+  images      String?  // JSON string for images array
   status      String   @default("ACTIVE") // ACTIVE, INACTIVE, COMPLETED
+  featured    Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
