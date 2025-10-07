@@ -47,6 +47,8 @@ export default function SignUpPage() {
     }
 
     try {
+      console.log('🔍 SIGNUP: Attempting to register user:', formData.email)
+      
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
@@ -58,6 +60,9 @@ export default function SignUpPage() {
           password: formData.password,
         }),
       })
+      
+      console.log('🔍 SIGNUP: Response status:', response.status)
+      console.log('🔍 SIGNUP: Response ok:', response.ok)
 
       const data = await response.json()
 
@@ -114,7 +119,17 @@ export default function SignUpPage() {
       }
     } catch (error) {
       console.error('Registration error:', error)
-      toast.error('Network error. Please check your connection and try again.')
+      console.error('Error details:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        name: error instanceof Error ? error.name : 'Unknown',
+        stack: error instanceof Error ? error.stack : undefined
+      })
+      
+      if (error instanceof TypeError && error.message === 'Failed to fetch') {
+        toast.error('Network error. Please check your connection and try again.')
+      } else {
+        toast.error('Registration failed. Please try again.')
+      }
     } finally {
       setLoading(false)
     }

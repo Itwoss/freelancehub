@@ -9,24 +9,27 @@ export function Footer() {
 
   const footerLinks = {
     product: [
-      { name: 'Integrations', href: '/integrations' },
-      { name: 'Pricing', href: '/pricing' },
-      { name: 'Docs', href: '/docs' },
-      { name: 'Changelog', href: '/changelog' },
+      { name: 'Product', href: '/products', description: 'Explore our digital products and services' },
+      { name: 'Integrations', href: '/integrations', description: 'Connect with 100+ tools and services' },
+      { name: 'Pricing', href: '/pricing', description: 'Flexible plans for every business size' },
+      { name: 'Docs', href: '/docs', description: 'Comprehensive guides and API documentation' },
+      { name: 'Changelog', href: '/changelog', description: 'Latest updates and new features' },
     ],
     company: [
-      { name: 'Blog', href: '/blog' },
-      { name: 'About', href: '/about' },
-      { name: 'Contact', href: '/contact' },
-      { name: 'Help center', href: '/help' },
-      { name: 'Sign in', href: '/signin' },
-      { name: 'Sign up', href: '/signup' },
+      { name: 'Company', href: '/about', description: 'Learn more about our mission and values' },
+      { name: 'Blog', href: '/blog', description: 'Industry insights and best practices' },
+      { name: 'About', href: '/about', description: 'Learn more about our mission' },
+      { name: 'Contact', href: '/contact', description: 'Get in touch with our team' },
+      { name: 'Help Center', href: '/help', description: 'Find answers to common questions' },
+      { name: 'Sign In', href: '/auth/signin', description: 'Access your account' },
+      { name: 'Sign Up', href: '/auth/signup', description: 'Join our community' },
     ],
     resources: [
-      { name: 'Report a Vulnerability', href: '/report' },
-      { name: 'Data Processing Agreement', href: '/dpa' },
-      { name: 'Privacy Policy', href: '/privacy' },
-      { name: 'Terms of Service', href: '/terms' },
+      { name: 'Resources', href: '/resources', description: 'Helpful resources and guides' },
+      { name: 'Report a Vulnerability', href: '/security/report', description: 'Help us keep the platform secure' },
+      { name: 'Data Processing Agreement', href: '/legal/dpa', description: 'How we handle your data' },
+      { name: 'Privacy Policy', href: '/privacy', description: 'Your privacy is important to us' },
+      { name: 'Terms of Service', href: '/terms', description: 'Platform usage guidelines' },
     ],
   }
 
@@ -76,11 +79,12 @@ export function Footer() {
         {/* Product */}
         <div>
           <h3 className="text-white font-semibold mb-4">Product</h3>
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {footerLinks.product.map((link) => (
               <li key={link.name}>
-                <Link href={link.href} className="hover:text-white text-sm">
-                  {link.name}
+                <Link href={link.href} className="hover:text-white text-sm block">
+                  <span className="font-medium">{link.name}</span>
+                  <span className="text-gray-400 text-xs block mt-1">{link.description}</span>
                 </Link>
               </li>
             ))}
@@ -90,11 +94,12 @@ export function Footer() {
         {/* Company */}
         <div>
           <h3 className="text-white font-semibold mb-4">Company</h3>
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {footerLinks.company.map((link) => (
               <li key={link.name}>
-                <Link href={link.href} className="hover:text-white text-sm">
-                  {link.name}
+                <Link href={link.href} className="hover:text-white text-sm block">
+                  <span className="font-medium">{link.name}</span>
+                  <span className="text-gray-400 text-xs block mt-1">{link.description}</span>
                 </Link>
               </li>
             ))}
@@ -104,11 +109,12 @@ export function Footer() {
         {/* Resources */}
         <div>
           <h3 className="text-white font-semibold mb-4">Resources</h3>
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {footerLinks.resources.map((link) => (
               <li key={link.name}>
-                <Link href={link.href} className="hover:text-white text-sm">
-                  {link.name}
+                <Link href={link.href} className="hover:text-white text-sm block">
+                  <span className="font-medium">{link.name}</span>
+                  <span className="text-gray-400 text-xs block mt-1">{link.description}</span>
                 </Link>
               </li>
             ))}

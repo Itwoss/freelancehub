@@ -180,7 +180,7 @@ export function Header() {
               
               {/* Office link */}
               <Link
-                href="/mini-office"
+                href="/auth/signin"
                 className="px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 hover:scale-105 flex items-center gap-2"
                 style={{
                   color: menuContrast.menuTextColorSubtle,
@@ -249,7 +249,7 @@ export function Header() {
             
             {/* Office link in mobile menu */}
             <Link
-              href="/mini-office"
+              href="/auth/signin"
               className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300"
               style={{
                 color: menuContrast.menuTextColorSubtle,

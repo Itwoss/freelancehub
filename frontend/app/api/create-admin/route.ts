@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       data: {
         email: 'admin@example.com',
         name: 'Admin User',
-        hashedPassword,
+        hashedPassword: hashedPassword,
         role: 'ADMIN',
         bio: 'System Administrator',
         rating: 5.0

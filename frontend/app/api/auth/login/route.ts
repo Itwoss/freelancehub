@@ -9,14 +9,34 @@ export async function POST(request: NextRequest) {
     
     console.log('🔍 LOGIN: Attempting login for:', email)
     
+    // Check database connection
+    if (!process.env.DATABASE_URL) {
+      console.error('❌ LOGIN: No DATABASE_URL found')
+      return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
+    }
+    
+    // Test database connection
+    try {
+      await prisma.$connect()
+      console.log('✅ LOGIN: Database connected successfully')
+    } catch (dbError) {
+      console.error('❌ LOGIN: Database connection failed:', dbError)
+      return NextResponse.json({ 
+        error: 'Database connection failed',
+        details: dbError instanceof Error ? dbError.message : 'Unknown database error'
+      }, { status: 500 })
+    }
+    
     if (!email || !password) {
       return NextResponse.json({ error: 'Email and password are required' }, { status: 400 })
     }
     
     // Find user
+    console.log('🔍 LOGIN: Looking up user in database...')
     const user = await prisma.user.findUnique({
       where: { email }
     })
+    console.log('🔍 LOGIN: User found:', user ? 'Yes' : 'No')
     
     if (!user) {
       console.log('❌ LOGIN: User not found')
@@ -73,6 +93,14 @@ export async function POST(request: NextRequest) {
     
   } catch (error) {
     console.error('❌ LOGIN: Error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error('❌ LOGIN: Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined
+    })
+    return NextResponse.json({ 
+      error: 'Internal server error',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 })
   }
 }

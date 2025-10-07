@@ -12,6 +12,9 @@ const registerSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     console.log('🔍 Starting user registration...')
+    console.log('🔍 Request URL:', request.url)
+    console.log('🔍 Request method:', request.method)
+    console.log('🔍 Request headers:', Object.fromEntries(request.headers.entries()))
     
     const body = await request.json()
     console.log('📝 Registration data:', { name: body.name, email: body.email })
@@ -31,12 +34,25 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       )
     }
+    
+    // Test database connection
+    try {
+      await prisma.$connect()
+      console.log('✅ REGISTER: Database connected successfully')
+    } catch (dbError) {
+      console.error('❌ REGISTER: Database connection failed:', dbError)
+      return NextResponse.json({ 
+        error: 'Database connection failed',
+        details: dbError instanceof Error ? dbError.message : 'Unknown database error'
+      }, { status: 500 })
+    }
 
     console.log('🔍 Checking if user already exists...')
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email }
     })
+    console.log('🔍 Existing user check:', existingUser ? 'User exists' : 'User does not exist')
 
     if (existingUser) {
       console.log('❌ User already exists:', email)
