@@ -5,9 +5,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate --schema=prisma/schema-mongodb.prisma && next build",
     "build:vercel": "NODE_OPTIONS='--max-old-space-size=4096' next build",
-    "build:digitalocean": "prisma generate && next build",
+    "build:digitalocean": "prisma generate --schema=prisma/schema-mongodb.prisma && next build",
     "build:mongodb": "prisma generate --schema=prisma/schema-mongodb.prisma && next build",
     "build:production": "prisma generate --schema=prisma/schema-mongodb.prisma && next build",
     "start": "next start",
@@ -17,7 +17,9 @@
     "test:coverage": "jest --coverage",
     "type-check": "tsc --noEmit",
     "setup:mongodb": "node scripts/setup-mongodb-production.js",
+    "setup:production": "node scripts/migrate-production.js",
     "db:generate": "prisma generate --schema=prisma/schema-mongodb.prisma",
+    "db:generate:production": "prisma generate --schema=prisma/schema-production.prisma",
     "db:push": "prisma db push --schema=prisma/schema-mongodb.prisma"
   },
   "dependencies": {
